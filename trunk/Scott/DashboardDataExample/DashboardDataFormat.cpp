@@ -1,6 +1,9 @@
 
 #include "DashboardDataFormat.h"
 
+/**
+ * Default constructor.  
+ */
 DashboardDataFormat::DashboardDataFormat(void)
 	: m_ds (DriverStation::GetInstance())
 {
