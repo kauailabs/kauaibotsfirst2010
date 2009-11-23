@@ -43,6 +43,16 @@ public:
 
 	void DoMecanum( float vX, float vY, float vRot );
 	void RestartEncoders();
+
+	Encoder& FrontLeftEncoder() { return m_frontLeftEncoder; } 
+	Encoder& FrontRightEncoder() { return m_frontRightEncoder; } 
+	Encoder& RearLeftEncoder() { return m_rearLeftEncoder; } 
+	Encoder& RearRightEncoder() { return m_rearRightEncoder; } 
+	
+	SpeedController& FrontLeftMotor() { return m_frontLeftMotor; }
+	SpeedController& FrontRightMotor() { return m_frontRightMotor; }
+	SpeedController& RearLeftMotor() { return m_rearLeftMotor; }
+	SpeedController& RearRightMotor() { return m_rearRightMotor; }
 	
 	~MecanumDrive();
 protected:
