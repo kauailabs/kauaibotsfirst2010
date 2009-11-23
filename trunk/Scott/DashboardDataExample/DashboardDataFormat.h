@@ -2,6 +2,7 @@
 #define __DashboardDataFormat_h__
 
 #include "WPILib.h"
+#include "MecanumDrive.h"
 
 // This is a test.
 
@@ -21,14 +22,7 @@ class DashboardDataFormat : public SensorBase
 public:
 	DashboardDataFormat(void);
 	virtual ~DashboardDataFormat();
-	float m_AnalogChannels[kAnalogModules][kAnalogChannels];
-	UINT8 m_RelayFwd[kDigitalModules];
-	UINT8 m_RelayRev[kDigitalModules];
-	UINT16 m_DIOChannels[kDigitalModules];
-	UINT16 m_DIOChannelsOutputEnable[kDigitalModules];
-	UINT8 m_PWMChannels[kDigitalModules][kPwmChannels];
-	UINT8 m_SolenoidChannels;
-	void PackAndSend(void);
+	void PackAndSend(Joystick& stick1, Joystick& stick2, MecanumDrive& drive);
 private:
 	DISALLOW_COPY_AND_ASSIGN(DashboardDataFormat);
 	DriverStation *m_ds;
