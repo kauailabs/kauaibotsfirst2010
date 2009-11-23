@@ -1,19 +1,22 @@
 #include "WPILib.h"
 #include "DashboardDataFormat.h"
+#include "MecanumDrive.h"
 
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
  */ 
 class DashboardDataExample : public SimpleRobot
 {
-	RobotDrive myRobot; // robot drive system
-	Joystick stick; // only joystick
+	MecanumDrive myRobot; // robot drive system
+	Joystick stick1; // Linear velocity control joystick
+	Joystick stick2; // Rotational velocity control joystick
 	DashboardDataFormat dashboardDataFormat;
 
 public:
 	DashboardDataExample(void)
-		: myRobot(1, 2)	// these must be initialized in the same order
-		, stick(1)		// as they are declared above.
+		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8) // these must be initialized in the same order
+		, stick1(1)		// as they are declared above.
+		, stick2(2)
 	{
 		GetWatchdog().SetExpiration(0.1);
 	}
@@ -29,7 +32,9 @@ public:
 		while(IsAutonomous())
 		{
 			GetWatchdog().Feed();
-			//myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
+			
+			// Autonomous functions go here...
+			
 			dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			dashboard.Printf("Iterations: %d\n", ++i);
 			UpdateDashboard();
@@ -48,7 +53,7 @@ public:
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			//myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
+			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick2.GetX());
 			dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			dashboard.Printf("Iterations: %d\n", ++i);
 			UpdateDashboard();
@@ -63,14 +68,7 @@ public:
 	 */
 	void UpdateDashboard(void)
 	{
-		static float num = 0.0;
-		dashboardDataFormat.m_AnalogChannels[0][0] = num;
-		dashboardDataFormat.m_AnalogChannels[0][1] = 5.0 - num;
-		dashboardDataFormat.m_DIOChannels[0]++;
-		dashboardDataFormat.m_DIOChannelsOutputEnable[0]--;
-		num += 0.01;
-		if (num > 5.0) num = 0.0;
-		dashboardDataFormat.PackAndSend();
+		dashboardDataFormat.PackAndSend(stick1, stick2, myRobot);
 	}
 };
 
