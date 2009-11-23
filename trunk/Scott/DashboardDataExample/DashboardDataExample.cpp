@@ -19,14 +19,14 @@ public:
 	}
 
 	/**
-	 * Runs the motors with arcade steering. 
-	 */
-	void RobotMain(void)
+	 * Main entry point for autonomous mode code
+	 **/
+	void  Autonomous () 
 	{
 		GetWatchdog().SetEnabled(true);
 		Dashboard &dashboard = m_ds->GetDashboardPacker();
 		INT32 i=0;
-		while (true)
+		while(IsAutonomous())
 		{
 			GetWatchdog().Feed();
 			//myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
@@ -37,6 +37,25 @@ public:
 		}
 	}
 
+	/**
+	 * Main entry point for Operator Control (teleop) mode
+	 **/
+	void  OperatorControl ()
+	{
+		GetWatchdog().SetEnabled(true);
+		Dashboard &dashboard = m_ds->GetDashboardPacker();
+		INT32 i=0;
+		while (IsOperatorControl())
+		{
+			GetWatchdog().Feed();
+			//myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
+			dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
+			dashboard.Printf("Iterations: %d\n", ++i);
+			UpdateDashboard();
+			Wait(0.02);
+		}	
+	}
+		
 	/**
 	 * Send data to the dashboard
 	 * Just sending a few values to show the data changing.
