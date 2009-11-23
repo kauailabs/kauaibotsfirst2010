@@ -17,43 +17,37 @@ DashboardDataFormat::~DashboardDataFormat()
 
 /**
  * Pack data using the correct types and in the correct order to match the
- * default "Dashboard Datatype" in the LabVIEW Dashboard project.
+ * "Dashboard Datatype" in the LabVIEW Dashboard project.
  */
-void DashboardDataFormat::PackAndSend(void)
+void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, MecanumDrive& drive)
 {
 	Dashboard &dashboardPacker = m_ds->GetDashboardPacker();
-	UINT32 module;
-	UINT32 channel;
+	
+	// Add data to describe the drive system state
+	//
+	// Add a cluster of Joystick data
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddFloat(stick1.GetX());
+	dashboardPacker.AddFloat(stick1.GetY());
+	dashboardPacker.AddFloat(stick2.GetX());
+	dashboardPacker.FinalizeCluster();
 
-	// Pack the analog modules
-	for (module = 0; module < kAnalogModules; module++)
-	{
-		dashboardPacker.AddCluster();
-		for (channel = 0; channel < kAnalogChannels; channel++)
-		{
-			dashboardPacker.AddFloat(m_AnalogChannels[module][channel]);
-		}
-		dashboardPacker.FinalizeCluster();
-	}
-	// Pack the digital modules
-	for (module = 0; module < kDigitalModules; module++)
-	{
-		dashboardPacker.AddCluster();
-		dashboardPacker.AddU8(m_RelayFwd[module]);
-		dashboardPacker.AddU8(m_RelayRev[module]);
-		dashboardPacker.AddU16(m_DIOChannels[module]);
-		dashboardPacker.AddU16(m_DIOChannelsOutputEnable[module]);
-		dashboardPacker.AddCluster();
-		for(channel = 0; channel < kPwmChannels; channel++)
-		{
-			dashboardPacker.AddU8(m_PWMChannels[module][channel]);
-		}
-		dashboardPacker.FinalizeCluster();
-		dashboardPacker.FinalizeCluster();
-	}
-	// Pack the solenoid module
-	dashboardPacker.AddU8(m_SolenoidChannels);
+	// Add a cluster of motor output speed data
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddFloat(drive.FrontLeftMotor().Get());
+	dashboardPacker.AddFloat(drive.FrontRightMotor().Get());
+	dashboardPacker.AddFloat(drive.RearLeftMotor().Get());
+	dashboardPacker.AddFloat(drive.RearRightMotor().Get());
+	dashboardPacker.FinalizeCluster();
 
+	// Add a cluster of wheel encoder input speed data
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddFloat(drive.FrontLeftEncoder().Get());
+	dashboardPacker.AddFloat(drive.FrontRightEncoder().Get());
+	dashboardPacker.AddFloat(drive.RearLeftEncoder().Get());
+	dashboardPacker.AddFloat(drive.RearRightEncoder().Get());
+	dashboardPacker.FinalizeCluster();
+	
 	// Flush the data to the driver station.
 	dashboardPacker.Finalize();
 }
