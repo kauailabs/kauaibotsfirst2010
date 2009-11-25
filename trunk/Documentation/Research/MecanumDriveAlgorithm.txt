@@ -1,0 +1,102 @@
+// Inputs are vFwd, vSide and vRot
+// Each input is expected to range from -1 to 1
+
+// Outputs are the four wheel speeds
+// Each output is expected to range from -1 to 1
+
+const int width  = 20;	 // Distance (inches) btwn left/right wheels // 20.5
+const int length = 28;   // Distance (inches) btwn front/back wheels // 28.5
+
+int scaledWidth  = 1;
+int scaledLength = 1;
+
+if ( width > length )
+{
+   scaledLength = length / width;
+}
+else if ( length > width )
+{
+   scaledWidth = width / length;
+}
+
+int rotationScale = ((scaledWidth + scaledLength)/2);
+
+frontLeftSpeed   = vFwd + vSide + (vRot * rotationScale);
+frontRightSpeed  = vFwd - vSide - (vRot * rotationScale);
+backLeftSpeed    = vFwd - vSide + (vRot * rotationScale);
+backRightSpeed   = vFwd + vSide - (vRot * rotationScale);
+
+// Test Cases
+
+// 1) Straight Ahead (vFwd=.5, vSide=0, vRot = 0)
+
+ .5  .5
+
+ .5  .5
+
+// 2) Straight Back (vFwd=-.5, vSide=0, vRot = 0)
+
+-.5 -.5
+
+-.5 -.5
+
+// 3) Direct Left (vFwd=0, vSide=-.5, vRot=0)
+
+-.5  .5
+
+ .5 -.5
+
+// 4) Direct Right (vFwd=0, vSide=.5, vRot=0)
+
+ .5 -.5
+
+-.5  .5
+
+// 5) Left Forward Diagonal (vFwd=.5, vSide=-.5, vRot=0)
+
+  0   1
+
+  1   0
+
+// 6) Right Forward Diagonal (vFwd=.5, vSide=.5, vRot=0)
+
+  1   0
+
+  0   1
+
+// 7 Clockwise Spin (vFwd=0, vSide=0, vRot=.5)
+
+ .5 -.5
+
+ .5 -.5
+
+// 8 Counterclockwise Spin (vFwd=0, vSide=0, vRot=-.5)
+
+-.5  .5
+
+-.5  .5
+
+// 9.  Straight ahead w/Clockwise Spin (vFwd=.5, vBack=0, vRot=.5)
+
+  1   0
+
+  1   0
+
+// 10.  Straight ahead, slight clockwise spin (vFwd=.5, vBack=0, vRot=.1)
+
+ .6  .4
+
+ .6  .4
+
+// 11.  Straight ahead (med), med. clockwise spin (vFwd=.25, vBack=0, vRot=.25)
+
+ .5  0
+
+ .5  0
+
+// 12.  Straight ahead (slow), clockwise spin (vFwd=.1, vBack=0, vRot=.5)
+
+ .6 -.4
+
+ .6 -.4
+
