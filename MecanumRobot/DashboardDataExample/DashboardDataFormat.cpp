@@ -25,6 +25,7 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, Mecanu
 	
 	// Add data to describe the drive system state
 	//
+	dashboardPacker.AddCluster();
 	// Add a cluster of Joystick data
 	dashboardPacker.AddCluster();
 	dashboardPacker.AddFloat(stick1.GetX());
@@ -46,6 +47,8 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, Mecanu
 	dashboardPacker.AddFloat(drive.FrontRightEncoder().Get());
 	dashboardPacker.AddFloat(drive.RearLeftEncoder().Get());
 	dashboardPacker.AddFloat(drive.RearRightEncoder().Get());
+	dashboardPacker.FinalizeCluster();
+	
 	dashboardPacker.FinalizeCluster();
 	
 	// Flush the data to the driver station.
