@@ -21,7 +21,7 @@
          <Item Name="App EXE.ico" Type="Document" URL="App EXE.ico"/>
       </Item>
       <Item Name="Dashboard Main.vi" Type="VI" URL="Dashboard Main.vi"/>
-      <Item Name="MecanumDriveTypeDef.ctl" Type="VI" URL="../../../Documents and Settings/slibert.E1/My Documents/LabVIEW Data/FRC Dashboard Project/MecanumDriveTypeDef.ctl"/>
+      <Item Name="MecanumDriveTypeDef.ctl" Type="VI" URL="MecanumDriveTypeDef.ctl"/>
       <Item Name="Dependencies" Type="Dependencies">
          <Item Name="vi.lib" Type="Folder">
             <Item Name="FixBadRect.vi" Type="VI" URL="/&lt;vilib&gt;/picture/pictutil.llb/FixBadRect.vi"/>
