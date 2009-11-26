@@ -25,14 +25,12 @@ GameDrive::GameDrive()
 	m_rearSteerMotor = new Speedmotor(6);
 	m_frontPot = new Potentiometer(1);
 	m_rearPot = new Potentiometer(2);
-	m_PIDFront = new PIDController(1,1,1);
-	m_PIDRear = new PIDController(1,1,1);
+	m_PIDFront = new PIDController(1,1,1,m_frontPot,m_frontSteerMotor);
+	m_PIDRear = new PIDController(1,1,1,m_rearPot,m_rearSteerMotor);
 	m_sensitivity = 0.5;
 	m_invertedRear = -1;
-	m_PIDFront->SetInput(m_frontPot, m_frontPot->GetMin(), m_frontPot->GetMax());
-	m_PIDFront->SetOutput(m_frontSteerMotor);
-	m_PIDRear->SetInput(m_rearPot, m_rearPot->GetMin(), m_rearPot->GetMax());
-	m_PIDRear->SetOutput(m_rearSteerMotor);
+	m_PIDFront->SetInputRange(m_frontPot->GetMin(), m_frontPot->GetMax());
+	m_PIDRear->SetInputRange(m_rearPot->GetMin(), m_rearPot->GetMax());
 	m_deleteAll = true;
 	m_DriveWheelEncoder = new Encoder(kDriveWheelEncoderForward,kDriveWheelEncoderReverse);
 	m_FreeWheelEncoder = new Encoder(kFreeWheelEncoderForward,kFreeWheelEncoderReverse);
@@ -59,18 +57,16 @@ GameDrive::GameDrive(SpeedController *frontLeftMotor, SpeedController *rearLeftM
 	m_rearRightMotor = rearRightMotor;
 	m_frontSteerMotor = new Speedmotor(frontSteerChannel);
 	m_rearSteerMotor = new Speedmotor(rearSteerChannel);
-	m_PIDFront = new PIDController(1,1,1);
-	m_PIDRear = new PIDController(1,1,1);
+	m_PIDFront = new PIDController(1,1,1,frontPot,m_frontSteerMotor);
+	m_PIDRear = new PIDController(1,1,1,rearPot,m_rearSteerMotor);
 	m_sensitivity = sensitivity;
 	for (INT32 i=0; i < kMaxNumberOfMotors; i++)
 	{
 		m_invertedMotors[i] = 1;
 	}
 	m_invertedRear = -1;
-	m_PIDFront->SetInput( frontPot, frontPot->GetMin(), frontPot->GetMax());
-	m_PIDRear->SetInput( rearPot, rearPot->GetMin(), rearPot->GetMax());
-	m_PIDFront->SetOutput( m_frontSteerMotor );
-	m_PIDRear->SetOutput( m_rearSteerMotor );
+	m_PIDFront->SetInputRange(frontPot->GetMin(), frontPot->GetMax());
+	m_PIDRear->SetInputRange(rearPot->GetMin(), rearPot->GetMax());
 	m_deleteSpeedControllers = false;
 	m_deleteSteerControllers = true;
 }
