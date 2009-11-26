@@ -4,7 +4,7 @@
 #include "Jaguar.h"
 #include "PIDOutput.h"
 
-class Speedmotor : public Jaguar, public PIDOutput
+class Speedmotor : public Jaguar
 {
   public:
     Speedmotor(UINT32 slot, UINT32 channel);

@@ -44,7 +44,7 @@ Potentiometer::Potentiometer(UINT32 channel, float min, float max)
 }
 
 
-float Potentiometer::PIDGet(void)
+double Potentiometer::PIDGet(void)
 {
   return GetAverageVoltage();
 }

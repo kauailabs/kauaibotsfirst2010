@@ -3,12 +3,12 @@
 
 #include <WPILib.H>
 
-class Potentiometer : public AnalogChannel, public PIDSource
+class Potentiometer : public AnalogChannel
 {
   public:
     Potentiometer(UINT32 slot, UINT32 channel, float min =-1.0, float max =1.0);
     Potentiometer(UINT32 channel, float min =-1.0, float max =1.0);
-    float PIDGet(void);
+    double PIDGet(void);
     float GetMax(void);
     float GetMin(void);
 
