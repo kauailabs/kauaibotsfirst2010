@@ -105,6 +105,11 @@ void MecanumDrive::RestartEncoders()
 	m_rearLeftEncoder.Start();
 	m_rearRightEncoder.Reset();
 	m_rearRightEncoder.Start();
+	
+	m_frontLeftEncoder.SetMinRate(0.5);
+	m_frontRightEncoder.SetMinRate(0.5);
+	m_rearLeftEncoder.SetMinRate(0.5);
+	m_rearRightEncoder.SetMinRate(0.5);
 }
 
 void MecanumDrive::MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities )
@@ -141,6 +146,22 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	char *strDescription = "DoMecanum()";
 	printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
 
+	// Introduce exponential ramp on joystick input.
+	
+	if ( vX > 0 )
+		vX = (vX * vX);
+	else
+		vX = -1 * (vX * vX);
+	if ( vY > 0 )
+		vY = (vY * vY);
+	else
+		vY = -1 * (vY * vY);
+	if ( vRot > 0 )
+		vRot = (vRot * vRot);
+	else
+		vRot = -1 * (vRot * vRot);
+	
+		
 	///////
 	// Translational/Rotational Input Velocity Scaling:
 	//
