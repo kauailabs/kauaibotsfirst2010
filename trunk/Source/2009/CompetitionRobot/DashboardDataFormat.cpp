@@ -4,8 +4,8 @@
 DashboardDataFormat::DashboardDataFormat(void)
 	: m_ds (DriverStation::GetInstance())
 {
-	int i;
-	int j;
+	UINT32 i;
+	UINT32 j;
 	for (i=0;i<kAnalogModules;i++)
 	{
 		for(j=0;j<kAnalogChannels;j++)

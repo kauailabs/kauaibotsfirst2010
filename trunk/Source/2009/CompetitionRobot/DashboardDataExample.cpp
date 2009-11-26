@@ -87,11 +87,11 @@ public:
 		
 		UINT32 center = (UINT32)((float)value / (float)count + .5);
 
-		printf("Analog Channel Center:  %d\n");
+		printf("Set Analog Channel Center:  %d\n",center);
 		
 		m_analog->SetAccumulatorCenter(center);
 		
-		printf("Analog Channel Deadband:  %d\n");
+		printf("Set Analog Channel Deadband:  %d\n",0);
 		
 		m_analog->SetAccumulatorDeadband(0); ///< TODO: compute / parameterize this
 		m_analog->ResetAccumulator();
