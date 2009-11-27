@@ -49,7 +49,16 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, Mecanu
 	dashboardPacker.AddFloat(drive.RearRightEncoder().Get());
 	dashboardPacker.FinalizeCluster();
 	
+	// Add a cluster of inertial navigation sensor data
+	
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddFloat(drive.AccelerometerX().GetAcceleration());
+	dashboardPacker.AddFloat(drive.AccelerometerY().GetAcceleration());	
+	dashboardPacker.AddFloat(drive.Gyroscope().GetAngle());
 	dashboardPacker.FinalizeCluster();
+	
+	// Finalize the entire cluster of drive system data
+	dashboardPacker.FinalizeCluster();	
 	
 	// Flush the data to the driver station.
 	dashboardPacker.Finalize();

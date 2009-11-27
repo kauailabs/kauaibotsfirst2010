@@ -82,7 +82,10 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorChannel,
 	UINT32 rearLeftEncoderChannelA,
 	UINT32 rearLeftEncoderChannelB,
 	UINT32 rearRightEncoderChannelA,
-	UINT32 rearRightEncoderChannelB )
+	UINT32 rearRightEncoderChannelB,
+	UINT32 gyroChannel,
+	UINT32 accelerometerChannelX,
+	UINT32 accelerometerChannelY )
 	: m_frontLeftMotor( frontLeftMotorChannel)
 	, m_frontRightMotor( frontRightMotorChannel)
 	, m_rearLeftMotor( rearLeftMotorChannel)
@@ -91,25 +94,44 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorChannel,
 	, m_frontRightEncoder(4,frontRightEncoderChannelA,4,frontRightEncoderChannelB)
 	, m_rearLeftEncoder(4,rearLeftEncoderChannelA,4,rearLeftEncoderChannelB)
 	, m_rearRightEncoder(4,rearRightEncoderChannelA,4,rearRightEncoderChannelB)
+	, m_gyroscope(1,gyroChannel)
+	, m_accelerometerX(1,accelerometerChannelX)
+	, m_accelerometerY(1,accelerometerChannelY)
 {
-	RestartEncoders();
+	RestartSensors();
 }
 
-void MecanumDrive::RestartEncoders()
+void MecanumDrive::InitializeSensors()
 {
-	m_frontLeftEncoder.Reset();
-	m_frontLeftEncoder.Start();
-	m_frontRightEncoder.Reset();
-	m_frontRightEncoder.Start();
-	m_rearLeftEncoder.Reset();
-	m_rearLeftEncoder.Start();
-	m_rearRightEncoder.Reset();
-	m_rearRightEncoder.Start();
-	
+	// Encoders
 	m_frontLeftEncoder.SetMinRate(0.5);
 	m_frontRightEncoder.SetMinRate(0.5);
 	m_rearLeftEncoder.SetMinRate(0.5);
 	m_rearRightEncoder.SetMinRate(0.5);
+	
+	// Gyroscope
+	//
+	// Gyro is initialized, including calibration, in constructor
+	//
+	
+	// Accelerometers
+	//
+	// Accelerometers are initialized, including calibration, in constructor
+	//
+	
+}
+
+void MecanumDrive::RestartSensors()
+{
+	m_frontLeftEncoder.Reset();
+	m_frontRightEncoder.Reset();
+	m_rearLeftEncoder.Reset();
+	m_rearRightEncoder.Reset();
+	
+	m_frontLeftEncoder.Start();
+	m_frontRightEncoder.Start();
+	m_rearLeftEncoder.Start();
+	m_rearRightEncoder.Start();
 }
 
 void MecanumDrive::MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities )
