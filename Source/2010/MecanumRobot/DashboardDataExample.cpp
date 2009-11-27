@@ -14,7 +14,7 @@ class DashboardDataExample : public SimpleRobot
 
 public:
 	DashboardDataExample(void)
-		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8) // these must be initialized in the same order
+		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8,1,2,3) // these must be initialized in the same order
 		, stick1(1)		// as they are declared above.
 		, stick2(2)
 	{

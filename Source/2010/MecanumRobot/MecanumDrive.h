@@ -9,6 +9,8 @@
 
 #include "Encoder.h"
 #include "Jaguar.h"
+#include "Gyro.h"
+#include "Accelerometer.h"
 
 /*
  * Description:  Custom Robot Drive Class to extend the
@@ -27,6 +29,10 @@ protected:
 	Encoder m_frontRightEncoder;
 	Encoder m_rearLeftEncoder;
 	Encoder m_rearRightEncoder;
+	Gyro	m_gyroscope;
+	Accelerometer m_accelerometerX;
+	Accelerometer m_accelerometerY;
+	
 public:
 	MecanumDrive( UINT32 frontLeftMotorChannel,
 			UINT32 frontRightMotorChannel,
@@ -39,20 +45,28 @@ public:
 			UINT32 rearLeftEncoderChannelA,
 			UINT32 rearLeftEncoderChannelB,
 			UINT32 rearRightEncoderChannelA,
-			UINT32 rearRightEncoderChannelB );
+			UINT32 rearRightEncoderChannelB,
+			UINT32 gyroChannel,
+			UINT32 accelerometerChannelX,
+			UINT32 accelerometerChannelY);
 
 	void DoMecanum( float vX, float vY, float vRot );
-	void RestartEncoders();
+	void InitializeSensors();
+	void RestartSensors();
 
-	Encoder& FrontLeftEncoder() { return m_frontLeftEncoder; } 
-	Encoder& FrontRightEncoder() { return m_frontRightEncoder; } 
-	Encoder& RearLeftEncoder() { return m_rearLeftEncoder; } 
-	Encoder& RearRightEncoder() { return m_rearRightEncoder; } 
+	Encoder& 			FrontLeftEncoder() { return m_frontLeftEncoder; } 
+	Encoder& 			FrontRightEncoder() { return m_frontRightEncoder; } 
+	Encoder& 			RearLeftEncoder() { return m_rearLeftEncoder; } 
+	Encoder& 			RearRightEncoder() { return m_rearRightEncoder; } 
 	
-	SpeedController& FrontLeftMotor() { return m_frontLeftMotor; }
-	SpeedController& FrontRightMotor() { return m_frontRightMotor; }
-	SpeedController& RearLeftMotor() { return m_rearLeftMotor; }
-	SpeedController& RearRightMotor() { return m_rearRightMotor; }
+	SpeedController& 	FrontLeftMotor() { return m_frontLeftMotor; }
+	SpeedController& 	FrontRightMotor() { return m_frontRightMotor; }
+	SpeedController& 	RearLeftMotor() { return m_rearLeftMotor; }
+	SpeedController& 	RearRightMotor() { return m_rearRightMotor; }
+	
+	Gyro&				Gyroscope() { return m_gyroscope; }
+	Accelerometer& 		AccelerometerX() { return m_accelerometerX; }
+	Accelerometer&		AccelerometerY() { return m_accelerometerY; }
 	
 	~MecanumDrive();
 protected:
