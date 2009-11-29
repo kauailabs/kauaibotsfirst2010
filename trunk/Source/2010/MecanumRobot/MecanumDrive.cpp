@@ -98,6 +98,7 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorChannel,
 	, m_accelerometerX(1,accelerometerChannelX)
 	, m_accelerometerY(1,accelerometerChannelY)
 {
+	InitializeSensors();
 	RestartSensors();
 }
 
@@ -113,12 +114,18 @@ void MecanumDrive::InitializeSensors()
 	//
 	// Gyro is initialized, including calibration, in constructor
 	//
-	
+	// Initialize sensivity of the AD22305 Gyroscope
+	m_gyroscope.SetSensitivity(.007);
 	// Accelerometers
 	//
 	// Accelerometers are initialized, including calibration, in constructor
 	//
-	
+	// Intialize Zero voltage and sensitivity of the ADXL335
+	// Accelerometer chip based upon chip spec sheet.
+	m_accelerometerX.SetZero(1.5);
+	m_accelerometerX.SetSensitivity(.3);
+	m_accelerometerY.SetZero(1.5);
+	m_accelerometerY.SetSensitivity(.3);
 }
 
 void MecanumDrive::RestartSensors()
@@ -165,8 +172,8 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 // Each output is expected to range from -1 to 1
 void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 {
-	char *strDescription = "DoMecanum()";
-	printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
+	//char *strDescription = "DoMecanum()";
+	//printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
 
 	// Introduce exponential ramp on joystick input.
 	
@@ -200,7 +207,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 		vY		*= excessRatio;
 		vRot	*= excessRatio;
 
-		printf("Input Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
+		//printf("Input Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
 	}
 
 	///////
@@ -217,15 +224,15 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	// was equal to the wheel radius.
 
 	vRot *= (1/cRotK);
-	printf("Output Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
+	//printf("Output Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
 
 	float wheelSpeeds[4];
 	float velocities[3] = { vX, vY, vRot };
 
 	MecanumDriveInvKinematics( velocities, &wheelSpeeds[0] );
 
-	printf("FL, FR:  %f, %f\n\n", wheelSpeeds[0], wheelSpeeds[1]);
-	printf("RL, RR:  %f, %f\n\n", wheelSpeeds[2], wheelSpeeds[3]);
+	//printf("FL, FR:  %f, %f\n\n", wheelSpeeds[0], wheelSpeeds[1]);
+	//printf("RL, RR:  %f, %f\n\n", wheelSpeeds[2], wheelSpeeds[3]);
 
 	m_frontLeftMotor.Set(wheelSpeeds[0]);
 	m_frontRightMotor.Set(wheelSpeeds[1]);
@@ -240,7 +247,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 
 	MecanumDriveFwdKinematics( wheelSpeeds, &derivedVelocities[0] );
 
-	printf("vX:  %f, vY:  %f, vRot:  %f\n\n", derivedVelocities[VX], derivedVelocities[VY], derivedVelocities[VROT]*cRotK );
+	//printf("vX:  %f, vY:  %f, vRot:  %f\n\n", derivedVelocities[VX], derivedVelocities[VY], derivedVelocities[VROT]*cRotK );
 }
 
 /*
