@@ -243,9 +243,9 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	// forward kinematics algorithm.  The resulting derived velocities should match
 	// the scaled input velocities.
 
-	float derivedVelocities[3];
+	//float derivedVelocities[3];
 
-	MecanumDriveFwdKinematics( wheelSpeeds, &derivedVelocities[0] );
+	//MecanumDriveFwdKinematics( wheelSpeeds, &derivedVelocities[0] );
 
 	//printf("vX:  %f, vY:  %f, vRot:  %f\n\n", derivedVelocities[VX], derivedVelocities[VY], derivedVelocities[VROT]*cRotK );
 }
