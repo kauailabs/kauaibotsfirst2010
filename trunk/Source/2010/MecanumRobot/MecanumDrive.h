@@ -10,7 +10,7 @@
 #include "Encoder.h"
 #include "Jaguar.h"
 #include "Gyro.h"
-#include "Accelerometer.h"
+#include "FilteredAccelerometer.h"
 
 /*
  * Description:  Custom Robot Drive Class to extend the
@@ -30,8 +30,8 @@ protected:
 	Encoder m_rearLeftEncoder;
 	Encoder m_rearRightEncoder;
 	Gyro	m_gyroscope;
-	Accelerometer m_accelerometerX;
-	Accelerometer m_accelerometerY;
+	FilteredAccelerometer m_accelerometerX;
+	FilteredAccelerometer m_accelerometerY;
 	
 public:
 	MecanumDrive( UINT32 frontLeftMotorChannel,
@@ -65,8 +65,8 @@ public:
 	SpeedController& 	RearRightMotor() { return m_rearRightMotor; }
 	
 	Gyro&				Gyroscope() { return m_gyroscope; }
-	Accelerometer& 		AccelerometerX() { return m_accelerometerX; }
-	Accelerometer&		AccelerometerY() { return m_accelerometerY; }
+	FilteredAccelerometer& 		AccelerometerX() { return m_accelerometerX; }
+	FilteredAccelerometer&		AccelerometerY() { return m_accelerometerY; }
 	
 	~MecanumDrive();
 protected:
