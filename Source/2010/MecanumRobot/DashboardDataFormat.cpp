@@ -21,7 +21,7 @@ DashboardDataFormat::~DashboardDataFormat()
  */
 void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, MecanumDrive& drive)
 {
-	Dashboard &dashboardPacker = m_ds->GetDashboardPacker();
+	Dashboard &dashboardPacker = m_ds->GetLowPriorityDashboardPacker();
 	
 	// Add data to describe the drive system state
 	//

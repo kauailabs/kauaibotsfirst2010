@@ -27,7 +27,7 @@ public:
 	void  Autonomous () 
 	{
 		GetWatchdog().SetEnabled(true);
-		Dashboard &dashboard = m_ds->GetDashboardPacker();
+		Dashboard &dashboard = m_ds->GetLowPriorityDashboardPacker();
 		INT32 i=0;
 		while(IsAutonomous())
 		{
@@ -48,7 +48,7 @@ public:
 	void  OperatorControl ()
 	{
 		GetWatchdog().SetEnabled(true);
-		Dashboard &dashboard = m_ds->GetDashboardPacker();
+		Dashboard &dashboard = m_ds->GetLowPriorityDashboardPacker();
 		INT32 i=0;
 		while (IsOperatorControl())
 		{
