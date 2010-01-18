@@ -22,7 +22,7 @@ class DashboardDataFormat : public SensorBase
 public:
 	DashboardDataFormat(void);
 	virtual ~DashboardDataFormat();
-	void PackAndSend(Joystick& stick1, Joystick& stick2, MecanumDrive& drive);
+	void PackAndSend(Joystick& stick1, MecanumDrive& drive);
 private:
 	DISALLOW_COPY_AND_ASSIGN(DashboardDataFormat);
 	DriverStation *m_ds;

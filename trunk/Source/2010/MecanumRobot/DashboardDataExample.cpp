@@ -8,17 +8,15 @@
 class DashboardDataExample : public SimpleRobot
 {
 	MecanumDrive myRobot; // robot drive system
-	Joystick stick1; // Linear velocity control joystick
-	Joystick stick2; // Rotational velocity control joystick
+	Joystick stick1; // X-box (X,Y,Rotation) controller
 	DashboardDataFormat dashboardDataFormat;
 
 public:
 	DashboardDataExample(void)
 		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8,1,2,3) // these must be initialized in the same order
 		, stick1(1)		// as they are declared above.
-		, stick2(2)
 	{
-		GetWatchdog().SetExpiration(0.1);
+		GetWatchdog().SetExpiration(0.5);
 	}
 
 	/**
@@ -27,7 +25,7 @@ public:
 	void  Autonomous () 
 	{
 		GetWatchdog().SetEnabled(true);
-		Dashboard &dashboard = m_ds->GetLowPriorityDashboardPacker();
+		Dashboard &dashboard = m_ds->GetHighPriorityDashboardPacker();
 		INT32 i=0;
 		while(IsAutonomous())
 		{
@@ -48,12 +46,12 @@ public:
 	void  OperatorControl ()
 	{
 		GetWatchdog().SetEnabled(true);
-		Dashboard &dashboard = m_ds->GetLowPriorityDashboardPacker();
+		Dashboard &dashboard = m_ds->GetHighPriorityDashboardPacker();
 		INT32 i=0;
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick2.GetX());
+			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist());
 			dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			dashboard.Printf("Iterations: %d\n", ++i);
 			UpdateDashboard();
@@ -68,7 +66,7 @@ public:
 	 */
 	void UpdateDashboard(void)
 	{
-		dashboardDataFormat.PackAndSend(stick1, stick2, myRobot);
+		dashboardDataFormat.PackAndSend(stick1, myRobot);
 	}
 };
 
