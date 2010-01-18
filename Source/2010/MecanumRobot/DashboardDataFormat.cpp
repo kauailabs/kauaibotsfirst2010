@@ -19,7 +19,7 @@ DashboardDataFormat::~DashboardDataFormat()
  * Pack data using the correct types and in the correct order to match the
  * "Dashboard Datatype" in the LabVIEW Dashboard project.
  */
-void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, MecanumDrive& drive)
+void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
 {
 	Dashboard &dashboardPacker = m_ds->GetLowPriorityDashboardPacker();
 	
@@ -30,7 +30,7 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, Joystick& stick2, Mecanu
 	dashboardPacker.AddCluster();
 	dashboardPacker.AddFloat(stick1.GetX());
 	dashboardPacker.AddFloat(stick1.GetY());
-	dashboardPacker.AddFloat(stick2.GetX());
+	dashboardPacker.AddFloat(stick1.GetTwist());
 	dashboardPacker.FinalizeCluster();
 
 	// Add a cluster of motor output speed data
