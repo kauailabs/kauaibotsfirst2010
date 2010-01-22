@@ -51,7 +51,7 @@ public:
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist());
+			myRobot.DoMecanum(stick1.GetX(),stick1.GetTwist(),stick1.GetY());
 			dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			dashboard.Printf("Iterations: %d\n", ++i);
 			UpdateDashboard();
