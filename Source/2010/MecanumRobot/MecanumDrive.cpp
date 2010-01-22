@@ -14,9 +14,9 @@
 // These may change if the robot design changes
 //////////////////////////////////////////////////////////
 
-const float cWidth			= 20.5;					// Distance btwn left/right wheels
-const float cLength			= 28.5;					// Distance btwn front/back wheels
-const float wheelDiameter	= 6.0;					// Per AndyMark Specs
+const float cWidth			= 32.5;					// Distance btwn left/right wheels
+const float cLength			= 18.75;					// Distance btwn front/back wheels
+const float wheelDiameter	= 8.0;					// Per AndyMark Specs
 const float wheelRadius		= wheelDiameter / 2;
 
 //////////////////////////////////////////////////////////

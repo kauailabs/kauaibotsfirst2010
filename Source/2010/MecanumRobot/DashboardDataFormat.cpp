@@ -29,8 +29,8 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
 	// Add a cluster of Joystick data
 	dashboardPacker.AddCluster();
 	dashboardPacker.AddFloat(stick1.GetX());
-	dashboardPacker.AddFloat(stick1.GetY());
 	dashboardPacker.AddFloat(stick1.GetTwist());
+	dashboardPacker.AddFloat(stick1.GetY());
 	dashboardPacker.FinalizeCluster();
 
 	// Add a cluster of motor output speed data
