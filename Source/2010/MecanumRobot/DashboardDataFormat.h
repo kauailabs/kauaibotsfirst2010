@@ -3,6 +3,8 @@
 
 #include "WPILib.h"
 #include "MecanumDrive.h"
+#include "Timer.h"
+#include "Target.h"
 
 // This is a test.
 
@@ -23,9 +25,15 @@ public:
 	DashboardDataFormat(void);
 	virtual ~DashboardDataFormat();
 	void PackAndSend(Joystick& stick1, MecanumDrive& drive);
+	void sendVisionData(double joyStickX,
+					double gyroAngle,
+					double gyroRate,
+					double targetX,
+					vector<Target> targets);
 private:
 	DISALLOW_COPY_AND_ASSIGN(DashboardDataFormat);
 	DriverStation *m_ds;
+	Timer *visionTimer;
 };
 
 
