@@ -36,7 +36,7 @@ public:
 		camera.writeResolution(k320x240);
 		camera.writeBrightness(0);
 		GetWatchdog().SetEnabled(true);
-		GetWatchdog().SetExpiration(0.5);
+		GetWatchdog().SetExpiration(1.0);
         // Set camera servos to their default position
 		horizontalServo.Set(.5);
         verticalServo.Set(.5);
