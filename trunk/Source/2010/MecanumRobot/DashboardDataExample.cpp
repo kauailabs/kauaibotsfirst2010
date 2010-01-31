@@ -78,17 +78,12 @@ public:
 			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			//dashboard.Printf("Iterations: %d\n", ++i);
 			horizontalServo.Set((stick2.GetX()+1)/2);
+
+			// Correct for non-zero offset in vertical servo.
 			
-			// Scale the vertical servo for tilt range
-			// of -20 degrees to 90 degrees
-			
-			
+			const double dVertOffset = -.1;
 			double dVertServoJoystickY = stick2.GetY();
-			/*
-			if ( dVertServoJoystickY < -.21) dVertServoJoystickY = -.21;
-			verticalServo.Set((dVertServoJoystickY * -.82 ) + .82);
-			*/
-			verticalServo.Set((dVertServoJoystickY + 1)/2);
+			verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);
 			
 			UpdateDashboard();
 			Wait(0.02);
