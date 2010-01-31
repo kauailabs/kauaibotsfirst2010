@@ -14,9 +14,9 @@
 // These may change if the robot design changes
 //////////////////////////////////////////////////////////
 
-const float cWidth			= 23.5;					// Distance btwn left/right wheels
-const float cLength			= 25.5;					// Distance btwn front/back wheels
-const float wheelDiameter	= 8.0;					// Per AndyMark Specs
+const float cWidth			= 22.25;					// Distance btwn left/right wheels
+const float cLength			= 26.0;					// Distance btwn front/back wheels
+const float wheelDiameter	= 6.0;					// Per AndyMark Specs
 const float wheelRadius		= wheelDiameter / 2;
 
 //////////////////////////////////////////////////////////
@@ -234,9 +234,9 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	//printf("FL, FR:  %f, %f\n\n", wheelSpeeds[0], wheelSpeeds[1]);
 	//printf("RL, RR:  %f, %f\n\n", wheelSpeeds[2], wheelSpeeds[3]);
 
-	m_frontLeftMotor.Set(wheelSpeeds[0]);
+	m_frontLeftMotor.Set(wheelSpeeds[0] * -1 ); // Inverted polarity of left-side wheels
 	m_frontRightMotor.Set(wheelSpeeds[1]);
-	m_rearLeftMotor.Set(wheelSpeeds[2]);
+	m_rearLeftMotor.Set(wheelSpeeds[2] * -1 );  // Inverted polarity of left-side wheels
 	m_rearRightMotor.Set(wheelSpeeds[3]);
 		
 	// For testing purposes, transform the resulting wheel speeds through the matching
