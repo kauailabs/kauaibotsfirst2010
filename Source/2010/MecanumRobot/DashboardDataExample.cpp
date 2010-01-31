@@ -29,7 +29,7 @@ public:
 		GetWatchdog().SetEnabled(false);
 		// Create and set up a camera instance. first wait for the camera to start
 		// if the robot was just powered on. This gives the camera time to boot.
-		Wait(10.0);
+		Wait(5.0);
 		//printf("Getting camera instance\n");
 		AxisCamera& camera = AxisCamera::getInstance();
 		//printf("Setting camera parameters\n");
