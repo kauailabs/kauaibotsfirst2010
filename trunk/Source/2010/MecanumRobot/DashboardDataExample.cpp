@@ -38,8 +38,8 @@ public:
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(1.0);
         // Set camera servos to their default position
-		horizontalServo.Set(.5);
-        verticalServo.Set(.5);
+		horizontalServo.Set(.0);
+        verticalServo.Set(.0);
 	}
 
 	/**
@@ -82,9 +82,13 @@ public:
 			// Scale the vertical servo for tilt range
 			// of -20 degrees to 90 degrees
 			
+			
 			double dVertServoJoystickY = stick2.GetY();
+			/*
 			if ( dVertServoJoystickY < -.21) dVertServoJoystickY = -.21;
 			verticalServo.Set((dVertServoJoystickY * -.82 ) + .82);
+			*/
+			verticalServo.Set((dVertServoJoystickY + 1)/2);
 			
 			UpdateDashboard();
 			Wait(0.02);
