@@ -3,6 +3,7 @@
 #include "MecanumDrive.h"
 #include "Vision/AxisCamera2010.h"
 #include "Vision/HSLImage.h"
+#include <math.h>
 
 #define MINIMUM_SCORE 0.01
 
@@ -77,16 +78,19 @@ public:
 			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetZ());
 			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			//dashboard.Printf("Iterations: %d\n", ++i);
-			horizontalServo.Set((stick2.GetX()+1)/2);
+			
+			double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());
+			
+			horizontalServo.Set((dHorizServoJoystick+1)/2);
 
 			// Correct for non-zero offset in vertical servo.
 			
 			const double dVertOffset = -.1;
-			double dVertServoJoystickY = stick2.GetY();
+			double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
 			verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);
 			
 			UpdateDashboard();
-			Wait(0.02);
+			Wait(0.01);
 		}	
 	}
 		
@@ -147,6 +151,22 @@ public:
 			}
 		}		
 	}
+
+	double CameraServoJoystickAdjust( double dJoystickIn )
+	{
+		return dJoystickIn;
+		
+		const double cCameraServoJoystickExponent = 2.0;
+		
+		double dJoystickOut = 0.0;
+		if ( dJoystickIn > 0 )
+			dJoystickOut = pow(dJoystickIn, cCameraServoJoystickExponent);
+		else
+			dJoystickOut = -1 * pow(dJoystickIn, cCameraServoJoystickExponent);
+
+		return dJoystickOut;
+	}
+	
 };
 
 START_ROBOT_CLASS(DashboardDataExample);
