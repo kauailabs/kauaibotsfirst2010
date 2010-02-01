@@ -166,6 +166,18 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 	}
 }
 
+const double cDriveJoystickExponent = 2.0;
+
+double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
+{
+	double dJoystickOut = 0.0;
+	if ( dJoystickIn > 0 )
+		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent);
+	else
+		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent);
+
+	return dJoystickOut;
+}
 // MecanumDrive()
 // Each input is expected to range from -1 to 1
 // Outputs are the four wheel speeds
@@ -177,20 +189,10 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 
 	// Introduce exponential ramp on joystick input.
 	
-	if ( vX > 0 )
-		vX = (vX * vX);
-	else
-		vX = -1 * (vX * vX);
-	if ( vY > 0 )
-		vY = (vY * vY);
-	else
-		vY = -1 * (vY * vY);
-	if ( vRot > 0 )
-		vRot = (vRot * vRot);
-	else
-		vRot = -1 * (vRot * vRot);
-	
-		
+	vX = InputJoystickAdjust(vX);
+	vY = InputJoystickAdjust(vY);
+	vRot = InputJoystickAdjust(vRot);
+			
 	///////
 	// Translational/Rotational Input Velocity Scaling:
 	//

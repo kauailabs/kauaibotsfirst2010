@@ -72,5 +72,7 @@ public:
 protected:
 	void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
 	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);
+
+	double InputJoystickAdjust( double dJoystickIn );
 };
 #endif
