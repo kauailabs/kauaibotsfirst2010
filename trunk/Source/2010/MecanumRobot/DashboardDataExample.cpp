@@ -1,7 +1,7 @@
 #include "WPILib.h"
 #include "DashboardDataFormat.h"
 #include "MecanumDrive.h"
-#include "Vision/AxisCamera2010.h"
+#include "Vision/AxisCamera.h"
 #include "Vision/HSLImage.h"
 #include <math.h>
 
@@ -32,10 +32,10 @@ public:
 		// if the robot was just powered on. This gives the camera time to boot.
 		Wait(5.0);
 		//printf("Getting camera instance\n");
-		AxisCamera& camera = AxisCamera::getInstance();
+		AxisCamera& camera = AxisCamera::GetInstance();
 		//printf("Setting camera parameters\n");
-		camera.writeResolution(k320x240);
-		camera.writeBrightness(0);
+		camera.WriteResolution(AxisCamera::kResolution_320x240);
+		camera.WriteBrightness(0);
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(1.0);
         // Set camera servos to their default position
@@ -101,8 +101,8 @@ public:
 	{
 		dashboardDataFormat.PackAndSend(stick1, myRobot);
 
-		AxisCamera& camera = AxisCamera::getInstance();
-		if ( camera.freshImage() ) 
+		AxisCamera& camera = AxisCamera::GetInstance();
+		if ( camera.IsFreshImage() ) 
 		{
 			// get the gyro heading that goes with this image
 			double gyroAngle = myRobot.Gyroscope().PIDGet();
@@ -139,8 +139,8 @@ public:
 			else // Targets detected
 			{
 				// set the new PID heading setpoint to the first target in the list
-				double horizontalAngle = targets[0].GetHorizontalAngle();
-				double setPoint = gyroAngle + horizontalAngle;
+				//double horizontalAngle = targets[0].GetHorizontalAngle();
+				//double setPoint = gyroAngle + horizontalAngle;
 
 				//turnController.SetSetpoint(setPoint);
 				
