@@ -139,7 +139,10 @@ vector<Target> Target::FindCircularTargets(ColorImage *image)
             }
 		}
 		sortedTargets.erase(sortedTargets.begin());
-		combinedTargets.push_back(t1);
+		if (t1.m_bothFound)
+		{
+			combinedTargets.push_back(t1);
+		}
 	}
 
 	// sort the combined targets so the highest scoring one is first
