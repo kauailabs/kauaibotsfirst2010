@@ -15,14 +15,14 @@ protected:
 	Servo *m_vertCameraServo;
 public:
 	KauaibotsTarget(Target t, ColorImage *image, Servo *horizCameraServo, Servo *vertCameraServo);
-	double GetRobotHorizontalAngle();
-	double GetRobotVerticalAngle();
-	double GetDistanceToTargetInches();  // Method using YPos
-	double GetDistanceToTargetInches2(); // Method using Major Radius
-	double GetDistanceToGoalInches();    // Method using YPos
+	double GetRobotHorizontalAngle();	 // Horiz. Degrees from Robot Center to Target Center
+	double GetRobotVerticalAngle();      // Vert. Degrees from Robot Center to Target Center
+	double GetDistanceToTargetInches();  // Distance from Camera to Target Center (using vert angle)
+	double GetDistanceToTargetInches2(); // Distance from Camera to Target Center (using target radius)
+	double GetDistanceToGoalInches();    // Distance from Robot to Goal (using vert angle)
 protected:
-	double GetHorizServoAngle();
-	double GetVertServoAngle();
+	double GetHorizServoAngle();		 // Servo Horiz. Angle offset (0 = no offset)
+	double GetVertServoAngle();			 // Servo Vert. Angle offset (0= not offset)
 };
 
 #endif // _KAUAIBOTSTARGET_H
