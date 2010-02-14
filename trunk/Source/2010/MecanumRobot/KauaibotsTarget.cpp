@@ -1,17 +1,17 @@
 #include "KauaibotsTarget.h"
 #include <math.h>
 
-const double cCameraAngleOfViewDegrees = 47.0;
-const double cCameraLensHeightInches = 19.0;
+const double cCameraAngleOfViewDegrees = 47.0;		// TODO:  Measure this
+const double cCameraLensHeightInches = 19.0;		// TODO:  Measure this
 const double cTargetCenterHeightInches = 56.5;
 const double cTargetOuterDiameterInches = 38.0;
 const double cCameraFocalLengthMM = 4.0;
 const double cCameraServoMinRange = 0;
 const double cCameraServoMaxRange = 1;
-const double cHorizCameraServoCenterValue = 0.5;
-const double cVertCameraServoCenterValue = 0.5;
-const double cHorizCameraServoRangeDegrees = 90;
-const double cVertCameraServoRangeDegrees = 80;
+const double cHorizCameraServoCenterValue = 0.5;	// TODO:  Measure this
+const double cVertCameraServoCenterValue = 0.5;		// TODO:  Measure this
+const double cHorizCameraServoRangeDegrees = 90;	// TODO:  Measure this
+const double cVertCameraServoRangeDegrees = 80;		// TODO:  Measure this
 
 double DegreesToRadians( double dDegrees )
 {
