@@ -18,6 +18,7 @@ class DashboardDataExample : public SimpleRobot
 	Servo horizontalServo;
 	Servo verticalServo;
 	DashboardDataFormat dashboardDataFormat;
+	Jaguar kicker;
 	
 public:
 	DashboardDataExample(void)
@@ -26,6 +27,7 @@ public:
 		, stick2(2)
 		, horizontalServo(9)
 		, verticalServo(10)
+		, kicker(5)
 	{
 		GetWatchdog().SetEnabled(false);
 		// Create and set up a camera instance. first wait for the camera to start
@@ -75,7 +77,7 @@ public:
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetZ());
+			myRobot.DoMecanum(stick1.GetX() * -1,stick1.GetY(),stick1.GetTwist() * -1);
 			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			//dashboard.Printf("Iterations: %d\n", ++i);
 			
@@ -88,6 +90,30 @@ public:
 			const double dVertOffset = -.1;
 			double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
 			verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);
+			
+			///////
+			// Manually control the kicker
+			//
+			// TODO:  This is initial code for testing; 
+			// need to develop code for managing tensioner,
+			// (Jaguar and potentiometer), detecting "fully cocked"
+			// position via limit switch, and detecting "ball
+			// present" via the custom optical ball detector
+			// (analog input).
+			///////
+			
+			if ( stick1.GetTrigger() )
+			{
+				kicker.Set(0.6);
+			}
+			else if ( stick1.GetTop() )
+			{
+				kicker.Set(-0.6);
+			}
+			else
+			{
+				kicker.Set(0);
+			}
 			
 			UpdateDashboard();
 			Wait(0.01);
