@@ -32,7 +32,7 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
 	dashboardPacker.AddCluster();
 	// Add a cluster of Joystick data
 	dashboardPacker.AddCluster();
-	dashboardPacker.AddFloat(stick1.GetX() * -1);
+	dashboardPacker.AddFloat(stick1.GetX());
 	dashboardPacker.AddFloat(stick1.GetY());
 	dashboardPacker.AddFloat(stick1.GetTwist() * -1);
 	dashboardPacker.FinalizeCluster();
