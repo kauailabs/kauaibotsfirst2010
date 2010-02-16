@@ -2,9 +2,9 @@
 #include <math.h>
 
 const double cCameraAngleOfViewDegrees = 47.0;		// TODO:  Measure this
-const double cCameraLensHeightInches = 19.0;		// TODO:  Measure this
+const double cCameraLensHeightInches = 24.5;		// TODO:  Measure this
 const double cTargetCenterHeightInches = 56.5;
-const double cTargetOuterDiameterInches = 38.0;
+const double cTargetOuterDiameterInches = 33.0;
 const double cCameraFocalLengthMM = 4.0;
 const double cCameraServoMinRange = 0;
 const double cCameraServoMaxRange = 1;
@@ -23,7 +23,7 @@ double RadiansToDegrees( double dRadians )
 	return (dRadians * 180.0 / 3.1415926);	
 }
 
-KauaibotsTarget::KauaibotsTarget(Target t, ColorImage *image, Servo *horizCameraServo, Servo *vertCameraServo)
+KauaibotsTarget::KauaibotsTarget(Target t, int imageHeight, int imageWidth, Servo* horizCameraServo, Servo* vertCameraServo)
 {
     m_majorRadius = t.m_majorRadius;
     m_minorRadius = t.m_minorRadius;
@@ -34,8 +34,8 @@ KauaibotsTarget::KauaibotsTarget(Target t, ColorImage *image, Servo *horizCamera
     m_rotation = t.m_rotation;
     m_xMax = t.m_xMax;
     m_bothFound = t.m_bothFound;
-	m_nWidth = image->GetWidth();
-	m_nHeight = image->GetHeight();
+	m_nWidth = imageWidth;
+	m_nHeight = imageHeight;
 
 	double dSensorSizeMM = tan(DegreesToRadians(cCameraAngleOfViewDegrees / 2)) * cCameraFocalLengthMM * 2;	
 

@@ -3,7 +3,10 @@
 #include "MecanumDrive.h"
 #include "Vision/AxisCamera.h"
 #include "Vision/HSLImage.h"
+#include "Vision/ColorImage.h"
+#include "Vision/ImageBase.h"
 #include <math.h>
+#include "KauaibotsTarget.h"
 
 #define MINIMUM_SCORE 0.01
 
@@ -77,7 +80,7 @@ public:
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX() * -1,stick1.GetY(),stick1.GetTwist() * -1);
+			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1);
 			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
 			//dashboard.Printf("Iterations: %d\n", ++i);
 			
@@ -135,6 +138,9 @@ public:
 			
 			// get the camera image
 			ColorImage *image = camera.GetImage();
+			
+			int imageHeight = image->GetHeight();
+			int imageWidth = image->GetWidth();
 
 			// find FRC targets in the image
 			vector<Target> targets = Target::FindCircularTargets(image);
@@ -164,6 +170,9 @@ public:
 			}
 			else // Targets detected
 			{
+				KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,&horizontalServo,&verticalServo);
+				printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches2());
+				printf("Angle    (degree):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
 				// set the new PID heading setpoint to the first target in the list
 				//double horizontalAngle = targets[0].GetHorizontalAngle();
 				//double setPoint = gyroAngle + horizontalAngle;

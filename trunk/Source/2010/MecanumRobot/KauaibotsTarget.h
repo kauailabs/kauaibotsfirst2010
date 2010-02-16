@@ -14,7 +14,7 @@ protected:
 	Servo *m_horizCameraServo;
 	Servo *m_vertCameraServo;
 public:
-	KauaibotsTarget(Target t, ColorImage *image, Servo *horizCameraServo, Servo *vertCameraServo);
+	KauaibotsTarget(Target t, int imageHeight, int imageWidth, Servo *horizCameraServo, Servo *vertCameraServo);
 	double GetRobotHorizontalAngle();	 // Horiz. Degrees from Robot Center to Target Center
 	double GetRobotVerticalAngle();      // Vert. Degrees from Robot Center to Target Center
 	double GetDistanceToTargetInches();  // Distance from Camera to Target Center (using vert angle)
