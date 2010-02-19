@@ -179,17 +179,21 @@ double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 	return dJoystickOut;
 }
 
-const double cDriveJoystickExponent2 = 3.0;
+const double cDriveJoystickExponent2 = 2;
 
 double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 {
+	return dJoystickIn;
+	/*
 	double dJoystickOut = 0.0;
+	dJoystickIn /= 2;
 	if ( dJoystickIn > 0 )
 		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent2);
 	else
 		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent2);
 
 	return dJoystickOut;
+	*/
 }
 
 
