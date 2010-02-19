@@ -17,9 +17,9 @@ public:
 	KauaibotsTarget(Target t, int imageHeight, int imageWidth, Servo *horizCameraServo, Servo *vertCameraServo);
 	double GetRobotHorizontalAngle();	 // Horiz. Degrees from Robot Center to Target Center
 	double GetRobotVerticalAngle();      // Vert. Degrees from Robot Center to Target Center
-	double GetDistanceToTargetInches();  // Distance from Camera to Target Center (using vert angle)
-	double GetDistanceToTargetInches2(); // Distance from Camera to Target Center (using target radius)
-	double GetDistanceToGoalInches();    // Distance from Robot to Goal (using vert angle)
+	double GetDistanceToTargetFeet();  // Distance from Camera to Target Center (using vert angle)
+	double GetDistanceToTargetFeet2(); // Distance from Camera to Target Center (using target radius)
+	double GetDistanceToGoalFeet();    // Distance from Robot to Goal (using vert angle)
 protected:
 	double GetHorizServoAngle();		 // Servo Horiz. Angle offset (0 = no offset)
 	double GetVertServoAngle();			 // Servo Vert. Angle offset (0= not offset)
