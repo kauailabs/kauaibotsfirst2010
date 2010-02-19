@@ -171,8 +171,10 @@ public:
 			else // Targets detected
 			{
 				KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,&horizontalServo,&verticalServo);
-				printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches2());
-				printf("Angle    (degree):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
+				printf("Distance (feet):  %f\n",smartTargeter.GetDistanceToTargetFeet2());
+				//printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches());
+
+				printf("Angle (degrees):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
 				// set the new PID heading setpoint to the first target in the list
 				//double horizontalAngle = targets[0].GetHorizontalAngle();
 				//double setPoint = gyroAngle + horizontalAngle;
