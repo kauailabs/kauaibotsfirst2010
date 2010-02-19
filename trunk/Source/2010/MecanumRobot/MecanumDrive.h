@@ -74,5 +74,6 @@ protected:
 	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);
 
 	double InputJoystickAdjust( double dJoystickIn );
+	double InputJoystickAdjust2( double dJoystickIn );
 };
 #endif
