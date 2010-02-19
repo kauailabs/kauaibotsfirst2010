@@ -178,6 +178,22 @@ double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 
 	return dJoystickOut;
 }
+
+const double cDriveJoystickExponent2 = 3.0;
+
+double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
+{
+	double dJoystickOut = 0.0;
+	if ( dJoystickIn > 0 )
+		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent2);
+	else
+		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent2);
+
+	return dJoystickOut;
+}
+
+
+
 // MecanumDrive()
 // Each input is expected to range from -1 to 1
 // Outputs are the four wheel speeds
@@ -191,7 +207,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	vX = InputJoystickAdjust(vX);
 	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust(vRot);
+	vRot = InputJoystickAdjust2(vRot);
 			
 	///////
 	// Translational/Rotational Input Velocity Scaling:
