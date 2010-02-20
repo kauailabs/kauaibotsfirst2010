@@ -22,6 +22,7 @@ class DashboardDataExample : public SimpleRobot
 	Servo verticalServo;
 	DashboardDataFormat dashboardDataFormat;
 	Jaguar kicker;
+	Jaguar tensioner;
 	
 public:
 	DashboardDataExample(void)
@@ -30,7 +31,8 @@ public:
 		, stick2(2)
 		, horizontalServo(9)
 		, verticalServo(10)
-		, kicker(5)
+		, kicker(6)
+		, tensioner(5)
 	{
 		GetWatchdog().SetEnabled(false);
 		// Create and set up a camera instance. first wait for the camera to start
