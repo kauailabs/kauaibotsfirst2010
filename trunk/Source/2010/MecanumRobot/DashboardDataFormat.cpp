@@ -60,6 +60,27 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
 	dashboardPacker.AddFloat(drive.AccelerometerY().GetAcceleration());	
 	dashboardPacker.AddFloat(drive.Gyroscope().GetAngle());
 	dashboardPacker.FinalizeCluster();
+
+	// Add a cluster of winch status data
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddBoolean(false); // Auto-load
+	dashboardPacker.AddBoolean(false); // Auto-fire
+	dashboardPacker.AddBoolean(false); // Winch Fwd
+	dashboardPacker.AddBoolean(false); // Winch Rev
+	dashboardPacker.AddBoolean(false); // Loaded Sensor
+	dashboardPacker.AddBoolean(false); // Kicker Complete Sensor
+	dashboardPacker.AddFloat(0); // Kicker Complete Voltage
+	dashboardPacker.AddBoolean(false); // Ball Detected
+	dashboardPacker.AddFloat(0); // Ball Detected Voltage
+	dashboardPacker.FinalizeCluster();
+	
+	// Add a cluster of tensioner status data
+	dashboardPacker.AddCluster();
+	dashboardPacker.AddBoolean(false); // Tensioner Fwd
+	dashboardPacker.AddBoolean(false); // Tensioner Rev
+	dashboardPacker.AddFloat(0); // Tensioner Voltage	
+	dashboardPacker.AddFloat(0); // Tensioner Distance
+	dashboardPacker.FinalizeCluster();
 	
 	// Finalize the entire cluster of drive system data
 	dashboardPacker.FinalizeCluster();	
