@@ -7,6 +7,8 @@
 #include "Vision/ImageBase.h"
 #include <math.h>
 #include "KauaibotsTarget.h"
+#include "Kicker.h"
+#include "Tensioner.h"
 
 #define MINIMUM_SCORE 0.01
 
@@ -21,8 +23,8 @@ class DashboardDataExample : public SimpleRobot
 	Servo horizontalServo;
 	Servo verticalServo;
 	DashboardDataFormat dashboardDataFormat;
-	Jaguar kicker;
-	Jaguar tensioner;
+	Kicker kicker;
+	Tensioner tensioner;
 	
 public:
 	DashboardDataExample(void)
@@ -31,8 +33,8 @@ public:
 		, stick2(2)
 		, horizontalServo(9)
 		, verticalServo(10)
-		, kicker(6)
-		, tensioner(5)
+		, kicker(5,7,6,9,1,2)
+		, tensioner(6,5)
 	{
 		GetWatchdog().SetEnabled(false);
 		// Create and set up a camera instance. first wait for the camera to start
@@ -106,23 +108,81 @@ public:
 			// present" via the custom optical ball detector
 			// (analog input).
 			///////
-			
+
+			/*
+			if ( stick1.GetRawButton(2) ) // Manual Load/Fire Mode
+			{
+				if ( kicker.GetAutoLoad() || kicker.GetAutoFire() )
+				{
+					kicker.SetAutoLoad(false);
+					kicker.SetAutoFire(false);
+				}
+				if ( ( kicker.GetKickerState() == Kicker::Loading ) &&
+					 kicker.IsWinchLoaded() )
+				{
+					kicker.SetKickerState(Kicker::Loaded);
+					kicker.SetKickerMotorState(Kicker::Off);
+				}
+				if ( stick1.GetTrigger() )
+				{
+					if ( kicker.IsWinchLoaded() )
+					{
+						// Fire away!
+						kicker.SetKickerMotorState(Kicker::Forward);
+					}
+					else
+					{
+						kicker.SetKickerMotorState(Kicker::Off);
+					}
+				}
+				else if ( (stick1.GetRawButton(10) || (kicker.GetKickerState() == Kicker::Loading))
+						  && !kicker.IsWinchLoaded())
+				{
+					kicker.SetKickerState(Kicker::Loading);
+					kicker.SetKickerMotorState(Kicker::Forward);
+				}
+				else if ( stick1.GetRawButton(4) )
+				{
+					kicker.SetKickerMotorState(Kicker::Reverse);
+				}
+				else
+				{
+					kicker.SetKickerMotorState(Kicker::Off);
+				}
+			}
+			else // Auto Load/Fire
+			{
+				if ( !kicker.GetAutoLoad() || !kicker.GetAutoFire() )
+				{
+					kicker.SetAutoLoad(true);
+					kicker.SetAutoFire(true);
+				}
+			}
+			*/
 			if ( stick1.GetTrigger() )
 			{
-				kicker.Set(0.6);
+				kicker.RequestFire();
 			}
-			else if ( stick1.GetTop() )
+
+			if ( stick1.GetRawButton(3) ) // Loosen
 			{
-				kicker.Set(-0.6);
+				tensioner.SetTensionerMotorState(Tensioner::Forward);
+			}
+			else if ( stick1.GetRawButton(5) ) // Tighten
+			{
+				tensioner.SetTensionerMotorState(Tensioner::Reverse);
 			}
 			else
 			{
-				kicker.Set(0);
-			}
+				tensioner.SetTensionerMotorState(Tensioner::Off);
+			}			
 			
 			UpdateDashboard();
 			Wait(0.01);
 		}	
+		kicker.RequestFire();
+		kicker.RequestQuit();
+		Wait(2); // Let the kicker clean up.
 	}
 		
 	/**
@@ -130,7 +190,7 @@ public:
 	 */
 	void UpdateDashboard(void)
 	{
-		dashboardDataFormat.PackAndSend(stick1, myRobot);
+		dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
 
 		AxisCamera& camera = AxisCamera::GetInstance();
 		if ( camera.IsFreshImage() ) 
