@@ -5,6 +5,8 @@
 #include "MecanumDrive.h"
 #include "Timer.h"
 #include "Target.h"
+#include "Kicker.h"
+#include "Tensioner.h"
 
 // This is a test.
 
@@ -24,7 +26,7 @@ class DashboardDataFormat : public SensorBase
 public:
 	DashboardDataFormat(void);
 	virtual ~DashboardDataFormat();
-	void PackAndSend(Joystick& stick1, MecanumDrive& drive);
+	void PackAndSend(Joystick& stick1, MecanumDrive& drive,Kicker& kicker, Tensioner& tensioner);
 	void sendVisionData(double joyStickX,
 					double gyroAngle,
 					double gyroRate,

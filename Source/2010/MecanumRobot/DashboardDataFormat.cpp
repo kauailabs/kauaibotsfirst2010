@@ -23,7 +23,7 @@ DashboardDataFormat::~DashboardDataFormat()
  * Pack data using the correct types and in the correct order to match the
  * "Dashboard Datatype" in the LabVIEW Dashboard project.
  */
-void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
+void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive,Kicker& kicker, Tensioner& tensioner)
 {
 	Dashboard &dashboardPacker = m_ds->GetLowPriorityDashboardPacker();
 	
@@ -63,23 +63,42 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive)
 
 	// Add a cluster of winch status data
 	dashboardPacker.AddCluster();
+	
+	float fireCompleteDetectorValue; 
+	bool fireCompleteDetected;
+	float ballDetectorValue;
+	bool ballDetected;
+	bool winchLoaded;
+	bool autoLoad;
+	bool autoFire;
+	
+	Kicker::KickerMotorState kickerState;
+	kicker.GetStatus(&fireCompleteDetectorValue,&fireCompleteDetected,&ballDetectorValue,&ballDetected,&winchLoaded,&kickerState,&autoLoad,&autoFire);
+	
 	dashboardPacker.AddBoolean(false); // Auto-load
 	dashboardPacker.AddBoolean(false); // Auto-fire
-	dashboardPacker.AddBoolean(false); // Winch Fwd
-	dashboardPacker.AddBoolean(false); // Winch Rev
-	dashboardPacker.AddBoolean(false); // Loaded Sensor
-	dashboardPacker.AddBoolean(false); // Kicker Complete Sensor
-	dashboardPacker.AddFloat(0); // Kicker Complete Voltage
-	dashboardPacker.AddBoolean(false); // Ball Detected
-	dashboardPacker.AddFloat(0); // Ball Detected Voltage
+	dashboardPacker.AddBoolean(kickerState==Kicker::Forward); // Winch Fwd
+	dashboardPacker.AddBoolean(kickerState==Kicker::Reverse); // Winch Rev
+	dashboardPacker.AddBoolean(winchLoaded); // Loaded Sensor
+	dashboardPacker.AddBoolean(fireCompleteDetected); // Kicker Complete Sensor
+	dashboardPacker.AddFloat(fireCompleteDetectorValue); // Kicker Complete Voltage
+	dashboardPacker.AddBoolean(ballDetected); // Ball Detected
+	dashboardPacker.AddFloat(ballDetectorValue); // Ball Detected Voltage
 	dashboardPacker.FinalizeCluster();
 	
 	// Add a cluster of tensioner status data
 	dashboardPacker.AddCluster();
-	dashboardPacker.AddBoolean(false); // Tensioner Fwd
-	dashboardPacker.AddBoolean(false); // Tensioner Rev
-	dashboardPacker.AddFloat(0); // Tensioner Voltage	
-	dashboardPacker.AddFloat(0); // Tensioner Distance
+	
+	float tensionerPotentiometerVoltage;
+	bool tensionerPotentiometerDistanceInFeet;
+	Tensioner::TensionerMotorState tensionerState;
+	
+	tensioner.GetStatus(&tensionerPotentiometerVoltage,&tensionerPotentiometerDistanceInFeet,&tensionerState);
+	
+	dashboardPacker.AddBoolean(tensionerState==Tensioner::Forward); // Tensioner Fwd
+	dashboardPacker.AddBoolean(tensionerState==Tensioner::Reverse); // Tensioner Rev
+	dashboardPacker.AddFloat(tensionerPotentiometerVoltage); // Tensioner Voltage	
+	dashboardPacker.AddFloat(tensionerPotentiometerDistanceInFeet); // Tensioner Distance
 	dashboardPacker.FinalizeCluster();
 	
 	// Finalize the entire cluster of drive system data
