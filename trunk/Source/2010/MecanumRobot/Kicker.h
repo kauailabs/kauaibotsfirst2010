@@ -12,11 +12,9 @@ public:
 	enum KickerState { Loading, Loaded, Unloaded }; 
 	
 	Kicker( UINT32 iJaguarPort, 
-			UINT32 iAnalogFireCompleteDetectorPort, 
-			UINT32 iAnalogBallDetectorPort, 
 			UINT32 iDigitalWinchLoadedDetectorPort,
-			UINT32 iFireCompleteRelayPort,
-			UINT32 iBallDetectorRelayPort);
+			UINT32 iDigitalBallDetectorPort
+			);
 	~Kicker();
 	
 	void GetStatus( float *fireCompleteDetectorValue, 
@@ -42,18 +40,12 @@ public:
 	void RequestFire();
 	bool IsFireRequested();
 	bool IsBallDetected();
-	bool IsFireComplete();
 	void ClearFireRequest();
 	
 protected:
 	Jaguar m_WinchControl;
-	AnalogTrigger m_FireCompleteDetector;
-	AnalogChannel m_FireCompleteDetectorChannel;
-	AnalogTrigger m_BallDetector;
-	AnalogChannel m_BallDetectorChannel;
 	DigitalInput m_WinchLoaded;
-	Relay		  m_FireCompleteDetectorRelay;
-	Relay		  m_BallDetectorRelay;
+	DigitalInput m_BallDetected;
 	bool		  m_bAutoLoad;
 	bool		  m_bAutoFire;
 	KickerState	  m_KickerState;

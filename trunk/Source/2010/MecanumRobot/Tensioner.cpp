@@ -1,10 +1,11 @@
 #include "Tensioner.h"
+#include <math.h>
 
-const float cMinVoltage = 1.63; // Fully Tightened
-const float cMaxVoltage = 4.97; // Fully Loosened
+const float cMinVoltage = 330;   // Fully Tightened
+const float cMaxVoltage = 860.0; // Fully Loosened
 
 const float cMinDistanceInFeet = 6;
-const float cMaxDistanceInFeet = 35;
+const float cMaxDistanceInFeet = 25;
 
 // voltageRange = cMaxVoltage = cMinVoltage
 // distanceRange = cMaxDistanceInFeet - cMinDistanceInFeet
@@ -12,45 +13,80 @@ const float cMaxDistanceInFeet = 35;
 Tensioner::Tensioner( 
 		UINT32 iTensionMotorPort, UINT32 iAnalogPotentiometerPort) :
 			m_TensionControlMotor(iTensionMotorPort),
-			m_TensionPotentiometer(iAnalogPotentiometerPort)			
+			m_TensionPotentiometer(iAnalogPotentiometerPort),
+			tensionControl(0.1, 0.001, 0.0, 
+					&m_TensionPotentiometer, 
+					&m_TensionControlMotor)
 {
-	SetTensionerMotorState(Off);
+			tensionControl.SetInputRange(0.00,1000.00);			// potentiometers always give these values to PIDGet()
+			tensionControl.SetOutputRange(-1,1);				// Jaguars always use these values ... already the default
+			tensionControl.SetTolerance(0.3);						//  This is percent -- Controls the results of OnTarget()
+			tensionControl.SetContinuous(true);
+//			tensionControl.Enable();
 }
 
 void Tensioner::GetStatus( float *tensionerPotentiometerVoltage, 
-					bool *tensionerPotentiometerDistanceInFeet,
+					float *tensionerPotentiometerDistanceInFeet,
 					TensionerMotorState *state)
 {
-	*tensionerPotentiometerVoltage =  m_TensionPotentiometer.GetAverageVoltage();
-	*tensionerPotentiometerDistanceInFeet = 0;
-	if ( m_TensionControlMotor.Get() == 0)
-	{
-		*state = Off;
-	}
-	else if ( m_TensionControlMotor.Get() > 0)
-	{
-		*state = Forward;
-	}
+	*tensionerPotentiometerVoltage = m_TensionPotentiometer.PIDGet();
+//	*tensionerPotentiometerDistanceInFeet = tensionControl.GetError();
+	*tensionerPotentiometerDistanceInFeet = tensionControl.GetSetpoint();
+	//for status routine 
+	*state = Reverse;
+	if (tensionControl.OnTarget())
+			*state = Off;
 	else
+		if (tensionControl.GetError()> 0)
+			*state = Forward;
+}
+// Sets the tensioner to a value determined by the joystick
+// we map the value into a number between cMinVoltage and cMaxVoltage (-0.4 and 2.8 
+// where joystick of -1 is max and joystick of 1 is min
+// Here are the various mappings involved
+//           joystick      voltage   feet
+// min       -1            2.8          6
+// zero       0            1.4         12
+// max       +1            -0.04       25
+
+void Tensioner::SetTensioner( float joystickValue )
+{
+	float zeropoint = (cMaxVoltage - cMinVoltage)/2;	// half distance between max and min
+	float voltageTarget = -joystickValue + 1;     		// value is between 0 and 2 where 0 is max
+	voltageTarget = voltageTarget * zeropoint;			// value is scaled to max and min
+	voltageTarget = voltageTarget + cMinVoltage;        // value is between max and min
+
+	if (tensionControl.OnTarget())
+		tensionControl.Disable();
+	
+	if (fabs(tensionControl.GetSetpoint() - voltageTarget) > 20)	// 20 volt bounce rejection
 	{
-		*state = Reverse;
+		tensionControl.Enable();
+		tensionControl.SetSetpoint(voltageTarget);
 	}
 
+	
+// now calculate distance to Target
+	zeropoint = (cMaxDistanceInFeet - cMinDistanceInFeet)/2;
+	float distanceTarget = -joystickValue + 1;
+	distanceTarget = distanceTarget * zeropoint;
+	distanceTarget = distanceTarget + cMinDistanceInFeet; 
+	Wait(0.02);
 }
 
-void Tensioner::SetTensionerMotorState( TensionerMotorState state )
+void Tensioner::IncreaseTension()
 {
-	switch ( state )
-	{
-	case Forward:
-		m_TensionControlMotor.Set(1);
-		break;
-	case Reverse:
-		m_TensionControlMotor.Set(-1);
-		break;
-	case Off:
-		m_TensionControlMotor.Set(0);
-	default:
-		break;
-	}
+	m_TensionControlMotor.Set(1);
+}
+void Tensioner::DecreaseTension()
+{
+	m_TensionControlMotor.Set(-1);
+}
+void Tensioner::StopMotor()
+{
+	m_TensionControlMotor.Set(0);
+}
+void Tensioner::SetContinuousMode(bool bOn)
+{
+	tensionControl.SetContinuous(bOn);
 }
