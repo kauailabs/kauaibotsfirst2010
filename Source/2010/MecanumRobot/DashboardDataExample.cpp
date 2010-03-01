@@ -33,7 +33,7 @@ public:
 		, stick2(2)
 		, horizontalServo(9)
 		, verticalServo(10)
-		, kicker(5,7,6,9,1,2)
+		, kicker(5,9,10)
 		, tensioner(6,5)
 	{
 		GetWatchdog().SetEnabled(false);
@@ -164,18 +164,32 @@ public:
 				kicker.RequestFire();
 			}
 
-			if ( stick1.GetRawButton(3) ) // Loosen
+			if ( stick1.GetRawButton(7))
 			{
-				tensioner.SetTensionerMotorState(Tensioner::Forward);
-			}
-			else if ( stick1.GetRawButton(5) ) // Tighten
-			{
-				tensioner.SetTensionerMotorState(Tensioner::Reverse);
+				tensioner.SetContinuousMode(true);
 			}
 			else
 			{
-				tensioner.SetTensionerMotorState(Tensioner::Off);
-			}			
+				tensioner.SetContinuousMode(false);
+			}
+			
+			tensioner.SetTensioner(stick1.GetZ());
+            /*
+            // Manual Tensioner Control
+			if ( stick1.GetRawButton(8))
+            {
+            	tensioner.IncreaseTension();
+            }
+            else if ( stick1.GetRawButton(9))
+            {
+            	tensioner.DecreaseTension();
+            }
+            else
+            {
+            	tensioner.StopMotor();
+            }
+			*/
+			kicker.SetAutoFire(stick1.GetRawButton(11));
 			
 			UpdateDashboard();
 			Wait(0.01);

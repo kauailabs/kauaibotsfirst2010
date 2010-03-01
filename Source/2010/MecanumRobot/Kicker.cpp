@@ -80,25 +80,13 @@ static void kickerTask(Kicker *kicker)
 
 
 Kicker::Kicker( UINT32 iJaguarPort, 
-				UINT32 iAnalogFireCompleteDetectorPort, 
-				UINT32 iAnalogBallDetectorPort, 
 				UINT32 iDigitalWinchLoadedDetectorPort,
-				UINT32 iFireCompleteRelayPort,
-				UINT32 iBallDetectorRelayPort)
+				UINT32 iDigitalBallDetectorPort)
 			: m_WinchControl(iJaguarPort),			
-			m_FireCompleteDetector(iAnalogFireCompleteDetectorPort),
-			m_FireCompleteDetectorChannel(iAnalogFireCompleteDetectorPort),
-			m_BallDetector(iAnalogBallDetectorPort),
-			m_BallDetectorChannel(iAnalogBallDetectorPort),
 			m_WinchLoaded(iDigitalWinchLoadedDetectorPort),
-			m_FireCompleteDetectorRelay(iFireCompleteRelayPort),
-			m_BallDetectorRelay(iBallDetectorRelayPort),
+		    m_BallDetected(iDigitalBallDetectorPort),
 			m_task ("Kicker", (FUNCPTR)kickerTask)
 {
-	m_FireCompleteDetectorRelay.SetDirection(Relay::kForwardOnly);
-	m_FireCompleteDetectorRelay.Set(Relay::kForward);
-	m_BallDetectorRelay.SetDirection(Relay::kForwardOnly);
-	m_BallDetectorRelay.Set(Relay::kForward);
 	m_bAutoLoad = true;
 	m_bAutoFire = false;
 	m_KickerState = Kicker::Unloaded;	
@@ -126,9 +114,9 @@ void Kicker::GetStatus( float *fireCompleteDetectorValue,
 					bool *autoLoad,
 					bool *autoFire)
 {
-	*fireCompleteDetectorValue = m_FireCompleteDetectorChannel.GetAverageVoltage();
-	*fireCompleteDetected = IsFireComplete();
-	*ballDetectorValue = m_BallDetectorChannel.GetAverageVoltage();
+	*fireCompleteDetectorValue = 0;
+	*fireCompleteDetected = false;
+	*ballDetectorValue =0;
 	*ballDetected = IsBallDetected();
 	*winchLoaded = IsWinchLoaded();
 	*state = GetKickerMotorState();
@@ -239,14 +227,8 @@ bool Kicker::IsQuitRequested()
 	return m_bQuitRequested;	
 }
 
-bool Kicker::IsFireComplete()
-{
-	Synchronized sync(cKickerStateSemaphore);
-	return m_FireCompleteDetector.GetTriggerState();
-}
-
 bool Kicker::IsBallDetected()
 {
 	Synchronized sync(cKickerStateSemaphore);
-	return !m_BallDetector.GetTriggerState();
+	return (m_BallDetected.Get() == 0);
 }

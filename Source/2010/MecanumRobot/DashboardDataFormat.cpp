@@ -90,7 +90,7 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive,Kick
 	dashboardPacker.AddCluster();
 	
 	float tensionerPotentiometerVoltage;
-	bool tensionerPotentiometerDistanceInFeet;
+	float tensionerPotentiometerDistanceInFeet;
 	Tensioner::TensionerMotorState tensionerState;
 	
 	tensioner.GetStatus(&tensionerPotentiometerVoltage,&tensionerPotentiometerDistanceInFeet,&tensionerState);
