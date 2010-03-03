@@ -1,26 +1,30 @@
 #include "Tensioner.h"
 #include <math.h>
 
-const float cMinVoltage = 330;   // Fully Tightened
-const float cMaxVoltage = 860.0; // Fully Loosened
+const float cMinVoltage = 100;   // Fully Tightened
+const float cMaxVoltage = 900.0; // Fully Loosened
 
 const float cMinDistanceInFeet = 6;
 const float cMaxDistanceInFeet = 25;
 
 // voltageRange = cMaxVoltage = cMinVoltage
 // distanceRange = cMaxDistanceInFeet - cMinDistanceInFeet
+//orig
+//tensionControl(0.1, 0.001, 0.0,
+//best
+//tensionControl(0.01, 0.0001, 0.005, 
 
 Tensioner::Tensioner( 
 		UINT32 iTensionMotorPort, UINT32 iAnalogPotentiometerPort) :
 			m_TensionControlMotor(iTensionMotorPort),
 			m_TensionPotentiometer(iAnalogPotentiometerPort),
-			tensionControl(0.1, 0.001, 0.0, 
+			tensionControl(0.01, 0.0001, 0.005, 
 					&m_TensionPotentiometer, 
 					&m_TensionControlMotor)
 {
 			tensionControl.SetInputRange(0.00,1000.00);			// potentiometers always give these values to PIDGet()
 			tensionControl.SetOutputRange(-1,1);				// Jaguars always use these values ... already the default
-			tensionControl.SetTolerance(0.3);						//  This is percent -- Controls the results of OnTarget()
+			tensionControl.SetTolerance(1);						//  This is percent -- Controls the results of OnTarget()
 			tensionControl.SetContinuous(true);
 //			tensionControl.Enable();
 }
@@ -71,7 +75,7 @@ void Tensioner::SetTensioner( float joystickValue )
 	float distanceTarget = -joystickValue + 1;
 	distanceTarget = distanceTarget * zeropoint;
 	distanceTarget = distanceTarget + cMinDistanceInFeet; 
-	Wait(0.02);
+//	Wait(0.02);
 }
 
 void Tensioner::IncreaseTension()
