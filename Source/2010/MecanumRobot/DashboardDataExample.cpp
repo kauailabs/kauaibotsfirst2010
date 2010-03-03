@@ -9,7 +9,7 @@
 #include "KauaibotsTarget.h"
 #include "Kicker.h"
 #include "Tensioner.h"
-
+#include "PIDController.h"
 #define MINIMUM_SCORE 0.01
 
 /**
@@ -252,13 +252,13 @@ public:
 
 				printf("Angle (degrees):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
 				// set the new PID heading setpoint to the first target in the list
-				//double horizontalAngle = targets[0].GetHorizontalAngle();
-				//double setPoint = gyroAngle + horizontalAngle;
+				double horizontalAngle = targets[0].GetHorizontalAngle();
+				double setPoint = gyroAngle + horizontalAngle;
 
 				//turnController.SetSetpoint(setPoint);
 				
 				// send dashboard data for target tracking
-				dashboardDataFormat.sendVisionData(0.0, gyroAngle, 0.0, targets[0].m_xPos / targets[0].m_xMax, targets);
+				dashboardDataFormat.sendVisionData(0.0, gyroAngle, setPoint, targets[0].m_xPos / targets[0].m_xMax, targets);
 
 				//	targets[0].Print();
 			}
