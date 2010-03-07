@@ -64,6 +64,17 @@ public:
 			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
 			
 			// Autonomous functions go here...
+			//
+			// Example:
+			//
+			// Status variable to return results from AutonomousDrive
+			AutoRotationMecanumDrive::WaitType success;
+			// Move left for 1 second
+			// success = myRobot.AutonomousDrive( -.5, 0, 0,AutoRotationMecanumDrive::Time,1);
+			// Rotate to the target (or give up in 2 seconds)
+			// success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillOnTarget,2);
+			// Drive forward until ball is kicked (or give up in 2 seconds)
+			//success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillBallDetected,2);
 			
 			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
 		}
