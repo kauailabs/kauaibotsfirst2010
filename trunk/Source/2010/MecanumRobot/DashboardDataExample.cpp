@@ -1,34 +1,27 @@
 #include "WPILib.h"
 #include "DashboardDataFormat.h"
-#include "MecanumDrive.h"
-#include "Vision/AxisCamera.h"
-#include "Vision/HSLImage.h"
-#include "Vision/ColorImage.h"
-#include "Vision/ImageBase.h"
+#include "AutoRotationMecanumDrive.h"
 #include <math.h>
-#include "KauaibotsTarget.h"
 #include "Kicker.h"
 #include "Tensioner.h"
-#include "PIDController.h"
-#define MINIMUM_SCORE 0.01
 
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
  */ 
 class DashboardDataExample : public SimpleRobot
 {
-	MecanumDrive myRobot; // robot drive system
-	Joystick stick1; // X-box (X,Y,Rotation) controller
-	Joystick stick2; // Camera Servo controller
-	Servo horizontalServo;
-	Servo verticalServo;
-	DashboardDataFormat dashboardDataFormat;
-	Kicker kicker;
-	Tensioner tensioner;
+	AutoRotationMecanumDrive myRobot; 	// robot drive system
+	Joystick stick1; 					// Drive (X,Y,Rotation) controller
+	Joystick stick2; 					// Camera Servo controller
+	Servo horizontalServo;				// Camera horizontal servo
+	Servo verticalServo;				// Camera vertical servo
+	DashboardDataFormat dashboardDataFormat;	// Dashboard updater
+	Kicker kicker;						// Kicker system
+	Tensioner tensioner;				// Tensioner system
 	
 public:
 	DashboardDataExample(void)
-		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8,1,2,3) // these must be initialized in the same order
+		: myRobot(1,2,3,4,1,2,3,4,5,6,7,8,1,2,3,&dashboardDataFormat,&kicker,&horizontalServo,&verticalServo) // these must be initialized in the same order
 		, stick1(1)		// as they are declared above.
 		, stick2(2)
 		, horizontalServo(9)
@@ -40,16 +33,13 @@ public:
 		// Create and set up a camera instance. first wait for the camera to start
 		// if the robot was just powered on. This gives the camera time to boot.
 		Wait(5.0);
-		//printf("Getting camera instance\n");
 		AxisCamera& camera = AxisCamera::GetInstance();
-		//printf("Setting camera parameters\n");
 		camera.WriteResolution(AxisCamera::kResolution_320x240);
-		camera.WriteBrightness(0);
+		camera.WriteBrightness(0);     // TODO:  Tune This...
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(1.0);
         // Set camera servos to their default position
-		horizontalServo.Set(.0);
-        verticalServo.Set(.0);
+		UpdateCameraServos(0,0);
 	}
 
 	/**
@@ -57,113 +47,67 @@ public:
 	 **/
 	void  Autonomous () 
 	{
+		DriverStation *ds = DriverStation::GetInstance();
+		
+		// Get information to help decide which autonomous
+		// program to run...
+		DriverStation::Alliance alliance = ds->GetAlliance();
+		UINT32 location = ds->GetLocation();
+		float analogInput = ds->GetAnalogIn(0);
+		
+		kicker.SetKickerState(Kicker::Loading);		
+		
 		GetWatchdog().SetEnabled(true);
-		//Dashboard &dashboard = m_ds->GetHighPriorityDashboardPacker();
-		//INT32 i=0;
+		UpdateCameraServos(0,0);		
 		while(IsAutonomous())
 		{
-			GetWatchdog().Feed();
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
 			
 			// Autonomous functions go here...
 			
-			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
-			//dashboard.Printf("Iterations: %d\n", ++i);
-			UpdateDashboard();
-			Wait(0.02);
+			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
 		}
 	}
 
+	// Updates Camera servo horizontal and vertical positions,
+	// input values are from -1 to 1.
+	void UpdateCameraServos( double dHorizServoJoystick, double dVertServoJoystickY )
+	{
+		horizontalServo.Set((dHorizServoJoystick+1)/2);
+
+		// Correct for non-zero offset in vertical servo.
+		
+		const double dVertOffset = -.1;
+		verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);		
+	}
+	
 	/**
 	 * Main entry point for Operator Control (teleop) mode
 	 **/
 	void  OperatorControl ()
 	{
 		GetWatchdog().SetEnabled(true);
-		//Dashboard &dashboard = m_ds->GetHighPriorityDashboardPacker();
-		//INT32 i=0;
+
+		// Load up the kicker
+		kicker.SetKickerState(Kicker::Loading);		
+		Timer kickerShutdownTimer;
+		kickerShutdownTimer.Start();
+		
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
 			myRobot.DoMecanum(stick1.GetY() * -1,stick1.GetX(),stick1.GetTwist() * -1);
-			//dashboard.Printf("It's been %f seconds, according to the FPGA.\n", GetClock());
-			//dashboard.Printf("Iterations: %d\n", ++i);
 			
-			double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());
-			
-			horizontalServo.Set((dHorizServoJoystick+1)/2);
-
-			// Correct for non-zero offset in vertical servo.
-			
-			const double dVertOffset = -.1;
+			double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());			
 			double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
-			verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);
+			UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
 			
-			///////
-			// Manually control the kicker
-			//
-			// TODO:  This is initial code for testing; 
-			// need to develop code for managing tensioner,
-			// (Jaguar and potentiometer), detecting "fully cocked"
-			// position via limit switch, and detecting "ball
-			// present" via the custom optical ball detector
-			// (analog input).
-			///////
-
-			/*
-			if ( stick1.GetRawButton(2) ) // Manual Load/Fire Mode
-			{
-				if ( kicker.GetAutoLoad() || kicker.GetAutoFire() )
-				{
-					kicker.SetAutoLoad(false);
-					kicker.SetAutoFire(false);
-				}
-				if ( ( kicker.GetKickerState() == Kicker::Loading ) &&
-					 kicker.IsWinchLoaded() )
-				{
-					kicker.SetKickerState(Kicker::Loaded);
-					kicker.SetKickerMotorState(Kicker::Off);
-				}
-				if ( stick1.GetTrigger() )
-				{
-					if ( kicker.IsWinchLoaded() )
-					{
-						// Fire away!
-						kicker.SetKickerMotorState(Kicker::Forward);
-					}
-					else
-					{
-						kicker.SetKickerMotorState(Kicker::Off);
-					}
-				}
-				else if ( (stick1.GetRawButton(10) || (kicker.GetKickerState() == Kicker::Loading))
-						  && !kicker.IsWinchLoaded())
-				{
-					kicker.SetKickerState(Kicker::Loading);
-					kicker.SetKickerMotorState(Kicker::Forward);
-				}
-				else if ( stick1.GetRawButton(4) )
-				{
-					kicker.SetKickerMotorState(Kicker::Reverse);
-				}
-				else
-				{
-					kicker.SetKickerMotorState(Kicker::Off);
-				}
-			}
-			else // Auto Load/Fire
-			{
-				if ( !kicker.GetAutoLoad() || !kicker.GetAutoFire() )
-				{
-					kicker.SetAutoLoad(true);
-					kicker.SetAutoFire(true);
-				}
-			}
-			*/
 			if ( stick1.GetTrigger() )
 			{
 				kicker.RequestFire();
 			}
 
+			// TODO:  Review whether this is necessary...
 			if ( stick1.GetRawButton(7))
 			{
 				tensioner.SetContinuousMode(true);
@@ -174,29 +118,20 @@ public:
 			}
 			
 			tensioner.SetTensioner(stick1.GetZ());
-            /*
-            // Manual Tensioner Control
-			if ( stick1.GetRawButton(8))
-            {
-            	tensioner.IncreaseTension();
-            }
-            else if ( stick1.GetRawButton(9))
-            {
-            	tensioner.DecreaseTension();
-            }
-            else
-            {
-            	tensioner.StopMotor();
-            }
-			*/
 			kicker.SetAutoFire(stick1.GetRawButton(11));
+			myRobot.SetAutoRotationMode(stick1.GetRawButton(10));
 			
 			UpdateDashboard();
+			
+const double cKickerShutdownTimeoutInSeconds = 118.0;			
+			
+			if ( kickerShutdownTimer.HasPeriodPassed(cKickerShutdownTimeoutInSeconds))
+			{
+				kicker.RequestQuit();				
+			}
+			
 			Wait(0.01);
 		}	
-		kicker.RequestFire();
-		kicker.RequestQuit();
-		Wait(2); // Let the kicker clean up.
 	}
 		
 	/**
@@ -205,64 +140,6 @@ public:
 	void UpdateDashboard(void)
 	{
 		dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
-
-		AxisCamera& camera = AxisCamera::GetInstance();
-		if ( camera.IsFreshImage() ) 
-		{
-			// get the gyro heading that goes with this image
-			double gyroAngle = myRobot.Gyroscope().PIDGet();
-			
-			// get the camera image
-			ColorImage *image = camera.GetImage();
-			
-			int imageHeight = image->GetHeight();
-			int imageWidth = image->GetWidth();
-
-			// find FRC targets in the image
-			vector<Target> targets = Target::FindCircularTargets(image);
-			delete image;  // Be sure to delete the image!
-			
-			if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
-			{
-				// no targets found. Make sure the first one in the list is 0,0
-				// since the dashboard program annotates the first target in green
-				// and the others in magenta. With no qualified targets, they'll all
-				// be magenta.
-				Target nullTarget;
-				nullTarget.m_majorRadius = 0.0;
-				nullTarget.m_minorRadius = 0.0;
-				nullTarget.m_score = 0.0;
-				if (targets.size() == 0)
-					targets.push_back(nullTarget);
-				else
-					targets.insert(targets.begin(), nullTarget);
-			
-				dashboardDataFormat.sendVisionData(0.0, gyroAngle, 0.0, 0.0, targets);
-				/*if (targets.size() == 0)
-					printf("No target found\n\n");
-				else
-					printf("No valid targets found, best score: %f\n", targets[0].m_score);
-					*/
-			}
-			else // Targets detected
-			{
-				KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,&horizontalServo,&verticalServo);
-				printf("Distance (feet):  %f\n",smartTargeter.GetDistanceToTargetFeet2());
-				//printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches());
-
-				printf("Angle (degrees):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
-				// set the new PID heading setpoint to the first target in the list
-				double horizontalAngle = targets[0].GetHorizontalAngle();
-				double setPoint = gyroAngle + horizontalAngle;
-
-				//turnController.SetSetpoint(setPoint);
-				
-				// send dashboard data for target tracking
-				dashboardDataFormat.sendVisionData(0.0, gyroAngle, setPoint, targets[0].m_xPos / targets[0].m_xMax, targets);
-
-				//	targets[0].Print();
-			}
-		}		
 	}
 
 	double CameraServoJoystickAdjust( double dJoystickIn )
