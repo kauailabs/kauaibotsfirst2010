@@ -196,23 +196,8 @@ double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 	*/
 }
 
-
-
-// MecanumDrive()
-// Each input is expected to range from -1 to 1
-// Outputs are the four wheel speeds
-// Each output is expected to range from -1 to 1
-void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
+void MecanumDrive::DoMecanumInternal( float vX, float vY, float vRot )
 {
-	//char *strDescription = "DoMecanum()";
-	//printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
-
-	// Introduce exponential ramp on joystick input.
-	
-	vX = InputJoystickAdjust(vX);
-	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust2(vRot);
-			
 	///////
 	// Translational/Rotational Input Velocity Scaling:
 	//
@@ -270,6 +255,24 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	//MecanumDriveFwdKinematics( wheelSpeeds, &derivedVelocities[0] );
 
 	//printf("vX:  %f, vY:  %f, vRot:  %f\n\n", derivedVelocities[VX], derivedVelocities[VY], derivedVelocities[VROT]*cRotK );
+}
+
+// MecanumDrive()
+// Each input is expected to range from -1 to 1
+// Outputs are the four wheel speeds
+// Each output is expected to range from -1 to 1
+void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
+{
+	//char *strDescription = "DoMecanum()";
+	//printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
+
+	// Introduce exponential ramp on joystick input.
+	
+	vX = InputJoystickAdjust(vX);
+	vY = InputJoystickAdjust(vY);
+	vRot = InputJoystickAdjust2(vRot);
+
+	DoMecanumInternal(vX,vY,vRot);
 }
 
 /*

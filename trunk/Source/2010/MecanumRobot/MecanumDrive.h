@@ -50,7 +50,7 @@ public:
 			UINT32 accelerometerChannelX,
 			UINT32 accelerometerChannelY);
 
-	void DoMecanum( float vX, float vY, float vRot );
+	virtual void DoMecanum( float vX, float vY, float vRot );
 	void InitializeSensors();
 	void RestartSensors();
 
@@ -68,11 +68,12 @@ public:
 	FilteredAccelerometer& 		AccelerometerX() { return m_accelerometerX; }
 	FilteredAccelerometer&		AccelerometerY() { return m_accelerometerY; }
 	
-	~MecanumDrive();
+	virtual ~MecanumDrive();
 protected:
 	void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
 	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);
-
+	void DoMecanumInternal( float vX, float vY, float vRot );
+	
 	double InputJoystickAdjust( double dJoystickIn );
 	double InputJoystickAdjust2( double dJoystickIn );
 };
