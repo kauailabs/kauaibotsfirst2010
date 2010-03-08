@@ -15,7 +15,7 @@
 
 #define MINIMUM_SCORE 0.01
 
-static SEM_ID cAutoRotateSemaphore;
+static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel,
 	UINT32 frontRightMotorChannel,
@@ -51,7 +51,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 			rearRightEncoderChannelB,
 			gyroChannel,
 			accelerometerChannelX,
-			accelerometerChannelY ), m_turnController(0.5,0.1,0.01,&m_gyroscope,this)
+			accelerometerChannelY ), m_turnController(.015,.001,0,&m_gyroscope,this)
 {
 	m_pDashboardDataFormat = pDashboardDataFormat;
 	m_pKicker = pKicker;
@@ -61,15 +61,20 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 	// Initialize Auto-rotation 
 	SetAutoRotationMode(false);
 	m_turnController.SetInputRange(-360.0, 360.0);
-	m_turnController.SetOutputRange(-0.6, 0.6);     // TODO:  Review this
-	m_turnController.SetTolerance(1.0 / 90.0 * 100);
+	m_turnController.SetOutputRange(-.4, .4);     // TODO:  Review this
+	m_turnController.SetTolerance(.25 / 720.0 * 100);
+	m_bAutoRotateTargetSet = false;
 }
 
 void AutoRotationMecanumDrive::SetAutoRotationMode( bool bEnable )
 {
-	m_bAutoRotationMode = bEnable;
-	SafeSetAutoRotateAmount(0);	// Always reset rotation amount	
-	bEnable ? m_turnController.Enable() : m_turnController.Disable();
+	if ( bEnable != m_bAutoRotationMode )
+	{
+		m_bAutoRotationMode = bEnable;
+		SafeSetAutoRotateAmount(0);	// Always reset rotation amount	
+		m_bAutoRotateTargetSet = false;
+		bEnable ? m_turnController.Enable() : m_turnController.Disable();
+	}
 }
 
 bool AutoRotationMecanumDrive::GetAutoRotationMode()
@@ -79,12 +84,17 @@ bool AutoRotationMecanumDrive::GetAutoRotationMode()
 
 void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot )
 {
+	vX = InputJoystickAdjust(vX);
+	vY = InputJoystickAdjust(vY);
+	vRot = InputJoystickAdjust(vRot);	
+	
 	// Update the Vision Dashboard.
 	// Note that this will force the angle to the target
 	// to be computed, which is used for auto-rotation.
-
-	UpdateDashboard();
+	// NOTE:  Do this after the update to the motors.
 	
+	UpdateDashboard();
+
 	// If in auto-rotation mode, get the rotation value from the PID controller
 	// based upon the delta between the target position and the current gyro 
 	// position.
@@ -92,6 +102,12 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	if ( m_bAutoRotationMode )
 	{
 		vRot = SafeGetAutoRotateAmount();
+		vRot *= -1;	// Invert value before sending to the output.
+		if ( m_turnController.OnTarget() )
+		{
+			m_turnController.Disable();
+		}
+		printf("AutoRotate Value:  %f\n",(double)vRot);
 	}
 	
 	MecanumDrive::DoMecanumInternal( vX, vY, vRot );
@@ -145,7 +161,7 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 
 	while ( !bDone && (currTime < quitTime) )
 	{
-		DoMecanum( vX, vY, vRot );
+		DoMecanumInternal( vX, vY, vRot );
 
 		if ( (wait == TillOnTarget) && m_turnController.OnTarget() )
 		{
@@ -237,15 +253,19 @@ void AutoRotationMecanumDrive::UpdateDashboard()
 		else // Targets detected
 		{
 			KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,m_pHorizontalServo,m_pVerticalServo);
-			printf("Distance (feet):  %f\n",smartTargeter.GetDistanceToTargetFeet2());				//printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches());
+			//printf("Distance (feet):  %f\n",smartTargeter.GetDistanceToTargetFeet2());				//printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches());
 
-			printf("Angle (degrees):  %f\n,",smartTargeter.GetRobotHorizontalAngle());
 			// set the new PID heading setpoint to the first target in the list
-			double horizontalAngle = targets[0].GetHorizontalAngle();
+			double horizontalAngle = smartTargeter.GetRobotHorizontalAngle();
 			double setPoint = gyroAngle + horizontalAngle;
+			printf("Target Angle (degrees):  %f    SetPoint:  %f  Gyro:  %f  OnTarget:  %i  Error:  %f\n,",horizontalAngle, setPoint,gyroAngle, m_turnController.OnTarget(), (double)m_turnController.GetError());
 
-			m_turnController.SetSetpoint(setPoint);
-			
+			if ( !m_bAutoRotateTargetSet )
+			{
+				m_bAutoRotateTargetSet = true;
+				m_turnController.SetSetpoint(setPoint);
+			}
+				
 			// send dashboard data for target tracking
 			m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, setPoint, targets[0].m_xPos / targets[0].m_xMax, targets);
 		}

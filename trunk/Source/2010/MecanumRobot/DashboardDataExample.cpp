@@ -58,8 +58,11 @@ public:
 		kicker.SetKickerState(Kicker::Loading);		
 		
 		GetWatchdog().SetEnabled(true);
-		UpdateCameraServos(0,0);		
-		while(IsAutonomous())
+		UpdateCameraServos(0,0);
+		
+		bool bRunOnce = false;
+		
+		while(IsAutonomous() && !bRunOnce )
 		{
 			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
 			
@@ -69,14 +72,29 @@ public:
 			//
 			// Status variable to return results from AutonomousDrive
 			AutoRotationMecanumDrive::WaitType success;
-			// Move left for 1 second
-			// success = myRobot.AutonomousDrive( -.5, 0, 0,AutoRotationMecanumDrive::Time,1);
-			// Rotate to the target (or give up in 2 seconds)
-			// success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillOnTarget,2);
+			// Move Right for .5 second.
+			//success = myRobot.AutonomousDrive( 0, .3, 0,AutoRotationMecanumDrive::Time,.5);
+			// Move Left for .5 second.
+			//success = myRobot.AutonomousDrive( 0, -.3, 0,AutoRotationMecanumDrive::Time,.5);
+			// Move Forward for .5 second.
+			success = myRobot.AutonomousDrive( .3, 0, 0,AutoRotationMecanumDrive::Time,.5);
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
+			// Move Backward for .5 second.
+			success = myRobot.AutonomousDrive( -.3, 0, 0,AutoRotationMecanumDrive::Time,.5);
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
+			// Rotate a bit, for .5 second.
+			success = myRobot.AutonomousDrive( 0, 0, .3,AutoRotationMecanumDrive::Time,.5);
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
+			// Rotate to the target (or give up in 3 seconds)
+			success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillOnTarget,3);
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
 			// Drive forward until ball is kicked (or give up in 2 seconds)
-			//success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillBallDetected,2);
+			success = myRobot.AutonomousDrive(.3,0,0,AutoRotationMecanumDrive::TillBallDetected,2);
+			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
 			
 			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
+		
+		    bRunOnce = true;
 		}
 	}
 
@@ -118,20 +136,10 @@ public:
 				kicker.RequestFire();
 			}
 
-			// TODO:  Review whether this is necessary...
-			if ( stick1.GetRawButton(7))
-			{
-				tensioner.SetContinuousMode(true);
-			}
-			else
-			{
-				tensioner.SetContinuousMode(false);
-			}
-			
 			tensioner.SetTensioner(stick1.GetZ());
 			kicker.SetAutoFire(stick1.GetRawButton(11));
 			myRobot.SetAutoRotationMode(stick1.GetRawButton(10));
-			
+				
 			UpdateDashboard();
 			
 const double cKickerShutdownTimeoutInSeconds = 118.0;			
@@ -140,8 +148,6 @@ const double cKickerShutdownTimeoutInSeconds = 118.0;
 			{
 				kicker.RequestQuit();				
 			}
-			
-			Wait(0.01);
 		}	
 	}
 		

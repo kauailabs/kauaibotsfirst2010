@@ -25,6 +25,7 @@ protected:
 	DashboardDataFormat *m_pDashboardDataFormat;
 	Kicker *m_pKicker;
 	bool m_bAutoRotationMode;
+	bool m_bAutoRotateTargetSet;
 	PIDController m_turnController;
 	Servo *m_pHorizontalServo;
 	Servo *m_pVerticalServo;
