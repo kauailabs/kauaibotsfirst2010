@@ -270,7 +270,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	vX = InputJoystickAdjust(vX);
 	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust2(vRot);
+	vRot = InputJoystickAdjust(vRot);
 
 	DoMecanumInternal(vX,vY,vRot);
 }

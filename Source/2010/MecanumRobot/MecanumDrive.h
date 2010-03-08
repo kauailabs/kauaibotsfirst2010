@@ -9,7 +9,7 @@
 
 #include "Encoder.h"
 #include "Jaguar.h"
-#include "Gyro.h"
+#include "CustomGyro.h"
 #include "FilteredAccelerometer.h"
 
 /*
@@ -29,7 +29,7 @@ protected:
 	Encoder m_frontRightEncoder;
 	Encoder m_rearLeftEncoder;
 	Encoder m_rearRightEncoder;
-	Gyro	m_gyroscope;
+	CustomGyro	m_gyroscope;
 	FilteredAccelerometer m_accelerometerX;
 	FilteredAccelerometer m_accelerometerY;
 	
@@ -64,7 +64,7 @@ public:
 	SpeedController& 	RearLeftMotor() { return m_rearLeftMotor; }
 	SpeedController& 	RearRightMotor() { return m_rearRightMotor; }
 	
-	Gyro&				Gyroscope() { return m_gyroscope; }
+	CustomGyro&			Gyroscope() { return m_gyroscope; }
 	FilteredAccelerometer& 		AccelerometerX() { return m_accelerometerX; }
 	FilteredAccelerometer&		AccelerometerY() { return m_accelerometerY; }
 	

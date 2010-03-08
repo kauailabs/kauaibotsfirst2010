@@ -1,6 +1,7 @@
 #include "Kicker.h"
 
-static SEM_ID cKickerStateSemaphore;
+static SEM_ID cKickerStateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
+
 
 /**
  * Internal task.

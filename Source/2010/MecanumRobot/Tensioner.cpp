@@ -20,7 +20,8 @@ Tensioner::Tensioner(
 			m_TensionPotentiometer(iAnalogPotentiometerPort),
 			tensionControl(0.01, 0.0001, 0.005, 
 					&m_TensionPotentiometer, 
-					&m_TensionControlMotor)
+					&m_TensionControlMotor,
+					.25)
 {
 			tensionControl.SetInputRange(0.00,1000.00);			// potentiometers always give these values to PIDGet()
 			tensionControl.SetOutputRange(-1,1);				// Jaguars always use these values ... already the default
