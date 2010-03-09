@@ -5,6 +5,32 @@
 #include "Kicker.h"
 #include "Tensioner.h"
 
+enum WaitType { Time, TillOnTarget, TillBallDetected };
+struct AutonomousStep
+{
+	float vX;
+	float vY;
+	float vRot;
+	WaitType wait;
+	float waitPeriodInSeconds; 
+};
+AutonomousStep AutonomousProgram[]={
+		// 
+		{    0,      0,    0,            Time,     3}, // Wait for 3 seconds before doing anything		
+		{   -3,      0,    0,            Time,    .5}, // Move Backward for .5 second.
+		{    0,      0,   .3,            Time,    .5}, // Rotate a bit, for .5 second.
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
+		{   .3,      0,    0,TillBallDetected,    .5}, // Drive forward until ball is kicked (or give up in 2 seconds)
+		{   .3,      0,    0,            Time,    .5}, // Move Forward for .5 second.
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .3,      0,    0,            Time,    .5}, // Move Forward for .5 second.
+		{   .3,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .3,      0,    0,TillBallDetected,    .5}, // Drive forward until ball is kicked (or give up in 2 seconds)
+		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+};
+
+
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
  */ 
@@ -61,11 +87,23 @@ public:
 		UpdateCameraServos(0,0);
 		
 		bool bRunOnce = false;
-		
+		AutonomousStep instruction;	
+		int step;
+		// Status variable to return results from AutonomousDrive
+		AutoRotationMecanumDrive::WaitType success;
 		while(IsAutonomous() && !bRunOnce )
 		{
+			instruction = AutonomousProgram[step];
 			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
-			
+
+			success = myRobot.AutonomousDrive( 
+					instruction.vX,
+					instruction.vY,
+					instruction.vRot,
+					(AutoRotationMecanumDrive::WaitType)instruction.wait,
+					instruction.waitPeriodInSeconds);	// do an autonomous step
+			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner); 
+/*			
 			// Autonomous functions go here...
 			//
 			// Example:
@@ -75,9 +113,7 @@ public:
 			// Move Right for .5 second.
 			//success = myRobot.AutonomousDrive( 0, .3, 0,AutoRotationMecanumDrive::Time,.5);
 			// Move Left for .5 second.
-			//success = myRobot.AutonomousDrive( 0, -.3, 0,AutoRotationMecanumDrive::Time,.5);
-			// Move Forward for .5 second.
-			success = myRobot.AutonomousDrive( .3, 0, 0,AutoRotationMecanumDrive::Time,.5);
+
 			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
 			// Move Backward for .5 second.
 			success = myRobot.AutonomousDrive( -.3, 0, 0,AutoRotationMecanumDrive::Time,.5);
@@ -93,7 +129,7 @@ public:
 			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
 			
 			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
-		
+	*/	
 		    bRunOnce = true;
 		}
 	}
