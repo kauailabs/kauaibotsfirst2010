@@ -166,24 +166,29 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 	}
 }
 
-const double cDriveJoystickExponent = 2.0;
+const double cDriveJoystickAdjust = 0.5;	// 0 to 1 (0 = same as input; 1 = x^3
 
 double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 {
+	// x' = ax^3 + (1-a)x
+	
 	double dJoystickOut = 0.0;
-	if ( dJoystickIn > 0 )
+	/*if ( dJoystickIn > 0 )
 		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent);
 	else
 		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent);
-
+	*/
+	
+	dJoystickOut = (cDriveJoystickAdjust * pow(dJoystickIn, 3)) + ((1 - cDriveJoystickAdjust) * dJoystickIn);
+	
 	return dJoystickOut;
 }
 
-const double cDriveJoystickExponent2 = 2;
+const double cDriveJoystickAdjust2 = 0.5;
 
 double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 {
-	return dJoystickIn;
+	//return dJoystickIn;
 	/*
 	double dJoystickOut = 0.0;
 	dJoystickIn /= 2;
@@ -194,6 +199,13 @@ double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 
 	return dJoystickOut;
 	*/
+	
+	// x' = ax^3 + (1-a)x
+	
+	double dJoystickOut = 0.0;
+	dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 3)) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
+	
+	return dJoystickOut;
 }
 
 void MecanumDrive::DoMecanumInternal( float vX, float vY, float vRot )

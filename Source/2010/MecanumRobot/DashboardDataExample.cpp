@@ -14,21 +14,51 @@ struct AutonomousStep
 	WaitType wait;
 	float waitPeriodInSeconds; 
 };
+/*
 AutonomousStep AutonomousProgram[]={
 		// 
-		{    0,      0,    0,            Time,     3}, // Wait for 3 seconds before doing anything		
-		{   -3,      0,    0,            Time,    .5}, // Move Backward for .5 second.
-		{    0,      0,   .3,            Time,    .5}, // Rotate a bit, for .5 second.
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		{   .3,      0,    0,TillBallDetected,    .5}, // Drive forward until ball is kicked (or give up in 2 seconds)
-		{   .3,      0,    0,            Time,    .5}, // Move Forward for .5 second.
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .3,      0,    0,            Time,    .5}, // Move Forward for .5 second.
-		{   .3,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .3,      0,    0,TillBallDetected,    .5}, // Drive forward until ball is kicked (or give up in 2 seconds)
+//		{    0,      0,    0,            Time,     3}, // Wait for 3 seconds before doing anything		
+		{    0,      0.5,    0,            Time,    .1}, // Move right 
+		{    0,     -0.5,    0,            Time,    .1}, // Move left 
+		{    0,      0.7,    0,            Time,    .1}, // Move right 
+		{    0,     -0.7,    0,            Time,    .1}, // Move left 		
+		{    0,      0,    0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
+		{   .1,      0,    0,            Time,    .2}, 
+		{   .2,      0,    0,            Time,    .2}, 
+		{   .3,      0,    0,            Time,    .2}, 
+		{   .4,      0,    0,            Time,    .2}, 
+		{   .5,      0,    0,            Time,    .2}, 
+		{   .6,      0,    0,            Time,    .2}, 
+		{   .7,      0,    0,            Time,    .2}, 
+		{    0,      0,    0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
+		{   .1,      0,    0,            Time,    .2}, 
+		{   .2,      0,    0,            Time,    .2}, 
+		{   .3,      0,    0,            Time,    .2}, 
+		{   .4,      0,    0,            Time,    .2}, 
+		{   .5,      0,    0,            Time,    .2}, 
+		{   .6,      0,    0,            Time,    .2}, 
+		{   .7,      0,    0,            Time,    .2}, 
+//		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
+//		{   .5,      0,    0,            Time,    2}, // Move Forward for 2 second.
+//		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+//		{   -.5,      0,    0,            Time,    3}, // Move Forward for 3 second.
+//		{   .5,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
+//		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+//		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
 		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
+*/
+AutonomousStep AutonomousProgram[]={
+		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
+		{   .5,      0,    0,            Time,    2}, // Move Forward for 2 second.
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   -.5,      0,    0,            Time,    3}, // Move Forward for 3 second.
+		{   .5,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
+		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+};
+
 
 
 /**
@@ -86,52 +116,29 @@ public:
 		GetWatchdog().SetEnabled(true);
 		UpdateCameraServos(0,0);
 		
-		bool bRunOnce = false;
 		AutonomousStep instruction;	
-		int step;
+		int step=0;
+		int numEntries = sizeof(AutonomousProgram)/sizeof(AutonomousProgram[0]);
 		// Status variable to return results from AutonomousDrive
 		AutoRotationMecanumDrive::WaitType success;
-		while(IsAutonomous() && !bRunOnce )
+		while(IsAutonomous() && (step < numEntries) )
 		{
 			instruction = AutonomousProgram[step];
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
 
 			success = myRobot.AutonomousDrive( 
 					instruction.vX,
 					instruction.vY,
 					instruction.vRot,
 					(AutoRotationMecanumDrive::WaitType)instruction.wait,
-					instruction.waitPeriodInSeconds);	// do an autonomous step
+					instruction.waitPeriodInSeconds,
+					GetWatchdog());	// do an autonomous step
 			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner); 
-/*			
-			// Autonomous functions go here...
-			//
-			// Example:
-			//
-			// Status variable to return results from AutonomousDrive
-			AutoRotationMecanumDrive::WaitType success;
-			// Move Right for .5 second.
-			//success = myRobot.AutonomousDrive( 0, .3, 0,AutoRotationMecanumDrive::Time,.5);
-			// Move Left for .5 second.
 
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()?
-			// Move Backward for .5 second.
-			success = myRobot.AutonomousDrive( -.3, 0, 0,AutoRotationMecanumDrive::Time,.5);
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
-			// Rotate a bit, for .5 second.
-			success = myRobot.AutonomousDrive( 0, 0, .3,AutoRotationMecanumDrive::Time,.5);
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
-			// Rotate to the target (or give up in 3 seconds)
-			success = myRobot.AutonomousDrive(0,0,0,AutoRotationMecanumDrive::TillOnTarget,3);
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
-			// Drive forward until ball is kicked (or give up in 2 seconds)
-			success = myRobot.AutonomousDrive(.3,0,0,AutoRotationMecanumDrive::TillBallDetected,2);
-			GetWatchdog().Feed();  // TODO:  Review this.  Add to AutonomousDrive()
-			
-			dashboardDataFormat.PackAndSend(stick1, myRobot,kicker,tensioner);
-	*/	
-		    bRunOnce = true;
+		    step++;
 		}
+		GetWatchdog().SetEnabled(false);
+		// should never get here
+		kicker.RequestQuit();
 	}
 
 	// Updates Camera servo horizontal and vertical positions,

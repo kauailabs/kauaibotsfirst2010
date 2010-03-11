@@ -61,7 +61,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 	// Initialize Auto-rotation 
 	SetAutoRotationMode(false);
 	m_turnController.SetInputRange(-360.0, 360.0);
-	m_turnController.SetOutputRange(-.4, .4);     // TODO:  Review this
+	m_turnController.SetOutputRange(-1, 1);     // TODO:  Review this
 	m_turnController.SetTolerance(.25 / 720.0 * 100);
 	m_bAutoRotateTargetSet = false;
 }
@@ -82,12 +82,15 @@ bool AutoRotationMecanumDrive::GetAutoRotationMode()
 	return m_bAutoRotationMode;
 }
 
-void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot )
+void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool bScaleInputs )
 {
-	vX = InputJoystickAdjust(vX);
-	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust(vRot);	
-	
+	if ( bScaleInputs )
+	{
+		vX = InputJoystickAdjust(vX);
+		vY = InputJoystickAdjust(vY);
+		vRot = InputJoystickAdjust2(vRot *.8);	
+	}
+		
 	// Update the Vision Dashboard.
 	// Note that this will force the angle to the target
 	// to be computed, which is used for auto-rotation.
@@ -145,10 +148,14 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot )
 // Return Value:  returns the reason for the wait.
 ////////////////////////////////////////////////////////////////////
 
-AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( float vX, float vY, float vRot, WaitType wait, float waitPeriodInSeconds )
+const float cRampUpTimeInSeconds = 0.1;
+
+AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( float vX, float vY, float vRot, WaitType wait, float waitPeriodInSeconds, Watchdog& watchdog  )
 {
 	bool bDone = false;
 	WaitType returnVal = Time;
+	
+	DriverStation *ds = DriverStation::GetInstance();
 	
 	// Save State
 	bool bLastAutoRotateMode = GetAutoRotationMode();
@@ -158,10 +165,27 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 
 	double currTime = GetTime();
 	double quitTime = currTime + waitPeriodInSeconds;
+	
+	double rampUpTime = currTime + cRampUpTimeInSeconds;
 
-	while ( !bDone && (currTime < quitTime) )
+	while ( ds->IsAutonomous() && !bDone && (currTime < quitTime) )
 	{
-		DoMecanumInternal( vX, vY, vRot );
+		float modifiedVX = vX;
+		float modifiedVY = vY;
+		float modifiedVRot = vRot;
+		
+		float rampUpTimeRemaining = rampUpTime - currTime;
+		if ( rampUpTimeRemaining > 0 )
+		{
+			float rampPercentage = rampUpTimeRemaining / rampUpTime;
+
+			modifiedVX *= rampPercentage;
+			modifiedVY *= rampPercentage;
+			modifiedVRot *= rampPercentage;
+		}
+		
+		watchdog.Feed();
+		DoMecanum( modifiedVX, modifiedVY, modifiedVRot, false );
 
 		if ( (wait == TillOnTarget) && m_turnController.OnTarget() )
 		{
@@ -176,10 +200,7 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 		Wait(0.02); 			// TODO:  Tune this.
 		currTime = GetTime();
 	}
-	
-	// Stop the motors
-	DoMecanum(0,0,0);
-	
+		
 	// Restore state
 	SetAutoRotationMode( bLastAutoRotateMode );
 	return returnVal;
