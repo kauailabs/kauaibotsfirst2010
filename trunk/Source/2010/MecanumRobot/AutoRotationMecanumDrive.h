@@ -57,7 +57,7 @@ public:
 	void SetAutoRotationMode( bool bEnable );
 	bool GetAutoRotationMode();
 	
-	virtual void DoMecanum( float vX, float vY, float vRot );	
+	virtual void DoMecanum( float vX, float vY, float vRot, bool bScaleInputs = true );	
 	
 	enum WaitType { Time, TillOnTarget, TillBallDetected };
 	
@@ -73,7 +73,7 @@ public:
 	//
 	// This method returns the reason for the wait.
 	
-	WaitType AutonomousDrive( float vX, float vY, float vRot, WaitType wait, float waitPeriodInSeconds );
+	WaitType AutonomousDrive( float vX, float vY, float vRot, WaitType wait, float waitPeriodInSeconds, Watchdog& watchdog );
 
 protected:
 	
