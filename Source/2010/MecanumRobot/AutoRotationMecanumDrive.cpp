@@ -51,7 +51,8 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 			rearRightEncoderChannelB,
 			gyroChannel,
 			accelerometerChannelX,
-			accelerometerChannelY ), m_turnController(.015,.001,0,&m_gyroscope,this)
+//			accelerometerChannelY ), m_turnController(.015,.001,0.001,&m_gyroscope,this)
+			accelerometerChannelY ), m_turnController(.025,.001,0.1,&m_gyroscope,this)
 {
 	m_pDashboardDataFormat = pDashboardDataFormat;
 	m_pKicker = pKicker;
@@ -88,7 +89,7 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool b
 	{
 		vX = InputJoystickAdjust(vX);
 		vY = InputJoystickAdjust(vY);
-		vRot = InputJoystickAdjust2(vRot *.8);	
+		vRot = InputJoystickAdjust2(vRot *.9);	
 	}
 		
 	// Update the Vision Dashboard.
@@ -217,6 +218,10 @@ AutoRotationMecanumDrive::~AutoRotationMecanumDrive()
 
 void AutoRotationMecanumDrive::PIDWrite(float output)
 {
+//	if (output > 0 && output < .1)
+//		output = .1;
+//	if (output < 0 && output > -.1)
+//		output = -.1;
 	SafeSetAutoRotateAmount( output );
 }
 
