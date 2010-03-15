@@ -48,18 +48,99 @@ AutonomousStep AutonomousProgram[]={
 		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
 */
+/*********************************************************************************************************
+      This code will kick 3 balls into target Tested on practice robot for back court
 AutonomousStep AutonomousProgram[]={
-		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
-		{   .5,      0,    0,            Time,    2}, // Move Forward for 2 second.
+		{   -.2,     0.055,    0,            Time,    .1},
+		{   -.4,     0.055,    0,            Time,    .1}, 
+		{   -.6,     0.055,    0,            Time,    .1}, 
+		{   -.8,     0.055,    0,            Time,    1}, // first target is 22 inches from start
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
+		{   -.3,     0.055,    0,            Time,    .1},
+		{   -.4,     0.055,    0,            Time,    .1}, 
+		{   -.5,     0.055,    0,            Time,    .1}, 
+		{   -.6,     0.055,    0,            Time,    .1},
+		{   -.7,     0.055,    0,            Time,    .1},  
+		{   -.8,     0.055,    0,            Time,    1.7}, // 36 inches 
 		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   -.5,      0,    0,            Time,    3}, // Move Forward for 3 second.
-		{   .5,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
+		{   -.3,     0.055,    0,            Time,    .1},  
+		{   -.4,     0.055,    0,            Time,    .1}, 
+		{   -.5,     0.055,    0,            Time,    .1},  
+		{   -.6,     0.055,    0,            Time,    .1}, 
+		{   -.7,     0.055,    0,            Time,    1.7}, //36 inches 
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   -.2,     0.055,    0,            Time,    .1},  
+		{   -.4,     0.055,    0,            Time,    .1}, 
+		{   -.6,     0.055,    0,            Time,    .1}, 
+		{   -.7,     0.055,    0,            Time,    .8}, // Make sure we kick last ball 
 		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
+************************************************************************************************************/
+/*
+ * Kick 2 balls
+AutonomousStep AutonomousProgram[]={
+		{   .3,     0.055,    0,            Time,    .1},
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .5,     0.055,    0,            Time,    .1}, 
+		{   .6,     0.055,    0,            Time,    .1},
+		{   .7,     0.055,    0,            Time,    .1},  
+		{   .8,     0.055,    0,            Time,    .8}, // 36 inches 
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .3,     0.055,    0,            Time,    .1},  
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .5,     0.055,    0,            Time,    .1},  
+		{   .6,     0.055,    0,            Time,    .1}, 
+		{   .7,     0.055,    0,            Time,    1.5}, //36 inches 
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .2,     0.055,    0,            Time,    .1},  
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .6,     0.055,    0,            Time,    .1}, 
+		{   .7,     0.055,    0,            Time,    .8}, // Make sure we kick last ball
+		{   0,         -.8,    0,            Time,    1.5},	// get out of the way		
+		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		};
+************************************************************************************************************/
+/*
+ * Kick 1 ball
+AutonomousStep AutonomousProgram[]={
+				{   .3,     0.055,    0,            Time,    .1},
+				{   .4,     0.055,    0,            Time,    .1}, 
+				{   .5,     0.055,    0,            Time,    .1}, 
+				{   .6,     0.055,    0,            Time,    .1},
+				{   .7,     0.055,    0,            Time,    .1},  
+				{   .8,     0.055,    0,            Time,    .8}, // 36 inches 
+				{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+				{   .2,     0.055,    0,            TillBallDetected,    .1},  
+				{   .4,     0.055,    0,            TillBallDetected,    .1}, 
+				{   .6,     0.055,    0,            TillBallDetected,    .1}, 
+				{   .7,     0.055,    0,            TillBallDetected,    .8}, // Make sure we kick last ball 
+				{   0,         -.8,    0,            Time,    1.5},		// get out of the way		
+				{   0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+				};
+************************************************************************************************************/
 
-
+/* test area */
+AutonomousStep AutonomousProgram[]={
+		{   .3,     0.055,    0,            Time,    .1},
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .5,     0.055,    0,            Time,    .1}, 
+		{   .6,     0.055,    0,            Time,    .1},
+		{   .7,     0.055,    0,            Time,    .1},  
+		{   .8,     0.055,    0,            Time,    .6}, // 36 inches 
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
+		{   .3,     0.055,    0,            Time,    .1},  
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .5,     0.055,    0,            Time,    .1},  
+		{   .6,     0.055,    0,            Time,    .1}, 
+		{   .7,     0.055,    0,            Time,    1.3}, //36 inches 
+		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
+		{   .2,     0.055,    0,            Time,    .1},  
+		{   .4,     0.055,    0,            Time,    .1}, 
+		{   .6,     0.055,    0,            Time,    .1}, 
+		{   .7,     0.055,    0,            Time,    .8}, // Make sure we kick last ball
+//		{   0,         -.8,    0,            Time,    1.5},	// get out of the way		
+		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		};
 
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
@@ -168,7 +249,8 @@ public:
 		while (IsOperatorControl())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetY() * -1,stick1.GetX(),stick1.GetTwist() * -1);
+//			myRobot.DoMecanum(stick1.GetY(),stick1.GetX()*-1,stick1.GetTwist() * -1);
+			myRobot.DoMecanum(stick1.GetY(),stick1.GetX() * -1,stick1.GetTwist() * -1);
 			
 			double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());			
 			double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());

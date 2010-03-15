@@ -184,7 +184,7 @@ double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 	return dJoystickOut;
 }
 
-const double cDriveJoystickAdjust2 = 0.5;
+const double cDriveJoystickAdjust2 = 0.15;
 
 double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 {
