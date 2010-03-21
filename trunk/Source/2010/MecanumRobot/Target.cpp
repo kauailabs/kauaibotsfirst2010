@@ -50,11 +50,15 @@ double Target::GetHorizontalAngle()
  * @param t2 the second Target
  * @returns (1, 0, or -1) for the scores of t1 > t2, t1 == t2, and t1 < t2
  */
-int compareTargets(Target t1, Target t2)
+/*int compareTargets(Target t1, Target t2)
 {
 	if (t1.m_score > t2.m_score) return 1;
 	if (t1.m_score < t2.m_score) return -1;
 	return 0;
+}*/
+
+bool compareTargets(Target t1, Target t2) {
+return (t1.m_score > t2.m_score);
 }
 
 /**
