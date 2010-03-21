@@ -86,7 +86,7 @@ Kicker::Kicker( UINT32 iJaguarPort,
 			: m_WinchControl(iJaguarPort),			
 			m_WinchLoaded(iDigitalWinchLoadedDetectorPort),
 		    m_BallDetected(iDigitalBallDetectorPort),
-			m_task ("Kicker", (FUNCPTR)kickerTask)
+			m_task ("Kicker", (FUNCPTR)kickerTask,Task::kDefaultPriority+1)
 {
 	m_bAutoLoad = true;
 	m_bAutoFire = false;

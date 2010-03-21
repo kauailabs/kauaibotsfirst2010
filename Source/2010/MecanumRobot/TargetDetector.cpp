@@ -24,6 +24,7 @@ static void detectorTask(TargetDetector *detector)
 	{	
 		if ( camera.IsFreshImage() ) 
 		{
+			//printf("Got a fresh image.\n");
 			// get the gyro heading that goes with this image
 			double gyroAngle = detector->Gyroscope()->PIDGet();
 			double targetAngle = 0;
@@ -50,7 +51,7 @@ static void detectorTask(TargetDetector *detector)
 				nullTarget.m_majorRadius = 0.0;
 				nullTarget.m_minorRadius = 0.0;
 				nullTarget.m_score = 0.0;
-				if (targets.size() == 0)
+				if (targets.size() == 0) 
 					targets.push_back(nullTarget);
 				else
 					targets.insert(targets.begin(), nullTarget);
@@ -59,7 +60,8 @@ static void detectorTask(TargetDetector *detector)
 			{
 				KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,detector->HorizontalServo(),detector->VerticalServo());									
 
-				targetAngle = smartTargeter.GetRobotHorizontalAngle();			
+				targetAngle = smartTargeter.GetRobotHorizontalAngle();
+				//printf("Found target at angle %f.\n", targetAngle);
 			}
 			
 			detector->SetDetectedTargets(targets, gyroAngle, targetAngle);

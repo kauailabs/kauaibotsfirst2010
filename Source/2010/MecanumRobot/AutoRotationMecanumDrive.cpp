@@ -52,36 +52,41 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 			gyroChannel,
 			accelerometerChannelX,
 //			accelerometerChannelY ), m_turnController(.015,.001,0.001,&m_gyroscope,this)
-			accelerometerChannelY ), m_turnController(.025,.001,0.1,&m_gyroscope,this)
+//			accelerometerChannelY ), m_turnController(.025,.001,0.1,&m_gyroscope,this)
+//			accelerometerChannelY ), m_turnController(.025,0,0,&m_gyroscope,this)
+			accelerometerChannelY ), m_turnController(.025,.005,0.2,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
 {
 	m_pDashboardDataFormat = pDashboardDataFormat;
 	m_pKicker = pKicker;
-	m_pHorizontalServo = pHorizontalServo;
-	m_pVerticalServo = pVerticalServo;
 	
 	// Initialize Auto-rotation 
-	SetAutoRotationMode(false);
+	SetAutoRotationMode(false,true);
 	m_turnController.SetInputRange(-360.0, 360.0);
-	m_turnController.SetOutputRange(-1, 1);     // TODO:  Review this
+	m_turnController.SetOutputRange(-.5, .5);     // TODO:  Review this
 	m_turnController.SetTolerance(.25 / 720.0 * 100);
 	m_bAutoRotateTargetSet = false;
+	m_bAutoRotateToTarget = true;
 }
 
-void AutoRotationMecanumDrive::SetAutoRotationMode( bool bEnable )
+void AutoRotationMecanumDrive::SetAutoRotationMode( bool bEnable, bool bRotateToTarget )
 {
 	if ( bEnable != m_bAutoRotationMode )
 	{
 		m_bAutoRotationMode = bEnable;
+		m_bAutoRotateToTarget = bRotateToTarget;
 		SafeSetAutoRotateAmount(0);	// Always reset rotation amount	
 		m_bAutoRotateTargetSet = false;
 		bEnable ? m_turnController.Enable() : m_turnController.Disable();
 	}
 }
 
-bool AutoRotationMecanumDrive::GetAutoRotationMode()
+bool AutoRotationMecanumDrive::GetAutoRotationMode( bool &bRotateToTarget )
 {
+	bRotateToTarget = m_bAutoRotateToTarget;
 	return m_bAutoRotationMode;
 }
+
+const double cMinMotorRotationalOutput = .25;
 
 void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool bScaleInputs )
 {
@@ -109,10 +114,24 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool b
 		vRot *= -1;	// Invert value before sending to the output.
 		if ( m_turnController.OnTarget() )
 		{
-			m_turnController.Disable();
+			//m_turnController.Disable();
 		}
-		printf("AutoRotate Value:  %f\n",(double)vRot);
+		/*
+		// If requested rotation value is within the dead zone, adjust it. 
+		if ( vRot < 0 && (vRot > (cMinMotorRotationalOutput * -1)) )
+		{
+			vRot = cMinMotorRotationalOutput * -1;
+		}
+		else if ( vRot > 0 && (vRot < cMinMotorRotationalOutput) )
+		{
+			vRot = cMinMotorRotationalOutput;
+		}
+		*/
+		//printf("AutoRotate Value:  %f\n",(double)vRot);
+	
 	}
+	
+	//printf("Rotation value:  %f\n",(double)vRot);
 	
 	MecanumDrive::DoMecanumInternal( vX, vY, vRot );
 }
@@ -149,7 +168,7 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool b
 // Return Value:  returns the reason for the wait.
 ////////////////////////////////////////////////////////////////////
 
-const float cRampUpTimeInSeconds = 0.1;
+const double cRampUpTimeInSeconds = 0.5;
 
 AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( float vX, float vY, float vRot, WaitType wait, float waitPeriodInSeconds, Watchdog& watchdog  )
 {
@@ -159,10 +178,11 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 	DriverStation *ds = DriverStation::GetInstance();
 	
 	// Save State
-	bool bLastAutoRotateMode = GetAutoRotationMode();
+	bool bLastRotateToTarget = true;
+	bool bLastAutoRotateMode = GetAutoRotationMode( bLastRotateToTarget );
 
 	// Enable AutoRotation if TillOnTarget, otherwise disable it.
-	SetAutoRotationMode( ( wait == TillOnTarget ) );
+	SetAutoRotationMode( ( wait == TillOnTarget ) || ( wait == TillAtZeroDegrees ), (wait == TillOnTarget) );
 
 	double currTime = GetTime();
 	double quitTime = currTime + waitPeriodInSeconds;
@@ -175,11 +195,13 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 		float modifiedVY = vY;
 		float modifiedVRot = vRot;
 		
-		float rampUpTimeRemaining = rampUpTime - currTime;
+		double rampUpTimeRemaining = rampUpTime - currTime;
 		if ( rampUpTimeRemaining > 0 )
 		{
-			float rampPercentage = rampUpTimeRemaining / rampUpTime;
+			double rampPercentage = 1 - (rampUpTimeRemaining / cRampUpTimeInSeconds);
 
+			printf("Ramping up to %f percent.\n", rampPercentage);
+			
 			modifiedVX *= rampPercentage;
 			modifiedVY *= rampPercentage;
 			modifiedVRot *= rampPercentage;
@@ -188,7 +210,7 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 		watchdog.Feed();
 		DoMecanum( modifiedVX, modifiedVY, modifiedVRot, false );
 
-		if ( (wait == TillOnTarget) && m_turnController.OnTarget() )
+		if ( ((wait == TillOnTarget) || (wait == TillAtZeroDegrees )) && m_turnController.OnTarget() )
 		{
 			returnVal = wait;
 			bDone = true;
@@ -198,12 +220,12 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 			returnVal = wait;
 			bDone = true;
 		}
-		Wait(0.02); 			// TODO:  Tune this.
+		Wait(0.01); 			// TODO:  Tune this.
 		currTime = GetTime();
 	}
 		
 	// Restore state
-	SetAutoRotationMode( bLastAutoRotateMode );
+	SetAutoRotationMode( bLastAutoRotateMode, bLastRotateToTarget );
 	return returnVal;
 }
 
@@ -243,58 +265,38 @@ void AutoRotationMecanumDrive::SafeSetAutoRotateAmount( float rot )
  */
 void AutoRotationMecanumDrive::UpdateDashboard()
 {
-	AxisCamera& camera = AxisCamera::GetInstance();
-	if ( camera.IsFreshImage() ) 
+	double gyroAngle;
+	double targetAngle;	
+	vector<Target> targets;
+	
+	m_TargetDetector.GetDetectedTargets( targets, gyroAngle, targetAngle);
+
+	if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
 	{
-		// get the gyro heading that goes with this image
-		double gyroAngle = Gyroscope().PIDGet();
+		// No targets found
+		m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, 0.0, 0.0, targets);		
+	}
+	else
+	{
+		double setPoint = gyroAngle + targetAngle;		
+		//printf("Target Angle (degrees):  %f   OnTarget:  %i  Error:  %f\n",targetAngle, m_turnController.OnTarget(), (double)m_turnController.GetError());
 		
-		// get the camera image
-		ColorImage *image = camera.GetImage();
-		
-		int imageHeight = image->GetHeight();
-		int imageWidth = image->GetWidth();
-
-		// find FRC targets in the image
-		vector<Target> targets = Target::FindCircularTargets(image);
-		delete image;  // Be sure to delete the image!
-		
-		if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
+		// If auto-rotation was requested, 
+		if ( !m_bAutoRotateTargetSet )
 		{
-			// no targets found. Make sure the first one in the list is 0,0
-			// since the dashboard program annotates the first target in green
-			// and the others in magenta. With no qualified targets, they'll all
-			// be magenta.
-			Target nullTarget;
-			nullTarget.m_majorRadius = 0.0;
-			nullTarget.m_minorRadius = 0.0;
-			nullTarget.m_score = 0.0;
-			if (targets.size() == 0)
-				targets.push_back(nullTarget);
-			else
-				targets.insert(targets.begin(), nullTarget);
-		
-			m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, 0.0, 0.0, targets);
-		}
-		else // Targets detected
-		{
-			KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,m_pHorizontalServo,m_pVerticalServo);
-			//printf("Distance (feet):  %f\n",smartTargeter.GetDistanceToTargetFeet2());				//printf("Distance (inches):  %f\n",smartTargeter.GetDistanceToTargetInches());
-
-			// set the new PID heading setpoint to the first target in the list
-			double horizontalAngle = smartTargeter.GetRobotHorizontalAngle();
-			double setPoint = gyroAngle + horizontalAngle;
-			printf("Target Angle (degrees):  %f    SetPoint:  %f  Gyro:  %f  OnTarget:  %i  Error:  %f\n,",horizontalAngle, setPoint,gyroAngle, m_turnController.OnTarget(), (double)m_turnController.GetError());
-
-			if ( !m_bAutoRotateTargetSet )
+			m_bAutoRotateTargetSet = true;
+			if ( m_bAutoRotateToTarget )
 			{
-				m_bAutoRotateTargetSet = true;
 				m_turnController.SetSetpoint(setPoint);
 			}
-				
-			// send dashboard data for target tracking
-			m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, setPoint, targets[0].m_xPos / targets[0].m_xMax, targets);
+			else // Rotate to zero degrees
+			{
+				m_turnController.SetSetpoint(0);					
+			}
 		}
+			
+		// send dashboard data for target tracking
+		m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, setPoint, targets[0].m_xPos / targets[0].m_xMax, targets);		
 	}		
 }
 
