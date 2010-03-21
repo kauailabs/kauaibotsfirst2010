@@ -10,6 +10,7 @@
 #include "MecanumDrive.h"
 #include "DashboardDataFormat.h"
 #include "Kicker.h"
+#include "TargetDetector.h"
 
 /*
  * Description:  Custom Robot Drive Class to extend the
@@ -25,11 +26,13 @@ protected:
 	DashboardDataFormat *m_pDashboardDataFormat;
 	Kicker *m_pKicker;
 	bool m_bAutoRotationMode;
+	bool m_bAutoRotateToTarget; // false = rotate to zero degrees
 	bool m_bAutoRotateTargetSet;
 	PIDController m_turnController;
 	Servo *m_pHorizontalServo;
 	Servo *m_pVerticalServo;
 	float m_pendingAutoRotateAmount;
+	TargetDetector m_TargetDetector;
 	
 public:
 	AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel,
@@ -54,12 +57,12 @@ public:
 	
 	virtual ~AutoRotationMecanumDrive();
 
-	void SetAutoRotationMode( bool bEnable );
-	bool GetAutoRotationMode();
+	void SetAutoRotationMode( bool bEnable, bool bRotateToTarget /* false = rotate to zero degrees */ );
+	bool GetAutoRotationMode( bool& bRotateToTarget );
 	
 	virtual void DoMecanum( float vX, float vY, float vRot, bool bScaleInputs = true );	
 	
-	enum WaitType { Time, TillOnTarget, TillBallDetected };
+	enum WaitType { Time, TillOnTarget, TillBallDetected, TillAtZeroDegrees };
 	
 	// Performs an autonomous-mode command.
 	//
