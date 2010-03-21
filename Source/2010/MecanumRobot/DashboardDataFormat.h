@@ -2,7 +2,6 @@
 #define __DashboardDataFormat_h__
 
 #include "WPILib.h"
-#include "MecanumDrive.h"
 #include "Timer.h"
 #include "Target.h"
 #include "Kicker.h"
@@ -21,12 +20,15 @@
  * to add data elements or remove them.  Just remember to make any changes consistently
  * between the LabVIEW "Dashboard Datatype" and the data that gets packed by this class.
  */
+
+class AutoRotationMecanumDrive;
+
 class DashboardDataFormat : public SensorBase
 {
 public:
 	DashboardDataFormat(void);
 	virtual ~DashboardDataFormat();
-	void PackAndSend(Joystick& stick1, MecanumDrive& drive,Kicker& kicker, Tensioner& tensioner);
+	void PackAndSend(Joystick& stick1, AutoRotationMecanumDrive& drive, Kicker& kicker, Tensioner& tensioner);
 	void sendVisionData(double joyStickX,
 					double gyroAngle,
 					double gyroRate,

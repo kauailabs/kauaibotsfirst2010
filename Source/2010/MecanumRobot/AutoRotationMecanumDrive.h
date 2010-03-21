@@ -59,6 +59,8 @@ public:
 
 	void SetAutoRotationMode( bool bEnable, bool bRotateToTarget /* false = rotate to zero degrees */ );
 	bool GetAutoRotationMode( bool& bRotateToTarget );
+
+	double GetAutoRotationError( bool& bOnTarget );	
 	
 	virtual void DoMecanum( float vX, float vY, float vRot, bool bScaleInputs = true );	
 	
@@ -85,7 +87,7 @@ protected:
 	// Thread-safe accesors for auto-rotation amount
 	float SafeGetAutoRotateAmount();
 	void SafeSetAutoRotateAmount( float rot );
-		
+			
 	// PIDOutput Overrides
 	void PIDWrite(float output);
 
