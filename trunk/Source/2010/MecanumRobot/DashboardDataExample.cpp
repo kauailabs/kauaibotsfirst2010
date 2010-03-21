@@ -14,133 +14,73 @@ struct AutonomousStep
 	WaitType wait;
 	float waitPeriodInSeconds; 
 };
-/*
-AutonomousStep AutonomousProgram[]={
-		// 
-//		{    0,      0,    0,            Time,     3}, // Wait for 3 seconds before doing anything		
-		{    0,      0.5,    0,            Time,    .1}, // Move right 
-		{    0,     -0.5,    0,            Time,    .1}, // Move left 
-		{    0,      0.7,    0,            Time,    .1}, // Move right 
-		{    0,     -0.7,    0,            Time,    .1}, // Move left 		
-		{    0,      0,    0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
-		{   .1,      0,    0,            Time,    .2}, 
-		{   .2,      0,    0,            Time,    .2}, 
-		{   .3,      0,    0,            Time,    .2}, 
-		{   .4,      0,    0,            Time,    .2}, 
-		{   .5,      0,    0,            Time,    .2}, 
-		{   .6,      0,    0,            Time,    .2}, 
-		{   .7,      0,    0,            Time,    .2}, 
-		{    0,      0,    0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
-		{   .1,      0,    0,            Time,    .2}, 
-		{   .2,      0,    0,            Time,    .2}, 
-		{   .3,      0,    0,            Time,    .2}, 
-		{   .4,      0,    0,            Time,    .2}, 
-		{   .5,      0,    0,            Time,    .2}, 
-		{   .6,      0,    0,            Time,    .2}, 
-		{   .7,      0,    0,            Time,    .2}, 
-//		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
-//		{   .5,      0,    0,            Time,    2}, // Move Forward for 2 second.
-//		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-//		{   -.5,      0,    0,            Time,    3}, // Move Forward for 3 second.
-//		{   .5,      0,    0,            Time,     2},  // Drive forward until ball is kicked (or give up in 2 seconds)
-//		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-//		{   -.5,      0,    0,TillBallDetected,    2}, // Drive forward until ball is kicked (or give up in 2 seconds)
-		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+
+AutonomousStep MidCourt1[]={
+		{    0,      0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds) 
+		{   .7,      0,    		0,            Time,    1.6}, 
+		{    0,      0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
+		{   .7,      0,    		0,            Time,    1.6}, 
+		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
-*/
-/*********************************************************************************************************
-      This code will kick 3 balls into target Tested on practice robot for back court
-AutonomousStep AutonomousProgram[]={
-		{   -.2,     0.055,    0,            Time,    .1},
-		{   -.4,     0.055,    0,            Time,    .1}, 
-		{   -.6,     0.055,    0,            Time,    .1}, 
-		{   -.8,     0.055,    0,            Time,    1}, // first target is 22 inches from start
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
-		{   -.3,     0.055,    0,            Time,    .1},
-		{   -.4,     0.055,    0,            Time,    .1}, 
-		{   -.5,     0.055,    0,            Time,    .1}, 
-		{   -.6,     0.055,    0,            Time,    .1},
-		{   -.7,     0.055,    0,            Time,    .1},  
-		{   -.8,     0.055,    0,            Time,    1.7}, // 36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   -.3,     0.055,    0,            Time,    .1},  
-		{   -.4,     0.055,    0,            Time,    .1}, 
-		{   -.5,     0.055,    0,            Time,    .1},  
-		{   -.6,     0.055,    0,            Time,    .1}, 
-		{   -.7,     0.055,    0,            Time,    1.7}, //36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   -.2,     0.055,    0,            Time,    .1},  
-		{   -.4,     0.055,    0,            Time,    .1}, 
-		{   -.6,     0.055,    0,            Time,    .1}, 
-		{   -.7,     0.055,    0,            Time,    .8}, // Make sure we kick last ball 
-		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+
+AutonomousStep FarCourt1[]={
+		{   .8,     0.055,    	0,            Time,    1.3}, // first target is 22 inches from start
+		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
+		{   .8,     0.055,    	0,            Time,    2.2}, // 36 inches 
+		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .7,     0.055,    	0,            Time,    2.1}, //36 inches 
+		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball 
+		{    0,      	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
-************************************************************************************************************/
-/*
- * Kick 2 balls
-AutonomousStep AutonomousProgram[]={
-		{   .3,     0.055,    0,            Time,    .1},
-		{   .4,     0.055,    0,            Time,    .1}, 
-		{   .5,     0.055,    0,            Time,    .1}, 
-		{   .6,     0.055,    0,            Time,    .1},
-		{   .7,     0.055,    0,            Time,    .1},  
-		{   .8,     0.055,    0,            Time,    .8}, // 36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .3,     0.055,    0,            Time,    .1},  
-		{   .4,     0.055,    0,            Time,    .1}, 
-		{   .5,     0.055,    0,            Time,    .1},  
-		{   .6,     0.055,    0,            Time,    .1}, 
-		{   .7,     0.055,    0,            Time,    1.5}, //36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .2,     0.055,    0,            Time,    .1},  
-		{   .4,     0.055,    0,            Time,    .1}, 
-		{   .6,     0.055,    0,            Time,    .1}, 
-		{   .7,     0.055,    0,            Time,    .8}, // Make sure we kick last ball
-		{   0,         -.8,    0,            Time,    1.5},	// get out of the way		
-		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+
+AutonomousStep MidCourt2[]={
+		{   .8,     0.055,    	0,            Time,    1.3}, // 36 inches 
+		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .7,     0.055,    	0,            Time,    1.9}, //36 inches 
+		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball
+		{    0,         -.8,    0,            Time,    1.5},	// get out of the way		
+		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
-************************************************************************************************************/
-/*
- * Kick 1 ball
-AutonomousStep AutonomousProgram[]={
-				{   .3,     0.055,    0,            Time,    .1},
-				{   .4,     0.055,    0,            Time,    .1}, 
-				{   .5,     0.055,    0,            Time,    .1}, 
-				{   .6,     0.055,    0,            Time,    .1},
-				{   .7,     0.055,    0,            Time,    .1},  
-				{   .8,     0.055,    0,            Time,    .8}, // 36 inches 
-				{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-				{   .2,     0.055,    0,            TillBallDetected,    .1},  
-				{   .4,     0.055,    0,            TillBallDetected,    .1}, 
-				{   .6,     0.055,    0,            TillBallDetected,    .1}, 
-				{   .7,     0.055,    0,            TillBallDetected,    .8}, // Make sure we kick last ball 
-				{   0,         -.8,    0,            Time,    1.5},		// get out of the way		
-				{   0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-				};
-************************************************************************************************************/
+
+AutonomousStep NearCourt1[]={
+		{   .8,     0.055,    	0,            Time,    1.3}, // 36 inches 
+		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0.055,    	0,    TillBallDetected,    1.1}, // Make sure we kick last ball 
+		{    0,      -.8,    	0,    		Time,    1.5},		// get out of the way		
+		{    0,      0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		};
 
 /* test area */
 AutonomousStep AutonomousProgram[]={
-		//{   .3,     0.055,    0,            Time,    .1},
-		//{   .4,     0.055,    0,            Time,    .1}, 
-		//{   .5,     0.055,    0,            Time,    .1}, 
-		//{   .6,     0.055,    0,            Time,    .1},
-		//{   .7,     0.055,    0,            Time,    .1},  
-		{   .8,     0.055,    0,            Time,    1.1}, // 36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		//{   .3,     0.055,    0,            Time,    .1},  
-		//{   .4,     0.055,    0,            Time,    .1}, 
-		//{   .5,     0.055,    0,            Time,    .1},  
-		//{   .6,     0.055,    0,            Time,    .1}, 
-		{   .7,     0.055,    0,            Time,    1.7}, //36 inches 
-		{    0,      0,    0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		//{   .2,     0.055,    0,            Time,    .1},  
-		//{   .4,     0.055,    0,            Time,    .1}, 
-		//{   .6,     0.055,    0,            Time,    .1}, 
-		{   .7,     0.055,    0,            Time,    1.1}, // Make sure we kick last ball
-//		{   0,         -.8,    0,            Time,    1.5},	// get out of the way		
-		{    0,      0,    0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		{   .8,     0.055,    	0,            Time,    1.1}, // 36 inches 
+		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
+		{   .7,     0.055,    	0,            Time,    1.7}, //36 inches 
+		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
+		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball
+		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
+
+struct AutonomousProgramInfo
+{
+	AutonomousStep *Program;
+	int NumberOfSteps;
+};
+
+#define MAKE_PROGRAM_INFO(p) p, sizeof(p) / sizeof(p[0])
+
+// Modify to add/change the program list.  NOTE:  MUST HAVE AT LEAST 1 PROGRAM!!!
+
+AutonomousProgramInfo AutonomousProgramList[] = {
+		{ MAKE_PROGRAM_INFO( MidCourt1 ) },
+		{ MAKE_PROGRAM_INFO( FarCourt1 ) },
+		{ MAKE_PROGRAM_INFO( MidCourt2 ) },
+		{ MAKE_PROGRAM_INFO( NearCourt1 ) },
+		{ MAKE_PROGRAM_INFO( AutonomousProgram ) },
+};
+
+#define NUM_AUTONOMOUS_PROGRAMS (sizeof(AutonomousProgramList)/sizeof(AutonomousProgramList[0]))
 
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
@@ -182,6 +122,9 @@ public:
 	/**
 	 * Main entry point for autonomous mode code
 	 **/
+	
+	static const int cNumDigitalDriverStationInputs = 8;
+	
 	void  Autonomous () 
 	{
 		printf("Entering Autonomous mode.\n");
@@ -191,7 +134,18 @@ public:
 		// program to run...
 		DriverStation::Alliance alliance = ds->GetAlliance();
 		UINT32 location = ds->GetLocation();
-		float analogInput = ds->GetAnalogIn(0);
+
+		// Determine which program to use.
+		int iSelectedAutonomousProgram = 0;
+		
+		for ( int i = 1; i < cNumDigitalDriverStationInputs + 1; i++)
+		{
+			if ( ds->GetDigitalIn(i) && (i <= NUM_AUTONOMOUS_PROGRAMS))
+			{
+				iSelectedAutonomousProgram = i - 1; // Translate to a 0-based index.
+				break;
+			}
+		}
 		
 		kicker.SetKickerState(Kicker::Loading);		
 		
@@ -200,12 +154,12 @@ public:
 		
 		AutonomousStep instruction;	
 		int step=0;
-		int numEntries = sizeof(AutonomousProgram)/sizeof(AutonomousProgram[0]);
+		int numEntries = AutonomousProgramList[iSelectedAutonomousProgram].NumberOfSteps;
 		// Status variable to return results from AutonomousDrive
 		AutoRotationMecanumDrive::WaitType success;
 		while(IsAutonomous() && (step < numEntries) )
 		{
-			instruction = AutonomousProgram[step];
+			instruction = AutonomousProgramList[iSelectedAutonomousProgram].Program[step];
 
 			success = myRobot.AutonomousDrive( 
 					instruction.vX,

@@ -1,6 +1,8 @@
 
 #include "DashboardDataFormat.h"
 #include <vector>
+#include "AutoRotationMecanumDrive.h"
+
 
 /**
  * Default constructor.  
@@ -23,7 +25,7 @@ DashboardDataFormat::~DashboardDataFormat()
  * Pack data using the correct types and in the correct order to match the
  * "Dashboard Datatype" in the LabVIEW Dashboard project.
  */
-void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive,Kicker& kicker, Tensioner& tensioner)
+void DashboardDataFormat::PackAndSend(Joystick& stick1, AutoRotationMecanumDrive& drive,Kicker& kicker, Tensioner& tensioner)
 {
 	Dashboard &dashboardPacker = m_ds->GetLowPriorityDashboardPacker();
 	
@@ -75,15 +77,18 @@ void DashboardDataFormat::PackAndSend(Joystick& stick1, MecanumDrive& drive,Kick
 	Kicker::KickerMotorState kickerState;
 	kicker.GetStatus(&fireCompleteDetectorValue,&fireCompleteDetected,&ballDetectorValue,&ballDetected,&winchLoaded,&kickerState,&autoLoad,&autoFire);
 	
-	dashboardPacker.AddBoolean(false); // Auto-load
-	dashboardPacker.AddBoolean(false); // Auto-fire
+	bool bOnTarget;
+	double dRotationError = drive.GetAutoRotationError( bOnTarget );
+
+	dashboardPacker.AddBoolean(bOnTarget); // Auto-load
+	dashboardPacker.AddBoolean(autoFire); // Auto-fire
 	dashboardPacker.AddBoolean(kickerState==Kicker::Forward); // Winch Fwd
 	dashboardPacker.AddBoolean(kickerState==Kicker::Reverse); // Winch Rev
 	dashboardPacker.AddBoolean(winchLoaded); // Loaded Sensor
 	dashboardPacker.AddBoolean(fireCompleteDetected); // Kicker Complete Sensor
-	dashboardPacker.AddFloat(fireCompleteDetectorValue); // Kicker Complete Voltage
+	dashboardPacker.AddFloat(dRotationError); // Kicker Complete Voltage
 	dashboardPacker.AddBoolean(ballDetected); // Ball Detected
-	dashboardPacker.AddFloat(ballDetectorValue); // Ball Detected Voltage
+	dashboardPacker.AddFloat(bOnTarget ? 1 : 0); // Ball Detected Voltage
 	dashboardPacker.FinalizeCluster();
 	
 	// Add a cluster of tensioner status data
