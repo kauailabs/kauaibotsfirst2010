@@ -1,6 +1,6 @@
 #include "TargetDetector.h"
 
-#define MINIMUM_SCORE 0.01
+#define MINIMUM_SCORE 0.005
 
 
 // Create Mutex for Target Data
@@ -41,7 +41,7 @@ static void detectorTask(TargetDetector *detector)
 			vector<Target> targets = Target::FindCircularTargets(image);
 			delete image;  // Be sure to delete the image!
 			
-			if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
+			if (targets.size() == 0 /*|| targets[0].m_score < MINIMUM_SCORE*/)
 			{
 				// no targets found. Make sure the first one in the list is 0,0
 				// since the dashboard program annotates the first target in green
@@ -61,7 +61,6 @@ static void detectorTask(TargetDetector *detector)
 				KauaibotsTarget smartTargeter(targets[0],imageHeight,imageWidth,detector->HorizontalServo(),detector->VerticalServo());									
 
 				targetAngle = smartTargeter.GetRobotHorizontalAngle();
-				//printf("Found target at angle %f.\n", targetAngle);
 			}
 			
 			detector->SetDetectedTargets(targets, gyroAngle, targetAngle);
