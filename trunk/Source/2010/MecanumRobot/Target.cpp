@@ -33,6 +33,7 @@ static ShapeDetectionOptions shapeOptions = {
 										500				// minMatchScore
 };
 
+#define MINIMUM_SCORE 0.005
 
 double Target::GetHorizontalAngle()
 {
@@ -59,6 +60,15 @@ double Target::GetHorizontalAngle()
 
 bool compareTargets(Target t1, Target t2) {
 return (t1.m_score > t2.m_score);
+}
+
+// Secondary sort routine.  Sort so that the target closest to the center is higher priority
+
+bool compareTargets2(Target t1, Target t2) {
+    double centerPoint = t1.m_xMax / 2;
+    double t1_delta = fabs(t1.m_xPos);
+    double t2_delta = fabs(t2.m_xPos);
+	return (t1_delta < t2_delta);
 }
 
 /**
@@ -143,7 +153,7 @@ vector<Target> Target::FindCircularTargets(ColorImage *image)
             }
 		}
 		sortedTargets.erase(sortedTargets.begin());
-		if (t1.m_bothFound)
+		if (t1.m_bothFound && t1.m_score >= MINIMUM_SCORE)
 		{
 			combinedTargets.push_back(t1);
 		}
@@ -152,6 +162,9 @@ vector<Target> Target::FindCircularTargets(ColorImage *image)
 	// sort the combined targets so the highest scoring one is first
 	sort(combinedTargets.begin(), combinedTargets.end(), compareTargets);
 
+	// next, sort so that the target closest to the center is first
+	sort(combinedTargets.begin(), combinedTargets.end(), compareTargets2);
+	
 	return combinedTargets;
 }
 

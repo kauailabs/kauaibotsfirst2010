@@ -54,7 +54,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 //			accelerometerChannelY ), m_turnController(.015,.001,0.001,&m_gyroscope,this)
 //			accelerometerChannelY ), m_turnController(.025,.001,0.1,&m_gyroscope,this)
 //			accelerometerChannelY ), m_turnController(.025,0,0,&m_gyroscope,this)
-			accelerometerChannelY ), m_turnController(.0225,.0115,.2,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
+			accelerometerChannelY ), m_turnController(0.02361,0.00175,0,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
 {
 	m_pDashboardDataFormat = pDashboardDataFormat;
 	m_pKicker = pKicker;
@@ -63,7 +63,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 	SetAutoRotationMode(false,true);
 	m_turnController.SetInputRange(-360.0, 360.0);
 	m_turnController.SetOutputRange(-.85, .85);     // TODO:  Review this
-	m_turnController.SetTolerance(.25 / 720.0 * 100);
+	m_turnController.SetTolerance(.5 / 720.0 * 100);
 	m_bAutoRotateTargetSet = false;
 	m_bAutoRotateToTarget = true;
 }
@@ -273,6 +273,7 @@ void AutoRotationMecanumDrive::UpdateDashboard()
 	if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
 	{
 		// No targets found
+		//printf("No Targets found.\n");
 		m_pDashboardDataFormat->sendVisionData(0.0, gyroAngle, 0.0, 0.0, targets);		
 	}
 	else
@@ -280,10 +281,14 @@ void AutoRotationMecanumDrive::UpdateDashboard()
 		double setPoint = gyroAngle + targetAngle;		
 		//printf("Target Angle (degrees):  %f   OnTarget:  %i  Error:  %f\n",targetAngle, m_turnController.OnTarget(), (double)m_turnController.GetError());
 
-		double delta = fabs(gyroAngle) - fabs(targetAngle);
+		double delta = fabs(gyroAngle) - fabs(targetAngle);	// distance from curr gyro pos to new target position
+		
+		double spDelta = fabs(m_turnController.GetSetpoint()) - fabs(setPoint); // distance from curr set point to new setpoint
 		
 		// If auto-rotation was requested, 
-		if ( !m_bAutoRotateTargetSet || ( m_bAutoRotateToTarget && ( (delta > -5) && (delta < 5) ) ) )
+		bool bRobotCloseToExistingTarget = ( (delta > -2.5) && (delta < 2.5) );
+		bool bNewSetpointNearExistingSetpoint = ( (spDelta > -2.5) && (spDelta < 2.5) );
+		if ( !m_bAutoRotateTargetSet /*|| ( m_bAutoRotateToTarget && bRobotCloseToExistingTarget && bNewSetpointNearExistingSetpoint )*/ )
 		{
 			m_bAutoRotateTargetSet = true;
 			if ( m_bAutoRotateToTarget )

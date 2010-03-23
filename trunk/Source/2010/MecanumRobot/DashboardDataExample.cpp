@@ -24,41 +24,41 @@ AutonomousStep MidCourt1[]={
 };
 
 AutonomousStep FarCourt1[]={
-		{   .8,     0.055,    	0,            Time,    1.3}, // first target is 22 inches from start
-		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
-		{   .8,     0.055,    	0,            Time,    2.2}, // 36 inches 
-		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .7,     0.055,    	0,            Time,    2.1}, //36 inches 
-		{    0,      	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball 
-		{    0,      	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		{   .7,     0,    	0,            Time,    1.3}, // first target is 22 inches from start
+		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
+		{   .7,     0,    	0,            Time,    1.8}, // 36 inches 
+		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .7,     0,    	0,            Time,    1.8}, //36 inches 
+		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0,    	0,            Time,    1.5}, // Make sure we kick last ball 
+		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
 
 AutonomousStep MidCourt2[]={
-		{   .8,     0.055,    	0,            Time,    1.3}, // 36 inches 
+		{   .8,     0.0,    	0,            Time,    1.3}, // 36 inches 
 		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .7,     0.055,    	0,            Time,    1.9}, //36 inches 
+		{   .7,     0.0,    	0,            Time,    1.9}, //36 inches 
 		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball
-		{    0,         -.8,    0,            Time,    1.5},	// get out of the way		
+		{   .7,     0.0,    	0,            Time,    1.1}, // Make sure we kick last ball
+		{    0,         .8,    0,            Time,    1.5},	// get out of the way		
 		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
 
 AutonomousStep NearCourt1[]={
-		{   .8,     0.055,    	0,            Time,    1.3}, // 36 inches 
-		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0.055,    	0,    TillBallDetected,    1.1}, // Make sure we kick last ball 
-		{    0,      -.8,    	0,    		Time,    1.5},		// get out of the way		
+//		{   .8,     0.0,    	0,            Time,    1.3}, // 36 inches 
+		{    .8,      0,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0.0,    	0,    TillBallDetected,    2.1}, // Make sure we kick last ball 
+		{    0,      .8,    	0,    		Time,    1.5},		// get out of the way		
 		{    0,      0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
 
 /* test area */
 AutonomousStep AutonomousProgram[]={
-		{   .8,     0.055,    	0,            Time,    1.1}, // 36 inches 
+		{   .8,     0.0,    	0,            Time,    1.1}, // 36 inches 
 		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		{   .7,     0.055,    	0,            Time,    1.7}, //36 inches 
+		{   .7,     0.0,    	0,            Time,    1.7}, //36 inches 
 		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		{   .7,     0.055,    	0,            Time,    1.1}, // Make sure we kick last ball
+		{   .7,     0.0,    	0,            Time,    1.1}, // Make sure we kick last ball
 		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
 
@@ -112,7 +112,7 @@ public:
 		Wait(1.0);
 		AxisCamera& camera = AxisCamera::GetInstance();
 		camera.WriteResolution(AxisCamera::kResolution_320x240);
-		camera.WriteBrightness(0);     // TODO:  Tune This...
+		camera.WriteBrightness(50);     // TODO:  Tune This...
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(2.0);
         // Set camera servos to their default position
