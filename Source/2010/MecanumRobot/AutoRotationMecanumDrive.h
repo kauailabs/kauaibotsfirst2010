@@ -64,7 +64,7 @@ public:
 	
 	virtual void DoMecanum( float vX, float vY, float vRot, bool bScaleInputs = true );	
 	
-	enum WaitType { Time, TillOnTarget, TillBallDetected, TillAtZeroDegrees };
+	enum WaitType { Time=0, TillOnTarget, TillBallDetected, TillAtZeroDegrees };
 	
 	// Performs an autonomous-mode command.
 	//

@@ -211,6 +211,7 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 
 		if ( ((wait == TillOnTarget) || (wait == TillAtZeroDegrees )) && m_turnController.OnTarget() )
 		{
+			printf("Exiting autonomous loop; on target.\n");
 			returnVal = wait;
 			bDone = true;
 		}
