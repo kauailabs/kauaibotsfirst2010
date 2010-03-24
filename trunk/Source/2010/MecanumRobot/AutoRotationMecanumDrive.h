@@ -33,6 +33,7 @@ protected:
 	Servo *m_pVerticalServo;
 	float m_pendingAutoRotateAmount;
 	TargetDetector m_TargetDetector;
+	bool m_bDetectedTargetDuringAutonomous;
 	
 public:
 	AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel,
