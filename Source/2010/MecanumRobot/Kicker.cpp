@@ -71,6 +71,7 @@ static void kickerTask(Kicker *kicker)
 				}
 				break;
 			}
+			Wait(0.02);
 		}
 		else
 		{

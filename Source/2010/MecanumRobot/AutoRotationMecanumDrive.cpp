@@ -66,6 +66,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 	m_turnController.SetTolerance(.5 / 720.0 * 100);
 	m_bAutoRotateTargetSet = false;
 	m_bAutoRotateToTarget = true;
+	m_bDetectedTargetDuringAutonomous = false;
 }
 
 void AutoRotationMecanumDrive::SetAutoRotationMode( bool bEnable, bool bRotateToTarget )
@@ -174,6 +175,7 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 	bool bDone = false;
 	WaitType returnVal = Time;
 	
+	m_bDetectedTargetDuringAutonomous = false;
 	DriverStation *ds = DriverStation::GetInstance();
 	
 	// Save State
@@ -209,7 +211,9 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 		watchdog.Feed();
 		DoMecanum( modifiedVX, modifiedVY, modifiedVRot, false );
 
-		if ( ((wait == TillOnTarget) || (wait == TillAtZeroDegrees )) && m_turnController.OnTarget() )
+		if ( ( ( (wait == TillOnTarget) && m_bDetectedTargetDuringAutonomous) || 
+				 (wait == TillAtZeroDegrees ) ) && 
+			  m_turnController.OnTarget() )
 		{
 			printf("Exiting autonomous loop; on target.\n");
 			returnVal = wait;
@@ -271,7 +275,7 @@ void AutoRotationMecanumDrive::UpdateDashboard()
 	
 	m_TargetDetector.GetDetectedTargets( targets, gyroAngle, targetAngle);
 
-	if (targets.size() == 0 || targets[0].m_score < MINIMUM_SCORE)
+	if (targets.size() == 0 /*|| targets[0].m_score < MINIMUM_SCORE*/)
 	{
 		// No targets found
 		//printf("No Targets found.\n");
@@ -294,6 +298,7 @@ void AutoRotationMecanumDrive::UpdateDashboard()
 			m_bAutoRotateTargetSet = true;
 			if ( m_bAutoRotateToTarget )
 			{
+				m_bDetectedTargetDuringAutonomous = true;				
 				m_turnController.SetSetpoint(setPoint);
 			}
 			else // Rotate to zero degrees
