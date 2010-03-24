@@ -32,13 +32,14 @@ AutonomousStep FarCourt2[]={
 		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
 AutonomousStep MidCourt1[]={
-		{    0, 0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds) 
-		{   .7, 0,    		0+rcrab,            Time,    2}, 
-		{    0, 0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
-		{   .7, 0,    		0+rcrab,            Time,    2},
-//		{    0,     .8,    	0,    		Time,    1.5},		// get out of the way	
-		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-};
+		{   .7,     0+crab,    	  0,    Time,    0.2}, 	
+		{   .8,     0+crab,    	  0.5,  Time,    0.2}, //24 inches + rotation
+		{   .8,     0+crab,    	  0,    Time,    0.4},			// rotate back	
+		{   .8,     0+crab,    	  -0.5,  Time,   0.2}, 
+		{   .7,     0+crab,    	  0,    Time,   1.3}, 	
+		{   .7,     0+crab,    	  0,TillBallDetected,   2.1}, // Make sure we kick last ball 
+		{    0,         0,    		0,   Time,    20.0}  // Wait for 20 seconds for autonomous mode to end
+		};
 
 AutonomousStep MidCourt2[]={
 		{   .7,0+crab,    	0+rcrab,            Time,    10}, // Make sure we kick last ball 
@@ -47,8 +48,8 @@ AutonomousStep MidCourt2[]={
 };
 
 AutonomousStep NearCourt1[]={
-//		{   .8,     0+crab,    	0,            Time,    1.3}, // 36 inches 
-		{    .8,  0+crab,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
+		{   .8,     0+crab,    	.8,            Time,    1.3}, // 36 inches 
+//		{    .8,  0+crab,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
 		{   .7,   0+crab,    	0,    TillBallDetected,    2.1}, // Make sure we kick last ball 
 //		{    0,       .8,    	0,    		Time,    1.5},		// get out of the way		
 		{    0,         0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
@@ -59,19 +60,16 @@ AutonomousStep NearCourt2[]={
 //		{    0,         .8,    	0,    		Time,    1.5},		// get out of the way	
 		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
+
 AutonomousStep sandbox[]={
-		{   0,   0,    	0,    TillBallDetected,    5},
-		{   0,   0,    	0,    TillAtZeroDegrees,    5},
-		{   0,   0,    	0,    Time,    1},
-		{   0,   0,    	0,    TillBallDetected,    5},
-		{   0,   0,    	0,    TillAtZeroDegrees,    5},
-		{   0,   0,    	0,    Time,    1},		
-		{   0,   0,    	0,    TillBallDetected,    5},
-		{   0,   0,    	0,    TillAtZeroDegrees,    5},
-		{   0,   0,    	0,    Time,    1},		
-		{   0,   0,    	0,    TillBallDetected,    5},
+		{   0,   -1,    	0,    Time,    .2},	  
+		{   0,   1,    	0,    Time,    .2},	
+		{   0,   0,    	0,    TillOnTarget,    5},
+		{   0,   -1,    	0,    Time,    .2},		
+		{   0,   1,    	0,    Time,    .2},			
 		{   0,   0,    	0,    TillAtZeroDegrees,    5}, 		
-		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		{   0,   -1,    	0,    Time,    .2	 }, 
+		{   0,   0,    	0,    Time,    .2	 } 
 		};
 
 struct AutonomousProgramInfo
@@ -123,10 +121,11 @@ public:
 		GetWatchdog().SetEnabled(false);
 		// Create and set up a camera instance. first wait for the camera to start
 		// if the robot was just powered on. This gives the camera time to boot.
-		Wait(1.0);
+		Wait(5.0);
 		AxisCamera& camera = AxisCamera::GetInstance();
 		camera.WriteResolution(AxisCamera::kResolution_320x240);
-		camera.WriteBrightness(50);     // TODO:  Tune This...
+		camera.WriteBrightness(50);     // TODO:  Tune This..
+	//	Wait(20.0);
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(2.0);
         // Set camera servos to their default position

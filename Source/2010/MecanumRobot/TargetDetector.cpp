@@ -16,7 +16,7 @@ static SEM_ID cDetectorStateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
  */
 static void detectorTask(TargetDetector *detector)
 {
-	Wait(5); // Wait a few seconds to ensure system initialization is complete.
+//	Wait(5); // Wait a few seconds to ensure system initialization is complete.
 	
 	AxisCamera& camera = AxisCamera::GetInstance();
 
