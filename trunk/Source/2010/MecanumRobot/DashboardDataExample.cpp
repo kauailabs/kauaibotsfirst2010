@@ -5,7 +5,7 @@
 #include "Kicker.h"
 #include "Tensioner.h"
 
-enum WaitType { Time, TillOnTarget, TillBallDetected, TillAtZeroDegrees };
+enum WaitType { Time=0, TillOnTarget, TillBallDetected, TillAtZeroDegrees };
 struct AutonomousStep
 {
 	float vX;
@@ -15,51 +15,63 @@ struct AutonomousStep
 	float waitPeriodInSeconds; 
 };
 
-AutonomousStep MidCourt1[]={
-		{    0,      0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds) 
-		{   .7,      0,    		0,            Time,    1.6}, 
-		{    0,      0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
-		{   .7,      0,    		0,            Time,    1.6}, 
-		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-};
-
+float crab = -.02;
+float rcrab = .02;
 AutonomousStep FarCourt1[]={
-		{   .7,     0,    	0,            Time,    1.3}, // first target is 22 inches from start
-		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
-		{   .7,     0,    	0,            Time,    1.8}, // 36 inches 
-		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .7,     0,    	0,            Time,    1.8}, //36 inches 
-		{    0,    	0,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0,    	0,            Time,    1.5}, // Make sure we kick last ball 
+		{   .7,     0+crab,    	0,            Time,    10}, // Make sure we kick last ball 
 		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+};
+AutonomousStep FarCourt2[]={
+		{   .7,     0+crab,    	0,            Time,    1.3}, // first target is 22 inches from start
+		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
+		{   .7,     0+crab,    	0,            Time,    1.8}, // 36 inches 
+		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
+		{   .7,     0+crab,    	0,            Time,    1.8}, //36 inches 
+		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,     0+crab,    	0,            Time,    1.5}, // Make sure we kick last ball 
+		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+};
+AutonomousStep MidCourt1[]={
+		{    0, 0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds) 
+		{   .7, 0,    		0+rcrab,            Time,    2}, 
+		{    0, 0,    		0,    TillOnTarget,  5}, // Rotate to the target (or give up in 3 seconds)
+		{   .7, 0,    		0+rcrab,            Time,    2},
+//		{    0,     .8,    	0,    		Time,    1.5},		// get out of the way	
+		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 };
 
 AutonomousStep MidCourt2[]={
-		{   .8,     0.0,    	0,            Time,    1.3}, // 36 inches 
-		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .7,     0.0,    	0,            Time,    1.9}, //36 inches 
-		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0.0,    	0,            Time,    1.1}, // Make sure we kick last ball
-		{    0,         .8,    0,            Time,    1.5},	// get out of the way		
-		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-		};
+		{   .7,0+crab,    	0+rcrab,            Time,    10}, // Make sure we kick last ball 
+//		{    0,    .8,    	0,    		Time,    1.5},		// get out of the way	
+		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+};
 
 AutonomousStep NearCourt1[]={
-//		{   .8,     0.0,    	0,            Time,    1.3}, // 36 inches 
-		{    .8,      0,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0.0,    	0,    TillBallDetected,    2.1}, // Make sure we kick last ball 
-		{    0,      .8,    	0,    		Time,    1.5},		// get out of the way		
-		{    0,      0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
+//		{   .8,     0+crab,    	0,            Time,    1.3}, // 36 inches 
+		{    .8,  0+crab,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
+		{   .7,   0+crab,    	0,    TillBallDetected,    2.1}, // Make sure we kick last ball 
+//		{    0,       .8,    	0,    		Time,    1.5},		// get out of the way		
+		{    0,         0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
 
-/* test area */
-AutonomousStep AutonomousProgram[]={
-		{   .8,     0.0,    	0,            Time,    1.1}, // 36 inches 
-		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		{   .7,     0.0,    	0,            Time,    1.7}, //36 inches 
-		{    0,      0,    		0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)
-		{   .7,     0.0,    	0,            Time,    1.1}, // Make sure we kick last ball
-		{    0,      0,    		0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+AutonomousStep NearCourt2[]={
+		{   .7,     0+crab,    	0,            Time,    5}, // Make sure we kick last ball 
+//		{    0,         .8,    	0,    		Time,    1.5},		// get out of the way	
+		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
+		};
+AutonomousStep sandbox[]={
+		{   0,   0,    	0,    TillBallDetected,    5},
+		{   0,   0,    	0,    TillAtZeroDegrees,    5},
+		{   0,   0,    	0,    Time,    1},
+		{   0,   0,    	0,    TillBallDetected,    5},
+		{   0,   0,    	0,    TillAtZeroDegrees,    5},
+		{   0,   0,    	0,    Time,    1},		
+		{   0,   0,    	0,    TillBallDetected,    5},
+		{   0,   0,    	0,    TillAtZeroDegrees,    5},
+		{   0,   0,    	0,    Time,    1},		
+		{   0,   0,    	0,    TillBallDetected,    5},
+		{   0,   0,    	0,    TillAtZeroDegrees,    5}, 		
+		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
 		};
 
 struct AutonomousProgramInfo
@@ -73,11 +85,13 @@ struct AutonomousProgramInfo
 // Modify to add/change the program list.  NOTE:  MUST HAVE AT LEAST 1 PROGRAM!!!
 
 AutonomousProgramInfo AutonomousProgramList[] = {
-		{ MAKE_PROGRAM_INFO( MidCourt1 ) },
 		{ MAKE_PROGRAM_INFO( FarCourt1 ) },
+		{ MAKE_PROGRAM_INFO( FarCourt2 ) },		
+		{ MAKE_PROGRAM_INFO( MidCourt1 ) },
 		{ MAKE_PROGRAM_INFO( MidCourt2 ) },
 		{ MAKE_PROGRAM_INFO( NearCourt1 ) },
-		{ MAKE_PROGRAM_INFO( AutonomousProgram ) },
+		{ MAKE_PROGRAM_INFO( NearCourt2 ) },
+		{ MAKE_PROGRAM_INFO( sandbox ) },
 };
 
 #define NUM_AUTONOMOUS_PROGRAMS (sizeof(AutonomousProgramList)/sizeof(AutonomousProgramList[0]))
