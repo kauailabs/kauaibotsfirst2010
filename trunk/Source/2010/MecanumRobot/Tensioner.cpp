@@ -2,7 +2,7 @@
 #include <math.h>
 
 const float cMinVoltage = 100;   // Fully Tightened
-const float cMaxVoltage = 900.0; // Fully Loosened
+const float cMaxVoltage = 500.0; // Fully Loosened
 
 const float cMinDistanceInFeet = 6;
 const float cMaxDistanceInFeet = 25;
@@ -25,7 +25,7 @@ Tensioner::Tensioner(
 			tensionControl.SetInputRange(0.00,1000.00);			// potentiometers always give these values to PIDGet()
 			tensionControl.SetOutputRange(-1,1);				// Jaguars always use these values ... already the default
 			tensionControl.SetTolerance(1);						//  This is percent -- Controls the results of OnTarget()
-			tensionControl.SetContinuous(true);
+			tensionControl.SetContinuous(false);
 //			tensionControl.Enable();
 }
 
@@ -61,14 +61,16 @@ void Tensioner::SetTensioner( float joystickValue )
 	voltageTarget = voltageTarget + cMinVoltage;        // value is between max and min
 
 	if (tensionControl.OnTarget())
+	{
 		tensionControl.Disable();
+		tensionControl.Reset();
+	}
 	
 	if (fabs(tensionControl.GetSetpoint() - voltageTarget) > 20)	// 20 volt bounce rejection
 	{
-		tensionControl.Enable();
 		tensionControl.SetSetpoint(voltageTarget);
+		tensionControl.Enable();
 	}
-
 	
 // now calculate distance to Target
 	zeropoint = (cMaxDistanceInFeet - cMinDistanceInFeet)/2;

@@ -55,6 +55,11 @@ static void kickerTask(Kicker *kicker)
 					kicker->SetKickerMotorState(Kicker::Off);
 					kicker->SetKickerState(Kicker::Unloaded);
 				}
+				else if ( !kicker->IsWinchLoaded() )
+				{
+					// change back to loading state
+					kicker->SetKickerState(Kicker::Loading);
+				}
 				break;
 			case Kicker::Unloaded:
 				// Wait until we get the fire complete, then

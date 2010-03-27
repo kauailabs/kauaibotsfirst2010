@@ -54,7 +54,8 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 //			accelerometerChannelY ), m_turnController(.015,.001,0.001,&m_gyroscope,this)
 //			accelerometerChannelY ), m_turnController(.025,.001,0.1,&m_gyroscope,this)
 //			accelerometerChannelY ), m_turnController(.025,0,0,&m_gyroscope,this)
-			accelerometerChannelY ), m_turnController(0.02361,0.00175,0,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
+//			accelerometerChannelY ), m_turnController(0.035,0.001,0.00,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
+			accelerometerChannelY ), m_turnController(0.024,0.0012,0.00,&m_gyroscope,this), m_TargetDetector(&m_gyroscope, pHorizontalServo, pVerticalServo)
 {
 	m_pDashboardDataFormat = pDashboardDataFormat;
 	m_pKicker = pKicker;
@@ -65,7 +66,7 @@ AutoRotationMecanumDrive::AutoRotationMecanumDrive( UINT32 frontLeftMotorChannel
 	m_turnController.SetOutputRange(-.85, .85);     // TODO:  Review this
 	m_turnController.SetTolerance(.5 / 720.0 * 100);
 	m_bAutoRotateTargetSet = false;
-	m_bAutoRotateToTarget = true;
+	m_bAutoRotateToTarget = false;
 	m_bDetectedTargetDuringAutonomous = false;
 }
 
@@ -183,8 +184,10 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 	bool bLastAutoRotateMode = GetAutoRotationMode( bLastRotateToTarget );
 
 	// Enable AutoRotation if TillOnTarget, otherwise disable it.
-	SetAutoRotationMode( ( wait == TillOnTarget ) || ( wait == TillAtZeroDegrees ), (wait == TillOnTarget) );
-
+	// SL:  Temp comment out due to drift observed during competition
+	//SetAutoRotationMode( ( wait == TillOnTarget ) || ( wait == TillAtZeroDegrees ), (wait == TillOnTarget) );
+	SetAutoRotationMode(false, bLastRotateToTarget);
+	
 	double currTime = GetTime();
 	double quitTime = currTime + waitPeriodInSeconds;
 	
@@ -210,21 +213,22 @@ AutoRotationMecanumDrive::WaitType AutoRotationMecanumDrive::AutonomousDrive( fl
 		
 		watchdog.Feed();
 		DoMecanum( modifiedVX, modifiedVY, modifiedVRot, false );
-
+		
 		if ( ( ( (wait == TillOnTarget) && m_bDetectedTargetDuringAutonomous) || 
 				 (wait == TillAtZeroDegrees ) ) && 
 			  m_turnController.OnTarget() )
 		{
-			printf("Exiting autonomous loop; on target.\n");
-			returnVal = wait;
-			bDone = true;
+			// SL:  Disable this code, since "till on target/zero degrees isn't working"
+			//printf("Exiting autonomous loop; on target.\n");
+			//returnVal = wait;
+			//bDone = true;
 		}
 		else if ( ( wait == TillBallDetected ) && m_pKicker->IsBallDetected() )
 		{
 			returnVal = wait;
 			bDone = true;
 		}
-		Wait(0.01); 			// TODO:  Tune this.
+		Wait(0.02); 			// TODO:  Tune this.
 		currTime = GetTime();
 	}
 		
