@@ -210,6 +210,8 @@ double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 
 void MecanumDrive::DoMecanumInternal( float vX, float vY, float vRot )
 {
+	vRot *= -1;	// Invert rotational dimension control	
+	
 	///////
 	// Translational/Rotational Input Velocity Scaling:
 	//
@@ -253,10 +255,10 @@ void MecanumDrive::DoMecanumInternal( float vX, float vY, float vRot )
 	//printf("FL, FR:  %f, %f\n\n", wheelSpeeds[0], wheelSpeeds[1]);
 	//printf("RL, RR:  %f, %f\n\n", wheelSpeeds[2], wheelSpeeds[3]);
 
-	m_frontLeftMotor.Set(wheelSpeeds[0] * -1 ); // Inverted polarity of left-side wheels
-	m_frontRightMotor.Set(wheelSpeeds[1]);
-	m_rearLeftMotor.Set(wheelSpeeds[2] * -1 );  // Inverted polarity of left-side wheels
-	m_rearRightMotor.Set(wheelSpeeds[3]);
+	m_frontLeftMotor.Set(wheelSpeeds[0] /** -1*/ ); // Inverted polarity of left-side wheels
+	m_frontRightMotor.Set(wheelSpeeds[1] * -1);
+	m_rearLeftMotor.Set(wheelSpeeds[2] /** -1*/ );  // Inverted polarity of left-side wheels
+	m_rearRightMotor.Set(wheelSpeeds[3] * -1);
 		
 	// For testing purposes, transform the resulting wheel speeds through the matching
 	// forward kinematics algorithm.  The resulting derived velocities should match

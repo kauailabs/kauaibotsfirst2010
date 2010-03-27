@@ -15,67 +15,51 @@ struct AutonomousStep
 	float waitPeriodInSeconds; 
 };
 
-float crab = -.02;
-float rcrab = .02;
-AutonomousStep FarCourt1[]={
-		{   .7,     0+crab,    	0,            Time,    10}, // Make sure we kick last ball 
-		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-};
-AutonomousStep FarCourt2[]={
-		{   .7,     0+crab,    	0,            Time,    1.3}, // first target is 22 inches from start
-		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)			
-		{   .7,     0+crab,    	0,            Time,    1.8}, // 36 inches 
-		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)		
-		{   .7,     0+crab,    	0,            Time,    1.8}, //36 inches 
-		{    0,    	0+crab,    	0,    TillOnTarget,     3}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,     0+crab,    	0,            Time,    1.5}, // Make sure we kick last ball 
-		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-};
-AutonomousStep MidCourt1[]={
-		{   .7,     0+crab,    	  0,    Time,    0.2}, 	
-		{   .8,     0+crab,    	  0.5,  Time,    0.2}, //24 inches + rotation
-		{   .8,     0+crab,    	  0,    Time,    0.4},			// rotate back	
-		{   .8,     0+crab,    	  -0.5,  Time,   0.2}, 
-		{   .7,     0+crab,    	  0,    Time,   1.3}, 	
-		{   .7,     0+crab,    	  0,TillBallDetected,   2.1}, // Make sure we kick last ball 
-		{    0,         0,    		0,   Time,    20.0}  // Wait for 20 seconds for autonomous mode to end
-		};
+enum KickDistance { Near, Mid, Far };
 
-AutonomousStep MidCourt2[]={
-		{   .7,0+crab,    	0+rcrab,            Time,    10}, // Make sure we kick last ball 
-//		{    0,    .8,    	0,    		Time,    1.5},		// get out of the way	
-		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-};
+float crab = 0; // SL, changed to 0 for competition robot -.02;
+float rcrab = 0; // SL, changed to 0 for competition robot.02;
+
+//////
+//
+// Autonomous Mode Programs
+//
+//////
+
+// TODO:  Check direction of side-to-side motion
+// TODO:  Check duration of side-to-side motion (don't cross into other side of court)
+// TODO:  Validate the robot "drift" over time, correct as appropriate
+// TODO:  Validate the shooting accuracy, correct as appropriate
 
 AutonomousStep NearCourt1[]={
-		{   .8,     0+crab,    	.8,            Time,    1.3}, // 36 inches 
-//		{    .8,  0+crab,    		0,    TillOnTarget,     2}, // Rotate to the target (or give up in 3 seconds)	
-		{   .7,   0+crab,    	0,    TillBallDetected,    2.1}, // Make sure we kick last ball 
-//		{    0,       .8,    	0,    		Time,    1.5},		// get out of the way		
-		{    0,         0,    		0,          Time,    20}  // Wait for 20 seconds for autonomous mode to end
-		};
+	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - at least 36 inches, until we kick 
+	{    0,	   .8,    	0,	Time,    			1},		// get out of the way		
+	{    0,		0,    	0,	Time,    			20} 	// Wait for 20 seconds for autonomous mode to end
+};
 
-AutonomousStep NearCourt2[]={
-		{   .7,     0+crab,    	0,            Time,    5}, // Make sure we kick last ball 
-//		{    0,         .8,    	0,    		Time,    1.5},		// get out of the way	
-		{    0,    	0,    	0,            Time,    20}  // Wait for 20 seconds for autonomous mode to end
-		};
+AutonomousStep MidCourt1[]={
+	{   .7,		0,    	0,	TillBallDetected,	5}, 	// Forward - until we kick
+	{    0,     0,    	0,	Time,    			1},		// wait a bit	
+	{   .7,		0,    	0,	TillBallDetected,	5}, 	// Forward - until we kick 
+	{    0,    .8,    	0,	Time,    			1},		// get out of the way	
+	{    0,    	0,    	0,	Time,    			20}  	// Wait for 20 seconds for autonomous mode to end
+};
 
-AutonomousStep sandbox[]={
-		{   0,   -1,    	0,    Time,    .2},	  
-		{   0,   1,    	0,    Time,    .2},	
-		{   0,   0,    	0,    TillOnTarget,    5},
-		{   0,   -1,    	0,    Time,    .2},		
-		{   0,   1,    	0,    Time,    .2},			
-		{   0,   0,    	0,    TillAtZeroDegrees,    5}, 		
-		{   0,   -1,    	0,    Time,    .2	 }, 
-		{   0,   0,    	0,    Time,    .2	 } 
-		};
+AutonomousStep FarCourt1[]={
+	{    0,     0,    	0,	Time,				1},		// wait a bit	
+	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked
+	{    0,     0,    	0,	Time,				1},		// wait a bit	
+	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked 
+	{    0,     0,    	0,	Time,				1},		// wait a bit	
+	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked
+	{    0,    	0,    	0,	Time,				20}  	// Wait for 20 seconds for autonomous mode to end
+};
 
 struct AutonomousProgramInfo
 {
 	AutonomousStep *Program;
 	int NumberOfSteps;
+	KickDistance Tensioner;
 };
 
 #define MAKE_PROGRAM_INFO(p) p, sizeof(p) / sizeof(p[0])
@@ -83,13 +67,9 @@ struct AutonomousProgramInfo
 // Modify to add/change the program list.  NOTE:  MUST HAVE AT LEAST 1 PROGRAM!!!
 
 AutonomousProgramInfo AutonomousProgramList[] = {
-		{ MAKE_PROGRAM_INFO( FarCourt1 ) },
-		{ MAKE_PROGRAM_INFO( FarCourt2 ) },		
-		{ MAKE_PROGRAM_INFO( MidCourt1 ) },
-		{ MAKE_PROGRAM_INFO( MidCourt2 ) },
-		{ MAKE_PROGRAM_INFO( NearCourt1 ) },
-		{ MAKE_PROGRAM_INFO( NearCourt2 ) },
-		{ MAKE_PROGRAM_INFO( sandbox ) },
+		{ MAKE_PROGRAM_INFO( NearCourt1 ), 	Near },
+		{ MAKE_PROGRAM_INFO( MidCourt1 ), 	Mid },
+		{ MAKE_PROGRAM_INFO( FarCourt1 ), 	Far },
 };
 
 #define NUM_AUTONOMOUS_PROGRAMS (sizeof(AutonomousProgramList)/sizeof(AutonomousProgramList[0]))
@@ -127,7 +107,7 @@ public:
 		camera.WriteBrightness(50);     // TODO:  Tune This..
 	//	Wait(20.0);
 		GetWatchdog().SetEnabled(true);
-		GetWatchdog().SetExpiration(2.0);
+		GetWatchdog().SetExpiration(3.0);
         // Set camera servos to their default position
 		UpdateCameraServos(0,0);
 	}
@@ -142,12 +122,14 @@ public:
 	{
 		printf("Entering Autonomous mode.\n");
 		DriverStation *ds = DriverStation::GetInstance();
+
+		kicker.SetAutoFire(true);		
 		
 		// Get information to help decide which autonomous
 		// program to run...
 		DriverStation::Alliance alliance = ds->GetAlliance();
 		UINT32 location = ds->GetLocation();
-
+		
 		// Determine which program to use.
 		int iSelectedAutonomousProgram = 0;
 		
@@ -160,10 +142,31 @@ public:
 			}
 		}
 		
-		kicker.SetKickerState(Kicker::Loading);		
-		
+		// Ensure the kicker mechanism is loaded before running autonomous program
+		if ( kicker.GetKickerState() != Kicker::Loaded )
+		{
+			kicker.SetKickerState(Kicker::Loading);		
+			Wait(3.5);
+		}
+			
 		GetWatchdog().SetEnabled(true);
-		UpdateCameraServos(0,0);
+		//UpdateCameraServos(0,0);
+
+		/*
+		KickDistance tension = AutonomousProgramList[iSelectedAutonomousProgram].Tensioner;
+		switch(tension)
+		{
+		case Near:
+			tensioner.SetTensioner(.8);		// TODO:  Check this
+			break;
+		case Mid:
+			tensioner.SetTensioner(0);
+			break;
+		case Far:
+			tensioner.SetTensioner(-.8);	// TODO:  Check this
+			break;
+		}
+		*/
 		
 		AutonomousStep instruction;	
 		int step=0;
@@ -187,7 +190,7 @@ public:
 		}
 		GetWatchdog().SetEnabled(false);
 		// should never get here
-		kicker.RequestQuit();
+		//kicker.RequestQuit();
 	}
 
 	// Updates Camera servo horizontal and vertical positions,
@@ -207,7 +210,7 @@ public:
 	 * 
 	 * Button 10:  When held down, rotates to target
 	 * Trigger:    When held down, will cause the kicker to fire immediately
-	 * Button 11:  When held down, will cause the kicker to fire when the ball is detected
+	 * Button 11:  When held down, will cause the kicker to NOT auto-fire when the ball is detected
 	 * Button 6:   When held down, robot will move forward, kick when ball is detected, and then stop
 	 * Button 7:   When held down, robot will move to position where Button 6 was last pressed and then stop
 	 * 
@@ -217,8 +220,11 @@ public:
 		printf("Entering Teleop mode.\n");
 		GetWatchdog().SetEnabled(true);
 
-		// Load up the kicker
-		kicker.SetKickerState(Kicker::Loading);		
+		// Ensure the kicker is loaded
+		if ( kicker.GetKickerState() != Kicker::Loaded)
+		{
+			kicker.SetKickerState(Kicker::Loading);		
+		}
 		Timer kickerShutdownTimer;
 		
 		Timer driveForwardAndKickTimer;
@@ -244,9 +250,9 @@ public:
 				myRobot.DoMecanum(stick1.GetY(),stick1.GetX() * -1,stick1.GetTwist() * -1);
 			}
 			
-			double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());			
-			double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
-			UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
+			//double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());			
+			//double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
+			//UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
 			
 			if ( stick1.GetTrigger() )
 			{
@@ -254,7 +260,7 @@ public:
 			}
 
 			tensioner.SetTensioner(stick1.GetZ());
-			kicker.SetAutoFire(stick1.GetRawButton(11));
+			kicker.SetAutoFire(!stick1.GetRawButton(11));
 			myRobot.SetAutoRotationMode(stick1.GetRawButton(10), true);
 				
 			//
@@ -271,7 +277,7 @@ public:
 				driveForwardAndKickTimer.Start();
 				
 				// Move forward until ball is detected, then kick the ball and stop
-				kicker.SetAutoFire(true);
+				//kicker.SetAutoFire(true);
 			}
 
 			if ( bInDriveForwardAndKickMode )
