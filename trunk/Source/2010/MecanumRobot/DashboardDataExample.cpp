@@ -259,7 +259,12 @@ public:
 				kicker.RequestFire();
 			}
 
-			tensioner.SetTensioner(stick1.GetZ());
+			// If "adjust tensioner" button is held down, update tensioner position.
+			if ( stick1.GetRawButton(9))
+			{
+				tensioner.SetTensioner(stick1.GetZ());				
+			}
+			
 			kicker.SetAutoFire(!stick1.GetRawButton(11));
 			myRobot.SetAutoRotationMode(stick1.GetRawButton(10), true);
 				
@@ -341,7 +346,7 @@ const double cKickerShutdownTimeoutInSeconds = 118.0;
 			
 			bLastInDriveForwardAndKick = bDriveForwardAndKick;
 			
-			Wait(0.02);	// Wait a bit, allowing other tasks to run.
+			Wait(0.01);	// Wait a bit, allowing other tasks to run.
 		}	
 	}
 		

@@ -107,7 +107,7 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool b
 {
 	if ( bScaleInputs )
 	{
-		vX = InputJoystickAdjust(vX);
+		vX = InputJoystickAdjust3(vX);
 		vY = InputJoystickAdjust(vY);
 		vRot = InputJoystickAdjust2(vRot *.9);	
 	}

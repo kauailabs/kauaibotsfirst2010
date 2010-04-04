@@ -81,16 +81,20 @@ TargetDetector::TargetDetector( CustomGyro * pGyro,
 	
 	InitDetectedTargets();	
 	
+	/*
 	if (!m_task.Start((INT32)this))
 	{
 		wpi_fatal(CompressorTaskError);
 	}
+	*/
 }
 
 TargetDetector::~TargetDetector()
 {
+	/*
 	// Shut down the task
 	m_task.Stop();
+	*/
 }
 
 void TargetDetector::GetDetectedTargets( vector<Target>& detectedTargets, double& gyroAngle, double& targetAngle )
