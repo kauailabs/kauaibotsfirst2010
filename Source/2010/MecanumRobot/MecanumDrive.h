@@ -76,5 +76,6 @@ protected:
 	
 	double InputJoystickAdjust( double dJoystickIn );
 	double InputJoystickAdjust2( double dJoystickIn );
+	double InputJoystickAdjust3( double dJoystickIn );
 };
 #endif
