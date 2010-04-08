@@ -17,8 +17,8 @@ struct AutonomousStep
 
 enum KickDistance { Near, Mid, Far };
 
-float crab = 0; // SL, changed to 0 for competition robot -.02;
-float rcrab = 0; // SL, changed to 0 for competition robot.02;
+float crab = 0; //0.2; // SL, changed to 0 for competition robot -.02;
+float rcrab = 0; //-0.2; // SL, changed to 0 for competition robot.02;
 
 //////
 //
@@ -32,27 +32,27 @@ float rcrab = 0; // SL, changed to 0 for competition robot.02;
 // TODO:  Validate the shooting accuracy, correct as appropriate
 
 AutonomousStep NearCourt1[]={
-	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - at least 36 inches, until we kick 
+	{   .7,     0,    	0,	TillBallDetected,	4}, 	// Forward - at least 36 inches, until we kick 
 	{    0,	   .8,    	0,	Time,    			1},		// get out of the way		
 	{    0,		0,    	0,	Time,    			20} 	// Wait for 20 seconds for autonomous mode to end
 };
 
 AutonomousStep MidCourt1[]={
-	{   .7,		0,    	0,	TillBallDetected,	5}, 	// Forward - until we kick
+	{   .7,		0,    	0,	TillBallDetected,	2.5}, 	// Forward - until we kick
 	{    0,     0,    	0,	Time,    			1},		// wait a bit	
-	{   .7,		0,    	0,	TillBallDetected,	5}, 	// Forward - until we kick 
-	{    0,    .8,    	0,	Time,    			1},		// get out of the way	
+	{   .7,		0,    	0,	TillBallDetected,	2.5}, 	// Forward - until we kick 
+	{    0,    .8,    	0,	Time,    			1.3},	// get out of the way	
 	{    0,    	0,    	0,	Time,    			20}  	// Wait for 20 seconds for autonomous mode to end
 };
 
 AutonomousStep FarCourt1[]={
 	{    0,     0,    	0,	Time,				1},		// wait a bit	
-	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked
+	{   .7,     0,    	0,	TillBallDetected,	2}, 	// Forward - until ball is kicked
 	{    0,     0,    	0,	Time,				1},		// wait a bit	
-	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked 
+	{   .7,     0,    	0,	TillBallDetected,	2.5}, 	// Forward - until ball is kicked 
 	{    0,     0,    	0,	Time,				1},		// wait a bit	
-	{   .7,     0,    	0,	TillBallDetected,	5}, 	// Forward - until ball is kicked
-	{    0,    	0,    	0,	Time,				20}  	// Wait for 20 seconds for autonomous mode to end
+	{   .7,     0,    	0,	TillBallDetected,	2.5}, 	// Forward - until ball is kicked
+	{  -.7,    .13,    	0,	Time,				5}  	// Move back near the center line
 };
 
 struct AutonomousProgramInfo
