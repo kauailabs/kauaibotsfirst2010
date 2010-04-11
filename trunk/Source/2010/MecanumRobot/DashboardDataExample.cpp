@@ -109,7 +109,7 @@ public:
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(3.0);
         // Set camera servos to their default position
-		UpdateCameraServos(0,0);
+		UpdateCameraServos(0,-.55);
 	}
 
 	/**
@@ -241,6 +241,31 @@ public:
 		{
 			GetWatchdog().Feed();
 			
+			bool bLookLeft = stick1.GetRawButton(4) | stick1.GetRawButton(2);
+			bool bLookRight = stick1.GetRawButton(5) | stick1.GetRawButton(3);
+			
+			bool bLookUp = stick1.GetRawButton(9);			
+			double dLook = 0;
+			double dTilt = bLookUp ? 0 : -.55;
+			if ( bLookLeft )
+			{
+				dLook = -.75;
+				dTilt = -.2;
+			}
+			else if ( bLookRight )
+			{
+				dLook = .75;
+				dTilt = -.2;
+			}
+			if ( bLookLeft && bLookRight )
+			{
+				dLook = 0;
+			}
+
+			double dHorizServoJoystick = CameraServoJoystickAdjust(dLook);			
+			double dVertServoJoystickY = CameraServoJoystickAdjust(dTilt);
+			UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
+			
 			bool bDriveForwardAndKick = stick1.GetRawButton(6);
 			bool bDriveReverseToPreKickPosition = stick1.GetRawButton(7);
 			bool bAutoDrive = bDriveForwardAndKick || bDriveReverseToPreKickPosition;
@@ -249,10 +274,6 @@ public:
 			{
 				myRobot.DoMecanum(stick1.GetY(),stick1.GetX() * -1,stick1.GetTwist() * -1);
 			}
-			
-			//double dHorizServoJoystick = CameraServoJoystickAdjust(stick2.GetX());			
-			//double dVertServoJoystickY = CameraServoJoystickAdjust(stick2.GetY());
-			//UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
 			
 			if ( stick1.GetTrigger() )
 			{
