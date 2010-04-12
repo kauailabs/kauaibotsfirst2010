@@ -74,6 +74,19 @@ AutonomousProgramInfo AutonomousProgramList[] = {
 
 #define NUM_AUTONOMOUS_PROGRAMS (sizeof(AutonomousProgramList)/sizeof(AutonomousProgramList[0]))
 
+// Camera Servo settings (tunable)
+
+const double c_dAzStraight	= 0;
+const double c_dAzLeft 		= -.75;
+const double c_dAzRight 	= .75;
+
+const double c_dElLevel 	= 0;
+const double c_dElDown 		= -.55;
+const double c_dElMidDown 	= -.2;
+
+const double c_dVertOffset = -.1;
+const double c_dHorizOffset = 0;
+
 /**
  * This is a demo program showing the use of the Dashboard data packing class.
  */ 
@@ -109,7 +122,7 @@ public:
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(3.0);
         // Set camera servos to their default position
-		UpdateCameraServos(0,-.55);
+		UpdateCameraServos(c_dAzStraight, c_dElDown);
 	}
 
 	/**
@@ -197,12 +210,9 @@ public:
 	// input values are from -1 to 1.
 	void UpdateCameraServos( double dHorizServoJoystick, double dVertServoJoystickY )
 	{
-		horizontalServo.Set((dHorizServoJoystick+1)/2);
-
-		// Correct for non-zero offset in vertical servo.
-		
-		const double dVertOffset = -.1;
-		verticalServo.Set(((dVertServoJoystickY + 1)/2) + dVertOffset);		
+		// Correct for non-zero offset in horizontal/vertical servos		
+		horizontalServo.Set(((dHorizServoJoystick+1)/2) + c_dHorizOffset);		
+		verticalServo.Set(((dVertServoJoystickY + 1)/2) + c_dVertOffset);		
 	}
 	
 	/**
@@ -241,30 +251,33 @@ public:
 		{
 			GetWatchdog().Feed();
 			
+			// Update Camera Look Angles (Azimuth, Elevation)
+			
 			bool bLookLeft = stick1.GetRawButton(4) | stick1.GetRawButton(2);
 			bool bLookRight = stick1.GetRawButton(5) | stick1.GetRawButton(3);
-			
 			bool bLookUp = stick1.GetRawButton(9);			
-			double dLook = 0;
-			double dTilt = bLookUp ? 0 : -.55;
+			double dLook = c_dAzStraight;
+			double dTilt = bLookUp ? c_dElLevel : c_dElDown;
 			if ( bLookLeft )
 			{
-				dLook = -.75;
-				dTilt = -.2;
+				dLook = c_dAzLeft;
+				dTilt = c_dElMidDown;
 			}
 			else if ( bLookRight )
 			{
-				dLook = .75;
-				dTilt = -.2;
+				dLook = c_dAzRight;
+				dTilt = c_dElMidDown;
 			}
 			if ( bLookLeft && bLookRight )
 			{
-				dLook = 0;
+				dLook = c_dAzStraight;
 			}
 
 			double dHorizServoJoystick = CameraServoJoystickAdjust(dLook);			
 			double dVertServoJoystickY = CameraServoJoystickAdjust(dTilt);
 			UpdateCameraServos(dHorizServoJoystick,dVertServoJoystickY);
+			
+			// Update Drive system with latest Joystick inputs
 			
 			bool bDriveForwardAndKick = stick1.GetRawButton(6);
 			bool bDriveReverseToPreKickPosition = stick1.GetRawButton(7);
