@@ -77,8 +77,8 @@ AutonomousProgramInfo AutonomousProgramList[] = {
 // Camera Servo settings (tunable)
 
 const double c_dAzStraight	= 0;
-const double c_dAzLeft 		= -.75;
-const double c_dAzRight 	= .75;
+const double c_dAzLeft 		= .75;
+const double c_dAzRight 	= -.75;
 
 const double c_dElLevel 	= 0;
 const double c_dElDown 		= -.55;
@@ -112,13 +112,16 @@ public:
 		, tensioner(6,5)
 	{
 		GetWatchdog().SetEnabled(false);
+		
 		// Create and set up a camera instance. first wait for the camera to start
 		// if the robot was just powered on. This gives the camera time to boot.
+		
 		Wait(5.0);
+		
 		AxisCamera& camera = AxisCamera::GetInstance();
 		camera.WriteResolution(AxisCamera::kResolution_320x240);
 		camera.WriteBrightness(50);     // TODO:  Tune This..
-	//	Wait(20.0);
+		
 		GetWatchdog().SetEnabled(true);
 		GetWatchdog().SetExpiration(3.0);
         // Set camera servos to their default position
