@@ -109,7 +109,7 @@ void AutoRotationMecanumDrive::DoMecanum( float vX, float vY, float vRot, bool b
 	{
 		vX = InputJoystickAdjust3(vX);
 		vY = InputJoystickAdjust(vY);
-		vRot = InputJoystickAdjust2(vRot *.9);	
+		vRot = InputJoystickAdjust2(vRot/* *.9*/);	
 	}
 		
 	// Update the Vision Dashboard.

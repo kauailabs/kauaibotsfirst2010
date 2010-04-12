@@ -186,7 +186,7 @@ double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 }
 
 // Rotation
-const double cDriveJoystickAdjust2 = -.75; //-0.25;
+const double cDriveJoystickAdjust2 = .1; // -1; //  -.75;
 
 double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 {
@@ -204,14 +204,27 @@ double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 	
 	// x' = ax^3 + (1-a)x
 	
-	double dJoystickOut = 0.0;
-	dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 2)) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
+	double dOffsetFactor = 0;
 	
+	if ( dJoystickIn < -0.025 )
+	{
+		dOffsetFactor = -.225;
+	}
+	else if ( dJoystickIn > 0.025 )
+	{
+		dOffsetFactor = .225;
+	}
+	
+	dJoystickIn += dOffsetFactor;
+	
+	double dJoystickOut = 0.0;
+	dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 3 /*4*/ )) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
+		
 	return dJoystickOut;
 }
 
 // Mecanum
-const double cDriveJoystickAdjust3 = -3; // -1.1;	// 0 to 1 (0 = same as input; 1 = x^3
+const double cDriveJoystickAdjust3 = -0.9; // -3; // -1.1;	// 0 to 1 (0 = same as input; 1 = x^3
 
 double MecanumDrive::InputJoystickAdjust3( double dJoystickIn )
 {
@@ -224,7 +237,7 @@ double MecanumDrive::InputJoystickAdjust3( double dJoystickIn )
 		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent);
 	*/
 	
-	dJoystickOut = (cDriveJoystickAdjust * pow(dJoystickIn, 13)) + ((1 - cDriveJoystickAdjust3) * dJoystickIn);
+	dJoystickOut = (cDriveJoystickAdjust * pow(dJoystickIn, 3 /*13*/)) + ((1 - cDriveJoystickAdjust3) * dJoystickIn);
 	
 	return dJoystickOut;
 }
