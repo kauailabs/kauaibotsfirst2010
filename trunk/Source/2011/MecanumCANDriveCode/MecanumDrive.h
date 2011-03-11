@@ -8,7 +8,7 @@
  */
 
 #include "WPILib.h"
-#include "../CANJaguar/CANJaguar.h"
+//#include "../CANJaguar/CANJaguar.h"
 //#include "CustomGyro.h"
 //#include "FilteredAccelerometer.h"
 

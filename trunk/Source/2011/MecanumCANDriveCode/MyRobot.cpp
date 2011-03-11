@@ -5,10 +5,12 @@
  * It uses CAN to control the Jaguars instead of PWM.
  */ 
 
-#define LEFT_REAR_CAN_ADDRESS 2
-#define RIGHT_REAR_CAN_ADDRES 3
-#define RIGHT_FRONT_CAN_ADDRESS 4
-#define LEFT_FRONT_CAN_ADDRESS 5
+#define LEFT_REAR_CAN_ADDRESS 4
+#define RIGHT_REAR_CAN_ADDRES 5
+#define RIGHT_FRONT_CAN_ADDRESS 3
+#define LEFT_FRONT_CAN_ADDRESS 2
+#define ELEVATOR_MAIN_CAN_ADDRESS 7
+#define ELEVATOR_ARM_CAN_ADDRESS 9
 
 class CANRobotDemo : public SimpleRobot
 {

@@ -14,9 +14,9 @@
 // These may change if the robot design changes
 //////////////////////////////////////////////////////////
 
-const float cWidth			= 22.25;					// Distance btwn left/right wheels
-const float cLength			= 26.0;					// Distance btwn front/back wheels
-const float wheelDiameter	= 6.0;					// Per AndyMark Specs
+const float cWidth			= 24.0;					// Distance btwn left/right wheels
+const float cLength			= 28.0;					// Distance btwn front/back wheels
+const float wheelDiameter	= 8.0;					// Per AndyMark Specs
 const float wheelRadius		= wheelDiameter / 2;
 
 //////////////////////////////////////////////////////////
@@ -45,10 +45,10 @@ const float cRotK = ((cWidth + cLength)/2) / wheelRadius;		// Rotational Coeffic
 // Matrices below by swapping the front and rear wheels.
 //////////////////////////////////////////////////////////
 
-const int WHEEL_FRONTLEFT	= 0;
-const int WHEEL_FRONTRIGHT	= 1;
-const int WHEEL_REARLEFT	= 2;
-const int WHEEL_REARRIGHT	= 3;
+const int WHEEL_FRONTLEFT	= 2;
+const int WHEEL_FRONTRIGHT	= 3;
+const int WHEEL_REARLEFT	= 4;
+const int WHEEL_REARRIGHT	= 5;
 
 const int VX	= 0;
 const int VY	= 1;
@@ -81,16 +81,16 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kSpeed)
 {
 	m_frontLeftMotor.ConfigEncoderCodesPerRev(360);
-	m_frontLeftMotor.ConfigMaxOutputVoltage(6.0);
+	m_frontLeftMotor.ConfigMaxOutputVoltage(12.0);
 	m_frontLeftMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
 	m_frontRightMotor.ConfigEncoderCodesPerRev(360);
-	m_frontRightMotor.ConfigMaxOutputVoltage(6.0);
+	m_frontRightMotor.ConfigMaxOutputVoltage(12.0);
 	m_frontRightMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
 	m_rearLeftMotor.ConfigEncoderCodesPerRev(360);
-	m_rearLeftMotor.ConfigMaxOutputVoltage(6.0);
+	m_rearLeftMotor.ConfigMaxOutputVoltage(12.0);
 	m_rearLeftMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
 	m_rearRightMotor.ConfigEncoderCodesPerRev(360);
-	m_rearRightMotor.ConfigMaxOutputVoltage(6.0);
+	m_rearRightMotor.ConfigMaxOutputVoltage(12.0);
 	m_rearRightMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
 	m_frontLeftMotor.SetPID(1,0,0);
 	m_frontRightMotor.SetPID(1,0,0);
