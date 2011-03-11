@@ -246,7 +246,11 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="FRC_UserProgram" passed="false" targetname="FRC_UserProgram">
             <contents>
-                <folder name="/MecanumCANDriveCode" recursive="true"/>
+                <folder name="/MecanumCANDriveCode" recursive="true">
+                    <excludes>
+                        <folder name="CANJaguar"/>
+                    </excludes>
+                </folder>
             </contents>
         </buildtarget>
     </buildtargets>
