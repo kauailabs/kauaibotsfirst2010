@@ -39,7 +39,6 @@ const float cRotK = ((cWidth + cLength)/2) / wheelRadius;		// Rotational Coeffic
 //
 // NOTE:  These matrices assume the roller direction of each wheel points to the
 // center of the robot.
-//
 // The AndyMark documentation indicates an alternative configuration, where each wheel's
 // Axis points to the center of the robot.  This alternative configuration modifies the
 // Matrices below by swapping the front and rear wheels.
@@ -154,7 +153,7 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 }
 
 // Side-to-Side
-const double cDriveJoystickAdjust = 0.15; //0.38;	// 0 to 1 (0 = same as input; 1 = x^3
+const double cDriveJoystickAdjust = 0.38; //0.38;	// 0 to 1 (0 = same as input; 1 = x^3
 
 double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
 {
@@ -205,8 +204,8 @@ double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
 	dJoystickIn += dOffsetFactor;
 	
 	double dJoystickOut = 0.0;
-	dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 3 /*4*/ )) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
-		
+	//dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 1 /*4*/ )) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
+	dJoystickOut = (cDriveJoystickAdjust2 * dJoystickIn);	
 	return dJoystickOut;
 }
 
@@ -305,7 +304,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	vX = InputJoystickAdjust(vX);
 	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust(vRot);
+	vRot = InputJoystickAdjust2(vRot);
 
 	DoMecanumInternal(vX,vY,vRot);
 }

@@ -17,11 +17,4 @@
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>CANJaguar</name>
-			<type>2</type>
-			<location>C:/WindRiver/workspace/CANJaguar for C++/CANJaguar</location>
-		</link>
-	</linkedResources>
 </projectDescription>

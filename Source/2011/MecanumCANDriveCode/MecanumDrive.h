@@ -25,15 +25,13 @@ protected:
 	CANJaguar  m_frontRightMotor;
 	CANJaguar  m_rearLeftMotor;
 	CANJaguar  m_rearRightMotor;
-	//CustomGyro	m_gyroscope;
-	//FilteredAccelerometer m_accelerometerX;
-	//FilteredAccelerometer m_accelerometerY;
 	
 public:
 	MecanumDrive( UINT32 frontLeftMotorCANAddress,
 			UINT32 frontRightMotorCANAddress,
 			UINT32 rearLeftMotorCANAddress,
-			UINT32 rearRightMotorCANAddress);
+			UINT32 rearRightMotorCANAddress
+			);
 	virtual void DoMecanum( float vX, float vY, float vRot );
 	void InitializeSensors();
 	void RestartSensors();
