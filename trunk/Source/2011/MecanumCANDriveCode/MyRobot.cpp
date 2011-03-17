@@ -1,25 +1,30 @@
 #include "WPILib.h"
 #include "MecanumDrive.h"
+#include "sloganarm.h"
 /**
  * This is a demo program showing the use of the SimpleRobot base class.
  * It uses CAN to control the Jaguars instead of PWM.
  */ 
 
 #define LEFT_REAR_CAN_ADDRESS 4
-#define RIGHT_REAR_CAN_ADDRES 5
+#define RIGHT_REAR_CAN_ADDRESS 5
 #define RIGHT_FRONT_CAN_ADDRESS 3
 #define LEFT_FRONT_CAN_ADDRESS 2
-#define ELEVATOR_MAIN_CAN_ADDRESS 7
-#define ELEVATOR_ARM_CAN_ADDRESS 9
+#define ELEVATOR_1_CAN_ADDRESS 7
+#define ELEVATOR_2_CAN_ADDRESS 9
+#define SHOULDER_CAN_ADDRESS 8
+#define HAND_CAN_ADDRESS 6
 
 class CANRobotDemo : public SimpleRobot
 {
 	MecanumDrive myRobot; // robot drive system
+    sloganarm myArm; 
 	Joystick stick1; // only joystick
 
 public:
 	CANRobotDemo(void):
-		myRobot(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRES),
+		myRobot(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRESS),
+	    myArm(SHOULDER_CAN_ADDRESS,HAND_CAN_ADDRESS,ELEVATOR_1_CAN_ADDRESS,ELEVATOR_2_CAN_ADDRESS),
 		stick1(1)
 	{
 		GetWatchdog().SetExpiration(100);
@@ -47,6 +52,11 @@ public:
 		{
 			GetWatchdog().Feed();
 			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1); // drive with arcade style (use right stick)
+			myArm.DoShoulder(stick1.GetRawButton(4),stick1.GetRawButton(2));
+			myArm.DoHand(stick1.GetRawButton(5),stick1.GetRawButton(3));			
+			myArm.DoElevator1(stick1.GetRawButton(6),stick1.GetRawButton(7));			
+			myArm.DoElevator2(stick1.GetRawButton(8),stick1.GetRawButton(9));			
+			
 			// Print out some information about the Left motor.
 			printf ("Left=> ");
 			printf ("Bus: %5.2f V ", myRobot.RearLeftMotor().GetBusVoltage());
