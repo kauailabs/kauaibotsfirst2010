@@ -54,8 +54,8 @@ public:
 			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1); // drive with arcade style (use right stick)
 			myArm.DoShoulder(stick1.GetRawButton(4),stick1.GetRawButton(2));
 			myArm.DoHand(stick1.GetRawButton(5),stick1.GetRawButton(3));			
-			myArm.DoElevator1(stick1.GetRawButton(6),stick1.GetRawButton(7));			
-			myArm.DoElevator2(stick1.GetRawButton(8),stick1.GetRawButton(9));			
+			myArm.DoElevator1(stick1.GetRawAxis(3));			
+			myArm.DoElevator2(stick1.GetRawAxis(3));			
 			
 			// Print out some information about the Left motor.
 			printf ("Left=> ");
