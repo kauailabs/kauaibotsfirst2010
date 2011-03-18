@@ -65,33 +65,33 @@ void sloganarm::DoHand(bool b5, bool b3)
 	}*/
 }
 
-void sloganarm::DoElevator1(bool b6, bool b7)
+void sloganarm::DoElevator1(float vZ)
 {
-	if (b6 != 0)
+	if (vZ > 0.10)
 	{
-		m_elev1.Set(12.0);
+		m_elev1.Set(vZ * -24.0);
 	}
-	if (b7 !=0)
+	if (vZ < -0.10)
 	{
-		m_elev1.Set(-12.0);
+		m_elev1.Set(vZ * -24.0);
 	}
-	if ((b6 == 0) && (b7 == 0))
+	if ((vZ <= 0.10) && (vZ >= -0.10))
 	{
 		m_elev1.Set(0.0);
 	}
 }
 
-void sloganarm::DoElevator2(bool b8, bool b9)
+void sloganarm::DoElevator2(float vZ)
 {
-	if (b8 != 0)
+	if (vZ > 0.10)
 	{
-		m_elev2.Set(12.0);
+		m_elev2.Set(vZ * -24.0);
 	}
-	if (b9 !=0)
+	if (vZ < -0.10)
 	{
-		m_elev2.Set(-12.0);
+		m_elev2.Set(vZ * -24.0);
 	}
-	if ((b8 == 0) && (b9 == 0))
+	if ((vZ <= 0.10) && (vZ >= -0.10))
 	{
 		m_elev2.Set(0.0);
 	}
