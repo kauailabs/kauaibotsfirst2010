@@ -1,6 +1,8 @@
 #include "WPILib.h"
 #include "MecanumDrive.h"
 #include "sloganarm.h"
+#include "pneumatics.h"
+
 /**
  * This is a demo program showing the use of the SimpleRobot base class.
  * It uses CAN to control the Jaguars instead of PWM.
@@ -15,16 +17,28 @@
 #define SHOULDER_CAN_ADDRESS 8
 #define HAND_CAN_ADDRESS 6
 
+#define LOCK_1_CHANNEL 3
+#define LOCK_2_CHANNEL 4
+#define FIRE_1_CHANNEL 1
+#define FIRE_2_CHANNEL 2
+#define PRESSURE_SWITCH 14
+#define COMPRESSOR1 1
+
 class CANRobotDemo : public SimpleRobot
 {
 	MecanumDrive myRobot; // robot drive system
     sloganarm myArm; 
+	pneumatics airsystem;
 	Joystick stick1; // only joystick
+
+	
 
 public:
 	CANRobotDemo(void):
 		myRobot(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRESS),
 	    myArm(SHOULDER_CAN_ADDRESS,HAND_CAN_ADDRESS,ELEVATOR_1_CAN_ADDRESS,ELEVATOR_2_CAN_ADDRESS),
+	    airsystem( LOCK_1_CHANNEL, LOCK_2_CHANNEL, FIRE_1_CHANNEL, FIRE_2_CHANNEL,
+	    			PRESSURE_SWITCH, COMPRESSOR1),
 		stick1(1)
 	{
 		GetWatchdog().SetExpiration(100);
@@ -55,7 +69,9 @@ public:
 			myArm.DoShoulder(stick1.GetRawButton(4),stick1.GetRawButton(2));
 			myArm.DoHand(stick1.GetRawButton(5),stick1.GetRawButton(3));			
 			myArm.DoElevator1(stick1.GetRawAxis(3));			
-			myArm.DoElevator2(stick1.GetRawAxis(3));			
+			myArm.DoElevator2(stick1.GetRawAxis(3));	
+			airsystem.Deployment(stick1.GetRawButton(9));
+			airsystem.UnDeployment(stick1.GetRawButton(6));
 			
 			// Print out some information about the Left motor.
 			printf ("Left=> ");

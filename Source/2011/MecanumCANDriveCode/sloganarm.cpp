@@ -31,7 +31,7 @@ void sloganarm::DoShoulder(bool b4, bool b2)
 	{
 		m_shoulder.Set(12.0);
 	}
-	if (b2 !=0)
+	if (b2 != 0)
 	{
 		m_shoulder.Set(-12.0);
 	}
@@ -47,7 +47,7 @@ void sloganarm::DoHand(bool b5, bool b3)
 	{
 		m_hand.Set(12.0);
 	}
-	if (b3 !=0)
+	if (b3 != 0)
 	{
 		m_hand.Set(-12.0);
 	}
@@ -55,14 +55,7 @@ void sloganarm::DoHand(bool b5, bool b3)
 	{
 		m_hand.Set(0.0);
 	}
-	/*if (b5 != 0)
-	{
-		m_hand.Set(12.0);
-	} 
-	else
-	{
-		m_hand.Set(-12.0);
-	}*/
+
 }
 
 void sloganarm::DoElevator1(float vZ)
