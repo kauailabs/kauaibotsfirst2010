@@ -2,7 +2,7 @@
 #define _PNEUMATICS_H
 
 #include "WPILib.h"
-//#include "constants.h"
+#include "constants.h"
 
 class pneumatics
 {
@@ -16,7 +16,6 @@ protected:
 public:
 	pneumatics(UINT32 Lock1channel, UINT32 Lock2channel, UINT32 Fire1channel, UINT32 Fire2channel,
 			UINT32 PressureSwitchchannel, UINT32 Compresschannel);
-	virtual void CompressedStop (bool b9);
 	virtual void Deployment (bool b14);
 	virtual void UnDeployment (bool b14);
 	

@@ -1,8 +1,5 @@
 #include "sloganarm.h"
 
-//const int SHOULDER	= 8;
-//const int HAND	= 6;
-
 sloganarm::sloganarm(UINT32 shoulderCANAddress,	UINT32 handCANAddress, UINT32 elev1CANAddress, UINT32 elev2CANAddress)
 		:m_shoulder( shoulderCANAddress, CANJaguar::kVoltage),
 		 m_hand( handCANAddress, CANJaguar::kVoltage),
@@ -60,15 +57,15 @@ void sloganarm::DoHand(bool b5, bool b3)
 
 void sloganarm::DoElevator1(float vZ)
 {
-	if (vZ > 0.10)
+	if (vZ > JoystickDead4)
 	{
 		m_elev1.Set(vZ * -24.0);
 	}
-	if (vZ < -0.10)
+	if (vZ < (-1 * JoystickDead4))
 	{
 		m_elev1.Set(vZ * -24.0);
 	}
-	if ((vZ <= 0.10) && (vZ >= -0.10))
+	if ((vZ <= JoystickDead4) && (vZ >= (-1 * JoystickDead4)))
 	{
 		m_elev1.Set(0.0);
 	}
@@ -76,15 +73,15 @@ void sloganarm::DoElevator1(float vZ)
 
 void sloganarm::DoElevator2(float vZ)
 {
-	if (vZ > 0.10)
+	if (vZ > JoystickDead4)
 	{
 		m_elev2.Set(vZ * -24.0);
 	}
-	if (vZ < -0.10)
+	if (vZ < (-1 * JoystickDead4))
 	{
 		m_elev2.Set(vZ * -24.0);
 	}
-	if ((vZ <= 0.10) && (vZ >= -0.10))
+	if ((vZ <= JoystickDead4) && (vZ >= (-1 * JoystickDead4)))
 	{
 		m_elev2.Set(0.0);
 	}

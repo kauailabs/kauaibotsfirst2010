@@ -2,6 +2,7 @@
 #define __sloganarm_h__
 
 #include "WPILib.h"
+#include "constants.h"
 
 class sloganarm
 {

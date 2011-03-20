@@ -2,36 +2,15 @@
 #include "MecanumDrive.h"
 #include "sloganarm.h"
 #include "pneumatics.h"
+#include "constants.h"
 
-/**
- * This is a demo program showing the use of the SimpleRobot base class.
- * It uses CAN to control the Jaguars instead of PWM.
- */ 
-
-#define LEFT_REAR_CAN_ADDRESS 4
-#define RIGHT_REAR_CAN_ADDRESS 5
-#define RIGHT_FRONT_CAN_ADDRESS 3
-#define LEFT_FRONT_CAN_ADDRESS 2
-#define ELEVATOR_1_CAN_ADDRESS 7
-#define ELEVATOR_2_CAN_ADDRESS 9
-#define SHOULDER_CAN_ADDRESS 8
-#define HAND_CAN_ADDRESS 6
-
-#define LOCK_1_CHANNEL 3
-#define LOCK_2_CHANNEL 4
-#define FIRE_1_CHANNEL 1
-#define FIRE_2_CHANNEL 2
-#define PRESSURE_SWITCH 14
-#define COMPRESSOR1 1
 
 class CANRobotDemo : public SimpleRobot
 {
-	MecanumDrive myRobot; // robot drive system
-    sloganarm myArm; 
-	pneumatics airsystem;
-	Joystick stick1; // only joystick
-
-	
+	MecanumDrive myRobot; //Mecanum Drive
+    sloganarm myArm; //Arm,Elevator and Claw
+	pneumatics airsystem; //Air System
+	Joystick stick1; //Joystick
 
 public:
 	CANRobotDemo(void):
@@ -44,47 +23,30 @@ public:
 		GetWatchdog().SetExpiration(100);
 	}
 
-	/**
-	 * Drive left & right motors for 2 seconds then stop
-	 */
+
 	void Autonomous(void)
 	{
 		GetWatchdog().SetEnabled(false);
-		//myRobot.Drive(0.5, 0.0); 	// drive forwards half speed
-		Wait(2.0); 				//    for 2 seconds
-		//myRobot.Drive(0.0, 0.0); 	// stop robot
+		// Autonomous Code Here
+
 	}
 
-	/**
-	 * Runs the motors with arcade steering. 
-	 */
+
 	void OperatorControl(void)
 	{
-		printf("In OperatorControl\n");
 		GetWatchdog().SetEnabled(true);
 		while (IsOperatorControl() && !IsDisabled())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1); // drive with arcade style (use right stick)
-			myArm.DoShoulder(stick1.GetRawButton(4),stick1.GetRawButton(2));
-			myArm.DoHand(stick1.GetRawButton(5),stick1.GetRawButton(3));			
+			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1); 
+			myArm.DoShoulder(stick1.GetRawButton(SHOULDER_BUTTON_1),stick1.GetRawButton(SHOULDER_BUTTON_2));
+			myArm.DoHand(stick1.GetRawButton(HAND_BUTTON_1),stick1.GetRawButton(HAND_BUTTON_2));			
 			myArm.DoElevator1(stick1.GetRawAxis(3));			
 			myArm.DoElevator2(stick1.GetRawAxis(3));	
-			airsystem.Deployment(stick1.GetRawButton(9));
-			airsystem.UnDeployment(stick1.GetRawButton(6));
-			
-			// Print out some information about the Left motor.
-			printf ("Left=> ");
-			printf ("Bus: %5.2f V ", myRobot.RearLeftMotor().GetBusVoltage());
-			printf ("Out: %6.2f V ", myRobot.RearLeftMotor().GetOutputVoltage());
-			printf ("Cur: %4.1f A ", myRobot.RearLeftMotor().GetOutputCurrent());
-			printf ("Temp: %5.1f Deg C ", myRobot.RearLeftMotor().GetTemperature());
-			printf ("LimSw: %s%s ", myRobot.RearLeftMotor().GetForwardLimitOK() ? "F":"-",
-					myRobot.RearLeftMotor().GetReverseLimitOK() ? "R":"-");
-			printf ("PwrCyc: %d ", myRobot.RearLeftMotor().GetPowerCycled() ? 1:0);
-			printf ("\n");
+			airsystem.Deployment(stick1.GetRawButton(DEPLOY_BUTTON));
+			airsystem.UnDeployment(stick1.GetRawButton(UNDEPLOY_BUTTON));
 
-			Wait(0.02);
+			Wait(0.02); // Do we need this???
 		}
 	}
 };
