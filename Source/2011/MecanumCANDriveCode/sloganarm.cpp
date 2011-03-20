@@ -42,15 +42,28 @@ void sloganarm::DoHand(bool b5, bool b3)
 {
 	if (b5 != 0)
 	{
-		m_hand.Set(12.0);
+		m_hand.Set(-12.0);
 	}
 	if (b3 != 0)
 	{
-		m_hand.Set(-12.0);
+		m_hand.Set(12.0);
 	}
 	if ((b5 == 0) && (b3 == 0))
 	{
 		m_hand.Set(0.0);
+	}
+
+}
+
+void sloganarm::DoHand2(bool b1)
+{
+	if (b1 != 0)
+	{
+		m_hand.Set(12.0);
+	}
+	if (b1 == 0)
+	{
+		m_hand.Set(-12.0);
 	}
 
 }

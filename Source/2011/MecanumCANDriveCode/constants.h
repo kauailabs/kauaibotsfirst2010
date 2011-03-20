@@ -43,6 +43,7 @@ const float wheelRadius		= wheelDiameter / 2;
 #define SHOULDER_BUTTON_2 2
 #define HAND_BUTTON_1 5
 #define HAND_BUTTON_2 3
+#define HAND_BUTTON_3 1
 #define DEPLOY_BUTTON 9
 #define UNDEPLOY_BUTTON 6
 /////////////////////////////////////////////////////////////////////////////////////
