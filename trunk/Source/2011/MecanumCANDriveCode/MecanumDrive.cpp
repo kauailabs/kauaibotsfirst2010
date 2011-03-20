@@ -3,72 +3,12 @@
  *
  *  Created on: Nov 22, 2009
  *      Author: slibert
+ *  Modified on: March 18, 2011
+ * 		Re-Author: smassaro
  */
 
 #include "MecanumDrive.h"
 #include <math.h>
-
-//////////////////////////////////////////////////////////
-// Robot-specific measurements (in units of inches)
-//
-// These may change if the robot design changes
-//////////////////////////////////////////////////////////
-
-const float cWidth			= 24.0;					// Distance btwn left/right wheels
-const float cLength			= 28.0;					// Distance btwn front/back wheels
-const float wheelDiameter	= 8.0;					// Per AndyMark Specs
-const float wheelRadius		= wheelDiameter / 2;
-
-//////////////////////////////////////////////////////////
-// Proportional translation vs. Rotation
-//
-// For the same motor speed, the distance of translation and distance of rotation
-// are not the same, due to the proportions of the wheel radius, and the 
-// distance between front/back and left/right wheels.
-//////////////////////////////////////////////////////////
-
-const float cRotK = ((cWidth + cLength)/2) / wheelRadius;		// Rotational Coefficient
-
-//////////////////////////////////////////////////////////
-// Forward and Inverse Kinematics Matrices
-//
-// As document on p. 523 of Omnidirectional Mobile Robot - Design and Implementation
-// (Ioan Doroftei, Victor Grosu and Veaceslav Spinu).
-//
-// A nominal value of 1 is used for translational motion.  
-//
-// NOTE:  These matrices assume the roller direction of each wheel points to the
-// center of the robot.
-// The AndyMark documentation indicates an alternative configuration, where each wheel's
-// Axis points to the center of the robot.  This alternative configuration modifies the
-// Matrices below by swapping the front and rear wheels.
-//////////////////////////////////////////////////////////
-
-const int WHEEL_FRONTLEFT	= 2;
-const int WHEEL_FRONTRIGHT	= 3;
-const int WHEEL_REARLEFT	= 4;
-const int WHEEL_REARRIGHT	= 5;
-
-const int VX	= 0;
-const int VY	= 1;
-const int VROT	= 2;
-
-#define ROLLERS_ROTATE_TO_ROBOT_CENTER 1
-
-const float invMatrix[4][3] = 
-{ 
-#ifdef ROLLERS_ROTATE_TO_ROBOT_CENTER
-	{  -1, 1,  cRotK },
-	{   1, 1, -cRotK },
-	{   1, 1,  cRotK },
-	{  -1, 1, -cRotK },
-#else
-	{   1, 1,  cRotK },
-	{  -1, 1, -cRotK },
-	{  -1, 1,  cRotK },
-	{   1, 1, -cRotK },
-#endif
-};
 
 MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
@@ -95,36 +35,10 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	m_frontRightMotor.SetPID(1,0,0);
 	m_rearLeftMotor.SetPID(1,0,0);
 	m_rearRightMotor.SetPID(1,0,0);
-	InitializeSensors();
-	RestartSensors();
 	m_frontLeftMotor.EnableControl();
 	m_frontRightMotor.EnableControl();
 	m_rearLeftMotor.EnableControl();
 	m_rearRightMotor.EnableControl();
-}
-
-void MecanumDrive::InitializeSensors()
-{	
-	// Gyroscope
-	//
-	// Gyro is initialized, including calibration, in constructor
-	//
-	// Initialize sensivity of the AD22305 Gyroscope
-	//m_gyroscope.SetSensitivity(.007);
-	// Accelerometers
-	//
-	// Accelerometers are initialized, including calibration, in constructor
-	//
-	// Intialize Zero voltage and sensitivity of the ADXL335
-	// Accelerometer chip based upon chip spec sheet.
-	//m_accelerometerX.SetZero(1.5);
-	//m_accelerometerX.SetSensitivity(.3);
-	//m_accelerometerY.SetZero(1.5);
-	//m_accelerometerY.SetSensitivity(.3);
-}
-
-void MecanumDrive::RestartSensors()
-{
 }
 
 void MecanumDrive::MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities )
@@ -152,166 +66,45 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 	}
 }
 
-// Side-to-Side
-const double cDriveJoystickAdjust = 0.38; //0.38;	// 0 to 1 (0 = same as input; 1 = x^3
-
-double MecanumDrive::InputJoystickAdjust( double dJoystickIn )
+double MecanumDrive::InputJoystickAdjust( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead)
 {
-	// x' = ax^3 + (1-a)x
-	
+
 	double dJoystickOut = 0.0;
-	/*if ( dJoystickIn > 0 )
-		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent);
-	else
-		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent);
-	*/
-	
-	dJoystickOut = (cDriveJoystickAdjust * pow(dJoystickIn, 3)) + ((1 - cDriveJoystickAdjust) * dJoystickIn);
-	
-	return dJoystickOut;
-}
-
-// Rotation
-const double cDriveJoystickAdjust2 = .1; // -1; //  -.75;
-
-double MecanumDrive::InputJoystickAdjust2( double dJoystickIn )
-{
-	//return dJoystickIn;
-	/*
-	double dJoystickOut = 0.0;
-	dJoystickIn /= 2;
-	if ( dJoystickIn > 0 )
-		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent2);
-	else
-		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent2);
-
-	return dJoystickOut;
-	*/
-	
-	// x' = ax^3 + (1-a)x
-	
-	double dOffsetFactor = 0;
-	
-	if ( dJoystickIn < -0.025 )
+	if ((dJoystickIn > dDead) || (dJoystickIn < (-1*dDead)))
 	{
-		dOffsetFactor = -.225;
+		dJoystickOut = ((dAdjustment * pow(dJoystickIn, dExponent)) + ((1 - dAdjustment) * dJoystickIn)) * dMultiplier;	
 	}
-	else if ( dJoystickIn > 0.025 )
-	{
-		dOffsetFactor = .225;
-	}
-	
-	dJoystickIn += dOffsetFactor;
-	
-	double dJoystickOut = 0.0;
-	//dJoystickOut = (cDriveJoystickAdjust2 * pow(dJoystickIn, 1 /*4*/ )) + ((1 - cDriveJoystickAdjust2) * dJoystickIn);
-	dJoystickOut = (cDriveJoystickAdjust2 * dJoystickIn);	
 	return dJoystickOut;
 }
 
-// Mecanum
-const double cDriveJoystickAdjust3 = -0.9; // -3; // -1.1;	// 0 to 1 (0 = same as input; 1 = x^3
-
-double MecanumDrive::InputJoystickAdjust3( double dJoystickIn )
+void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 {
-	// x' = ax^3 + (1-a)x
-	
-	double dJoystickOut = 0.0;
-	/*if ( dJoystickIn > 0 )
-		dJoystickOut = pow(dJoystickIn, cDriveJoystickExponent);
-	else
-		dJoystickOut = -1 * pow(dJoystickIn, cDriveJoystickExponent);
-	*/
-	
-	dJoystickOut = (cDriveJoystickAdjust * pow(dJoystickIn, 3 /*13*/)) + ((1 - cDriveJoystickAdjust3) * dJoystickIn);
-	
-	return dJoystickOut;
-}
 
-void MecanumDrive::DoMecanumInternal( float vX, float vY, float vRot )
-{
-	vRot *= -1;	// Invert rotational dimension control	
+	vY = InputJoystickAdjust(vY, JoystickAdjust, JoystickPow, JoystickMult, JoystickDead);	
+	vX = InputJoystickAdjust(vX, JoystickAdjust2, JoystickPow2, JoystickMult2, JoystickDead2);
+	vRot = ROTATE_DIRECTION * InputJoystickAdjust(vRot, JoystickAdjust3, JoystickPow3, JoystickMult3, JoystickDead3);
 	
-	///////
-	// Translational/Rotational Input Velocity Scaling:
-	//
-	// Four input mix cases (1/0-0, 0/1-0, 0/0-1 and .5/.5,1) all should end up driving the
-	// motors at their maximum speed.
-	//
-	// However, total output of each motor cannot exceed 1.
-	// Thus, the inputs are scaled to ensure the sum does not exceed 1.0.
-
 	float excessRatio = (float)1.0 / ( fabs(vX) + fabs(vY) + fabs(vRot) ); 
 	if ( excessRatio < 1.0 )
 	{
 		vX		*= excessRatio;
 		vY		*= excessRatio;
 		vRot	*= excessRatio;
-
-		//printf("Input Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
 	}
 
-	///////
-	// Rotational Output Velocity Scaling
-	//
-	// Outputs should not exceed the minimum/maximum output mother speed ranges.
-	// Therefore, scale the rotational input value so that the maximum rotational
-	// output velocity is equivalent to the maximum translational output velocity (1.0).
-	//
-	// This scaling is derived from the fact that the distance traveled for rotational motion 
-	// is less than the distance traveled for translational motion.
-	//
-	// NOTE:  Rotational and Translational distances would be equivalent if the wheel base  
-	// was equal to the wheel radius.
-
 	vRot *= (1/cRotK);
-	//printf("Output Velocities scaled to %f, %f, %f\n", vX, vY, vRot);
 
 	float wheelSpeeds[4];
 	float velocities[3] = { vX, vY, vRot };
 
 	MecanumDriveInvKinematics( velocities, &wheelSpeeds[0] );
+	m_frontLeftMotor.Set(600 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION );
+	m_frontRightMotor.Set(600 * wheelSpeeds[1] * DRIVE_DIRECTION);
+	m_rearLeftMotor.Set(600 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION);  
+	m_rearRightMotor.Set(600 * wheelSpeeds[3] * DRIVE_DIRECTION);
 
-	//printf("FL, FR:  %f, %f\n\n", wheelSpeeds[0], wheelSpeeds[1]);
-	//printf("RL, RR:  %f, %f\n\n", wheelSpeeds[2], wheelSpeeds[3]);
-
-	m_frontLeftMotor.Set(600 * wheelSpeeds[0] /** -1*/ ); // Inverted polarity of left-side wheels
-	m_frontRightMotor.Set(600 * wheelSpeeds[1] * -1);
-	m_rearLeftMotor.Set(600 * wheelSpeeds[2] /** -1*/ );  // Inverted polarity of left-side wheels
-	m_rearRightMotor.Set(600 * wheelSpeeds[3] * -1);
-		
-	// For testing purposes, transform the resulting wheel speeds through the matching
-	// forward kinematics algorithm.  The resulting derived velocities should match
-	// the scaled input velocities.
-
-	//float derivedVelocities[3];
-
-	//MecanumDriveFwdKinematics( wheelSpeeds, &derivedVelocities[0] );
-
-	//printf("vX:  %f, vY:  %f, vRot:  %f\n\n", derivedVelocities[VX], derivedVelocities[VY], derivedVelocities[VROT]*cRotK );
 }
 
-// MecanumDrive()
-// Each input is expected to range from -1 to 1
-// Outputs are the four wheel speeds
-// Each output is expected to range from -1 to 1
-void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
-{
-	//char *strDescription = "DoMecanum()";
-	//printf("%s (%f,%f,%f)\n\n", strDescription, vX, vY, vRot );
-
-	// Introduce exponential ramp on joystick input.
-	
-	vX = InputJoystickAdjust(vX);
-	vY = InputJoystickAdjust(vY);
-	vRot = InputJoystickAdjust2(vRot);
-
-	DoMecanumInternal(vX,vY,vRot);
-}
-
-/*
- * Default destructor
- */
 MecanumDrive::~MecanumDrive()
 {	
 }
