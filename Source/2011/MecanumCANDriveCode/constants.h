@@ -52,17 +52,17 @@ const float wheelRadius		= wheelDiameter / 2;
 // Result(when outside of the dead zone) = Mult(Adjust*Original^Pow + (1-Adjust)Original)
 /////////////////////////////////////////////////////////////////////////////////////
 // Forward Backwards
-const double JoystickAdjust = 0.35; 
+const double JoystickAdjust = 0.40; 
 const double JoystickPow = 3; 
-const double JoystickMult = .6;
+const double JoystickMult = .5;
 const double JoystickDead = 0; 
 // Side to Side
-const double JoystickAdjust2 = 0.35; 
+const double JoystickAdjust2 = 0.40; 
 const double JoystickPow2 = 3; 
-const double JoystickMult2 = .6; 
+const double JoystickMult2 = .5; 
 const double JoystickDead2 = 0; 
 // Rotation
-const double JoystickAdjust3 = 0.35;
+const double JoystickAdjust3 = 0.10;
 const double JoystickPow3 = 3;
 const double JoystickMult3 = .1;
 const double JoystickDead3 = 0;
