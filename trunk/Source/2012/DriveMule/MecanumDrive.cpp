@@ -102,11 +102,16 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	float velocities[3] = { vX, vY, vRot };
 
 	MecanumDriveInvKinematics( velocities, &wheelSpeeds[0] );
-	m_frontLeftMotor.Set(600 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION );
-	m_frontRightMotor.Set(600 * wheelSpeeds[1] * DRIVE_DIRECTION);
-	m_rearLeftMotor.Set(600 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION);  
-	m_rearRightMotor.Set(600 * wheelSpeeds[3] * DRIVE_DIRECTION);
+	
+	UINT8 syncGroup = 0x80;
 
+	m_frontLeftMotor.Set(600 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
+	m_frontRightMotor.Set(600 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
+	m_rearLeftMotor.Set(600 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
+	m_rearRightMotor.Set(600 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+
+	CANJaguar::UpdateSyncGroup(syncGroup);	
+	
 	m_safetyHelper->Feed();	
 }
 
