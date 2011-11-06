@@ -52,7 +52,9 @@ public:
 	{
 		SmartDashboard::Log("Entering Teleop Mode...",Dashboard_Status); 
 		
-		GetWatchdog().SetEnabled(true);
+		GetWatchdog().SetEnabled(false);
+		myRobot.SetSafetyEnabled(false);
+
 		while (IsOperatorControl() && !IsDisabled())
 		{
 			GetWatchdog().Feed();
@@ -61,7 +63,22 @@ public:
 			SmartDashboard::Log(stick1.GetX(), Dashboard_Joystick1_X);
 			SmartDashboard::Log(stick1.GetY(), Dashboard_Joystick1_Y);
 			SmartDashboard::Log(stick1.GetTwist(), Dashboard_Joystick1_Twist);
-			
+			SmartDashboard::Log(myRobot.FrontLeftMotor().GetSpeed(), FrontLeftEncoderSpeed);
+			SmartDashboard::Log(myRobot.FrontRightMotor().GetSpeed(), FrontRightEncoderSpeed);
+			SmartDashboard::Log(myRobot.RearLeftMotor().GetSpeed(), RearLeftEncoderSpeed);
+			SmartDashboard::Log(myRobot.RearRightMotor().GetSpeed(), RearRightEncoderSpeed);
+			SmartDashboard::Log(myRobot.FrontLeftMotor().GetFaults(), FrontLeftMotorFaults);
+			SmartDashboard::Log(myRobot.FrontRightMotor().GetFaults(), FrontRightMotorFaults);
+			SmartDashboard::Log(myRobot.RearLeftMotor().GetFaults(), RearLeftMotorFaults);
+			SmartDashboard::Log(myRobot.RearRightMotor().GetFaults(), RearRightMotorFaults);
+			SmartDashboard::Log(myRobot.FrontLeftMotor().Get(), FrontLeftMotorSetting);			
+			SmartDashboard::Log(myRobot.FrontRightMotor().Get(), FrontRightMotorSetting);			
+			SmartDashboard::Log(myRobot.RearLeftMotor().Get(), RearLeftMotorSetting);			
+			SmartDashboard::Log(myRobot.RearRightMotor().Get(), RearRightMotorSetting);	
+			SmartDashboard::Log(myRobot.FrontLeftMotor().GetP(), FrontLeftMotorP);
+			SmartDashboard::Log(myRobot.FrontRightMotor().GetP(), FrontRightMotorP);
+			SmartDashboard::Log(myRobot.RearLeftMotor().GetP(), RearLeftMotorP);
+			SmartDashboard::Log(myRobot.RearRightMotor().GetP(), RearRightMotorP);
 			Wait(0.02); // Wait 20 ms 
 		}
 

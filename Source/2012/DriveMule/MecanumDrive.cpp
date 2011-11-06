@@ -14,10 +14,10 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
 	UINT32 rearLeftMotorCANAddress,
 	UINT32 rearRightMotorCANAddress)
-	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kSpeed)
-	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kSpeed)
-	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kSpeed)
-	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kSpeed)
+	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kPercentVbus)
 {
 	m_frontLeftMotor.ConfigEncoderCodesPerRev(360);
 	m_frontLeftMotor.ConfigMaxOutputVoltage(12.0);
@@ -31,10 +31,14 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	m_rearRightMotor.ConfigEncoderCodesPerRev(360);
 	m_rearRightMotor.ConfigMaxOutputVoltage(12.0);
 	m_rearRightMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
-	m_frontLeftMotor.SetPID(1,0,0);
-	m_frontRightMotor.SetPID(1,0,0);
-	m_rearLeftMotor.SetPID(1,0,0);
-	m_rearRightMotor.SetPID(1,0,0);
+	m_frontLeftMotor.SetPID(.7,.004,0);
+	m_frontRightMotor.SetPID(.7,.004,0);
+	m_rearLeftMotor.SetPID(.7,.004,0);
+	m_rearRightMotor.SetPID(.7,.004,0);
+	m_frontLeftMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+	m_frontRightMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+	m_rearLeftMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+	m_rearRightMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
 	m_frontLeftMotor.EnableControl();
 	m_frontRightMotor.EnableControl();
 	m_rearLeftMotor.EnableControl();
@@ -87,6 +91,7 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	vY = InputJoystickAdjust(vY, JoystickAdjust, JoystickPow, JoystickMult, JoystickDead);	
 	vX = InputJoystickAdjust(vX, JoystickAdjust2, JoystickPow2, JoystickMult2, JoystickDead2);
 	vRot = ROTATE_DIRECTION * InputJoystickAdjust(vRot, JoystickAdjust3, JoystickPow3, JoystickMult3, JoystickDead3);
+	//vRot = ROTATE_DIRECTION * vRot;
 	
 	float excessRatio = (float)1.0 / ( fabs(vX) + fabs(vY) + fabs(vRot) ); 
 	if ( excessRatio < 1.0 )
@@ -105,10 +110,10 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	UINT8 syncGroup = 0x80;
 
-	m_frontLeftMotor.Set(600 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
-	m_frontRightMotor.Set(600 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
-	m_rearLeftMotor.Set(600 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
-	m_rearRightMotor.Set(600 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+	m_frontLeftMotor.Set(1 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
+	m_frontRightMotor.Set(1 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
+	m_rearLeftMotor.Set(1 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
+	m_rearRightMotor.Set(1 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
 
 	CANJaguar::UpdateSyncGroup(syncGroup);	
 	
