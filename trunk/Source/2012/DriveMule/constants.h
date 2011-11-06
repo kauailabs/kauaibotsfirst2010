@@ -20,10 +20,10 @@ const float wheelRadius		= wheelDiameter / 2;
 /////////////////////////////////////////////////////////////////////////////////////
 //Physical locations of connectors on the robot
 /////////////////////////////////////////////////////////////////////////////////////
-#define LEFT_REAR_CAN_ADDRESS 4
-#define RIGHT_REAR_CAN_ADDRESS 5
+#define LEFT_REAR_CAN_ADDRESS 5
+#define RIGHT_REAR_CAN_ADDRESS 2
 #define RIGHT_FRONT_CAN_ADDRESS 3
-#define LEFT_FRONT_CAN_ADDRESS 2
+#define LEFT_FRONT_CAN_ADDRESS 4
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -38,17 +38,17 @@ const float wheelRadius		= wheelDiameter / 2;
 // Forward Backwards
 const double JoystickAdjust = 0.40; 
 const double JoystickPow = 3; 
-const double JoystickMult = .5;
+const double JoystickMult = 1;
 const double JoystickDead = 0; 
 // Side to Side
 const double JoystickAdjust2 = 0.40; 
 const double JoystickPow2 = 3; 
-const double JoystickMult2 = .5; 
+const double JoystickMult2 = 1; 
 const double JoystickDead2 = 0; 
 // Rotation
-const double JoystickAdjust3 = 0.10;
+const double JoystickAdjust3 = .4;
 const double JoystickPow3 = 3;
-const double JoystickMult3 = .1;
+const double JoystickMult3 = .7;
 const double JoystickDead3 = 0;
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -60,6 +60,22 @@ const double JoystickDead3 = 0;
 #define Dashboard_Joystick1_X 		"Joystick1_X"		// Type:  double
 #define Dashboard_Joystick1_Y 		"Joystick1_Y"		// Type:  double
 #define Dashboard_Joystick1_Twist 	"Joystick1_Twist"	// Type:  double
+#define FrontLeftEncoderSpeed       "FrontLeftEncoder"
+#define FrontRightEncoderSpeed      "FrontRightEncoder"
+#define RearLeftEncoderSpeed        "RearLeftEncoder"
+#define RearRightEncoderSpeed       "RearRightEncoder"
+#define FrontLeftMotorFaults		"FrontLeftFaults"
+#define FrontRightMotorFaults		"FrontRightFaults"
+#define RearLeftMotorFaults			"RearLeftFaults"
+#define RearRightMotorFaults		"RearRightFaults"
+#define FrontLeftMotorSetting		"FrontLeftSetting"
+#define FrontRightMotorSetting		"FrontRightSetting"
+#define RearLeftMotorSetting		"RearLeftSetting"
+#define RearRightMotorSetting		"RearRightSetting"
+#define FrontLeftMotorP				"FrontLeftMotorP"
+#define FrontRightMotorP			"FrontRightMotorP"
+#define RearLeftMotorP				"RearLeftMotorP"
+#define RearRightMotorP				"RearRightMotorP"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Mecanum Constants
