@@ -10,6 +10,7 @@
 #include "MecanumDrive.h"
 #include <math.h>
 
+
 MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
 	UINT32 rearLeftMotorCANAddress,
@@ -46,7 +47,7 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 
 	// Init Motor Safety
 	m_safetyHelper = new MotorSafetyHelper(this);
-	m_safetyHelper->SetSafetyEnabled(true);
+	m_safetyHelper->SetSafetyEnabled(false);
 }
 
 void MecanumDrive::MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities )
