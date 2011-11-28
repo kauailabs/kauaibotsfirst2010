@@ -39,7 +39,7 @@ public:
 			myRobot.DoMecanum(0,0,0);
 			Wait(2.0);		// Wait 2 seconds
 		}
-		myRobot.SetSafetyEnabled(true);
+		myRobot.SetSafetyEnabled(false);
 		
 		SmartDashboard::Log("Exiting Autonomous Mode...",Dashboard_Status);
 	}
@@ -67,19 +67,15 @@ public:
 			SmartDashboard::Log(myRobot.FrontRightMotor().GetSpeed(), FrontRightEncoderSpeed);
 			SmartDashboard::Log(myRobot.RearLeftMotor().GetSpeed(), RearLeftEncoderSpeed);
 			SmartDashboard::Log(myRobot.RearRightMotor().GetSpeed(), RearRightEncoderSpeed);
-			SmartDashboard::Log(myRobot.FrontLeftMotor().GetFaults(), FrontLeftMotorFaults);
-			SmartDashboard::Log(myRobot.FrontRightMotor().GetFaults(), FrontRightMotorFaults);
-			SmartDashboard::Log(myRobot.RearLeftMotor().GetFaults(), RearLeftMotorFaults);
-			SmartDashboard::Log(myRobot.RearRightMotor().GetFaults(), RearRightMotorFaults);
 			SmartDashboard::Log(myRobot.FrontLeftMotor().Get(), FrontLeftMotorSetting);			
 			SmartDashboard::Log(myRobot.FrontRightMotor().Get(), FrontRightMotorSetting);			
 			SmartDashboard::Log(myRobot.RearLeftMotor().Get(), RearLeftMotorSetting);			
 			SmartDashboard::Log(myRobot.RearRightMotor().Get(), RearRightMotorSetting);	
-			SmartDashboard::Log(myRobot.FrontLeftMotor().GetP(), FrontLeftMotorP);
-			SmartDashboard::Log(myRobot.FrontRightMotor().GetP(), FrontRightMotorP);
-			SmartDashboard::Log(myRobot.RearLeftMotor().GetP(), RearLeftMotorP);
-			SmartDashboard::Log(myRobot.RearRightMotor().GetP(), RearRightMotorP);
-			Wait(0.02); // Wait 20 ms 
+			SmartDashboard::Log(myRobot.FrontLeftMotor().GetFaults(), FrontLeftMotorFaults);
+			SmartDashboard::Log(myRobot.FrontRightMotor().GetFaults(), FrontRightMotorFaults);
+			SmartDashboard::Log(myRobot.RearLeftMotor().GetFaults(), RearLeftMotorFaults);
+			SmartDashboard::Log(myRobot.RearRightMotor().GetFaults(), RearRightMotorFaults);
+			Wait(0.05); // Wait 50 ms 
 		}
 
 		SmartDashboard::Log("Exiting Teleop Mode...",Dashboard_Status); 
