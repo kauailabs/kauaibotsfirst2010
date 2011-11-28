@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////
 // Robot-specific measurements (in units of inches)
 //////////////////////////////////////////////////////////
-
+//WHARRGARBL
 const float cWidth			= 24.0;					// Distance between left/right wheels
 const float cLength			= 28.0;					// Distance btwn front/back wheels
 const float wheelDiameter	= 8.0;					// Per AndyMark Specs
