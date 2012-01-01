@@ -15,10 +15,10 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
 	UINT32 rearLeftMotorCANAddress,
 	UINT32 rearRightMotorCANAddress)
-	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kPercentVbus)
-	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kPercentVbus)
-	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kPercentVbus)
-	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kPercentVbus)
+	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kSpeed)
+	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kSpeed)
+	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kSpeed)
+	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kSpeed)
 {
 	m_frontLeftMotor.ConfigEncoderCodesPerRev(360);
 	m_frontLeftMotor.ConfigMaxOutputVoltage(12.0);
@@ -111,10 +111,10 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	UINT8 syncGroup = 0x80;
 
-	m_frontLeftMotor.Set(1 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
-	m_frontRightMotor.Set(1 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
-	m_rearLeftMotor.Set(1 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
-	m_rearRightMotor.Set(1 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+	m_frontLeftMotor.Set(250 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
+	m_frontRightMotor.Set(250 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
+	m_rearLeftMotor.Set(250 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
+	m_rearRightMotor.Set(250 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
 
 	CANJaguar::UpdateSyncGroup(syncGroup);	
 	
