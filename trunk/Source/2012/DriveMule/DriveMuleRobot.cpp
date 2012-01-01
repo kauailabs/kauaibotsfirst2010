@@ -1,6 +1,7 @@
 #include "WPILib.h"
 #include "MecanumDrive.h"
 #include "constants.h"
+#include <math.h>
 
 /**
  * This simple robot program operates a mecanum drive, under control
@@ -58,7 +59,21 @@ public:
 		while (IsOperatorControl() && !IsDisabled())
 		{
 			GetWatchdog().Feed();
-			myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1);
+			
+			double twist = stick1.GetTwist();
+			if (fabs(twist) < .01)
+				twist = 0;
+						
+			double y = stick1.GetY();
+			if (fabs(y) < .01)
+				y = 0;
+									
+			double x = stick1.GetX();
+			if (fabs(x) < .01)
+				x = 0;
+			myRobot.DoMecanum(x,y,twist * -1);
+			
+			//myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1);
 			
 			SmartDashboard::Log(stick1.GetX(), Dashboard_Joystick1_X);
 			SmartDashboard::Log(stick1.GetY(), Dashboard_Joystick1_Y);
