@@ -61,15 +61,15 @@ public:
 			GetWatchdog().Feed();
 			
 			double twist = stick1.GetTwist();
-			if (fabs(twist) < .01)
+			if (fabs(twist) < DEADZONE)
 				twist = 0;
 						
 			double y = stick1.GetY();
-			if (fabs(y) < .01)
+			if (fabs(y) < DEADZONE)
 				y = 0;
 									
 			double x = stick1.GetX();
-			if (fabs(x) < .01)
+			if (fabs(x) < DEADZONE)
 				x = 0;
 			myRobot.DoMecanum(x,y,twist * -1);
 			
