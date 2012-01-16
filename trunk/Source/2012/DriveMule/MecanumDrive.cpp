@@ -14,40 +14,73 @@
 MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
 	UINT32 rearLeftMotorCANAddress,
-	UINT32 rearRightMotorCANAddress)
-	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kSpeed)
-	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kSpeed)
-	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kSpeed)
-	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kSpeed)
+	UINT32 rearRightMotorCANAddress,
+	CANJaguar::ControlMode controlMode )
+	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_rearRightMotor( rearRightMotorCANAddress, CANJaguar::kPercentVbus)
+	, m_currControlMode( controlMode )
 {
-	m_frontLeftMotor.ConfigEncoderCodesPerRev(360);
-	m_frontLeftMotor.ConfigMaxOutputVoltage(12.0);
-	m_frontLeftMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
-	m_frontRightMotor.ConfigEncoderCodesPerRev(360);
-	m_frontRightMotor.ConfigMaxOutputVoltage(12.0);
-	m_frontRightMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
-	m_rearLeftMotor.ConfigEncoderCodesPerRev(360);
-	m_rearLeftMotor.ConfigMaxOutputVoltage(12.0);
-	m_rearLeftMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
-	m_rearRightMotor.ConfigEncoderCodesPerRev(360);
-	m_rearRightMotor.ConfigMaxOutputVoltage(12.0);
-	m_rearRightMotor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
-	m_frontLeftMotor.SetPID(.7,.004,0);
-	m_frontRightMotor.SetPID(.7,.004,0);
-	m_rearLeftMotor.SetPID(.7,.004,0);
-	m_rearRightMotor.SetPID(.7,.004,0);
-	m_frontLeftMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-	m_frontRightMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-	m_rearLeftMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-	m_rearRightMotor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-	m_frontLeftMotor.EnableControl();
-	m_frontRightMotor.EnableControl();
-	m_rearLeftMotor.EnableControl();
-	m_rearRightMotor.EnableControl();
-
+	m_frontLeftMotor.GetPowerCycled();
+	m_frontRightMotor.GetPowerCycled();
+	m_rearLeftMotor.GetPowerCycled();
+	m_rearRightMotor.GetPowerCycled();
+	
+	SetMode( controlMode );
+	
 	// Init Motor Safety
 	m_safetyHelper = new MotorSafetyHelper(this);
 	m_safetyHelper->SetSafetyEnabled(false);
+}
+
+void MecanumDrive::SetMode( CANJaguar::ControlMode controlMode )
+{
+	m_currControlMode = controlMode;
+
+	if ( m_currControlMode == CANJaguar::kSpeed )
+	{
+		m_maxOutputSpeed = 250;
+	}
+	else // kPercentVbus
+	{
+		m_maxOutputSpeed = 1;
+	}
+	
+	InitMotor(m_frontLeftMotor);
+	InitMotor(m_frontRightMotor);
+	InitMotor(m_rearLeftMotor);
+	InitMotor(m_rearRightMotor);	
+}
+
+void MecanumDrive::InitMotor( CANJaguar& motor )
+{
+	motor.ChangeControlMode( m_currControlMode );
+	if ( m_currControlMode == CANJaguar::kSpeed )
+	{
+		motor.ConfigEncoderCodesPerRev(360);
+		motor.ConfigMaxOutputVoltage(12.0);
+		motor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
+		motor.SetPID(.7,.004,0);
+		motor.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+	}
+	motor.EnableControl();
+}
+
+void MecanumDrive::CheckForRestartedMotor( CANJaguar& motor, const char * strDescription )
+{
+	if ( m_currControlMode != CANJaguar::kSpeed )   // kSpeed is the default
+	{
+		if ( motor.GetPowerCycled() )
+		{
+			Wait(0.10); // Wait 100 ms 
+			InitMotor( motor );
+			char error[256];
+			sprintf(error, "\n\n>>>>%s %s", strDescription, "Jaguar Power Cycled - re-initializing");
+			printf(error);
+			setErrorData(error, strlen(error), 100);		
+		}
+	}
 }
 
 void MecanumDrive::MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities )
@@ -111,10 +144,15 @@ void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 	
 	UINT8 syncGroup = 0x80;
 
-	m_frontLeftMotor.Set(250 * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
-	m_frontRightMotor.Set(250 * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
-	m_rearLeftMotor.Set(250 * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
-	m_rearRightMotor.Set(250 * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+	CheckForRestartedMotor( m_frontLeftMotor, "Front Left" );
+	CheckForRestartedMotor( m_frontRightMotor, "Front Right" );
+	CheckForRestartedMotor( m_rearLeftMotor, "Rear Left" );
+	CheckForRestartedMotor( m_rearRightMotor, "Rear Right" );
+	
+	m_frontLeftMotor.Set(m_maxOutputSpeed * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
+	m_frontRightMotor.Set(m_maxOutputSpeed * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
+	m_rearLeftMotor.Set(m_maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);  
+	m_rearRightMotor.Set(m_maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
 
 	CANJaguar::UpdateSyncGroup(syncGroup);	
 	
@@ -154,6 +192,11 @@ bool MecanumDrive::IsSafetyEnabled()
 void MecanumDrive::SetSafetyEnabled(bool enabled)
 {
 	m_safetyHelper->SetSafetyEnabled(enabled);
+}
+
+void MecanumDrive::GetDescription(char *desc)
+{
+	sprintf(desc, "MecanumDrive Class");
 }
 
 void MecanumDrive::StopMotor()
