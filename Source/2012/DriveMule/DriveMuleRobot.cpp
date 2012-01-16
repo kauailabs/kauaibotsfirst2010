@@ -18,12 +18,12 @@ class DriveMuleRobot : public SimpleRobot
 public:
 
 	DriveMuleRobot(void) :
-		myRobot(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRESS),
+		myRobot(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRESS,CANJaguar::kSpeed),
 		stick1(1)	
 	{
 		// Configure MotorSafety to require motors are updated at least every 100ms.
 		myRobot.SetExpiration(0.1);
-		SmartDashboard::init();
+		SmartDashboard::GetInstance()->init();
 	}
 
 	/**
@@ -51,7 +51,12 @@ public:
 	
 	void OperatorControl(void)
 	{
-		SmartDashboard::Log("Entering Teleop Mode...",Dashboard_Status); 
+		SmartDashboard *pDashboard = SmartDashboard::GetInstance();
+		
+		pDashboard->Log("Entering Teleop Mode...",Dashboard_Status); 
+	
+		bool bUsePercentVbusMode = DriverStation::GetInstance()->GetDigitalIn(1);
+		myRobot.SetMode( bUsePercentVbusMode ? CANJaguar::kPercentVbus : CANJaguar::kSpeed );		
 		
 		GetWatchdog().SetEnabled(false);
 		myRobot.SetSafetyEnabled(false);
@@ -59,6 +64,13 @@ public:
 		while (IsOperatorControl() && !IsDisabled())
 		{
 			GetWatchdog().Feed();
+			
+			bool bNewUsePercentVbusMode = DriverStation::GetInstance()->GetDigitalIn(1);
+			if ( bNewUsePercentVbusMode != bUsePercentVbusMode)
+			{
+				bUsePercentVbusMode = bNewUsePercentVbusMode;
+				myRobot.SetMode( bUsePercentVbusMode ? CANJaguar::kPercentVbus : CANJaguar::kSpeed );		
+			}
 			
 			double twist = stick1.GetTwist();
 			if (fabs(twist) < DEADZONE)
@@ -75,25 +87,25 @@ public:
 			
 			//myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1);
 			
-			SmartDashboard::Log(stick1.GetX(), Dashboard_Joystick1_X);
-			SmartDashboard::Log(stick1.GetY(), Dashboard_Joystick1_Y);
-			SmartDashboard::Log(stick1.GetTwist(), Dashboard_Joystick1_Twist);
-			SmartDashboard::Log(myRobot.FrontLeftMotor().GetSpeed(), FrontLeftEncoderSpeed);
-			SmartDashboard::Log(myRobot.FrontRightMotor().GetSpeed(), FrontRightEncoderSpeed);
-			SmartDashboard::Log(myRobot.RearLeftMotor().GetSpeed(), RearLeftEncoderSpeed);
-			SmartDashboard::Log(myRobot.RearRightMotor().GetSpeed(), RearRightEncoderSpeed);
-			SmartDashboard::Log(myRobot.FrontLeftMotor().Get(), FrontLeftMotorSetting);			
-			SmartDashboard::Log(myRobot.FrontRightMotor().Get(), FrontRightMotorSetting);			
-			SmartDashboard::Log(myRobot.RearLeftMotor().Get(), RearLeftMotorSetting);			
-			SmartDashboard::Log(myRobot.RearRightMotor().Get(), RearRightMotorSetting);	
-			SmartDashboard::Log(myRobot.FrontLeftMotor().GetFaults(), FrontLeftMotorFaults);
-			SmartDashboard::Log(myRobot.FrontRightMotor().GetFaults(), FrontRightMotorFaults);
-			SmartDashboard::Log(myRobot.RearLeftMotor().GetFaults(), RearLeftMotorFaults);
-			SmartDashboard::Log(myRobot.RearRightMotor().GetFaults(), RearRightMotorFaults);
+			pDashboard->Log(stick1.GetX(), Dashboard_Joystick1_X);
+			pDashboard->Log(stick1.GetY(), Dashboard_Joystick1_Y);
+			pDashboard->Log(stick1.GetTwist(), Dashboard_Joystick1_Twist);
+			/*pDashboard->Log(myRobot.FrontLeftMotor().GetSpeed(), FrontLeftEncoderSpeed);
+			pDashboard->Log(myRobot.FrontRightMotor().GetSpeed(), FrontRightEncoderSpeed);
+			pDashboard->Log(myRobot.RearLeftMotor().GetSpeed(), RearLeftEncoderSpeed);
+			pDashboard->Log(myRobot.RearRightMotor().GetSpeed(), RearRightEncoderSpeed);
+			pDashboard->Log(myRobot.FrontLeftMotor().Get(), FrontLeftMotorSetting);			
+			pDashboard->Log(myRobot.FrontRightMotor().Get(), FrontRightMotorSetting);			
+			pDashboard->Log(myRobot.RearLeftMotor().Get(), RearLeftMotorSetting);			
+			pDashboard->Log(myRobot.RearRightMotor().Get(), RearRightMotorSetting);	
+			pDashboard->Log(myRobot.FrontLeftMotor().GetFaults(), FrontLeftMotorFaults);
+			pDashboard->Log(myRobot.FrontRightMotor().GetFaults(), FrontRightMotorFaults);
+			pDashboard->Log(myRobot.RearLeftMotor().GetFaults(), RearLeftMotorFaults);
+			pDashboard->Log(myRobot.RearRightMotor().GetFaults(), RearRightMotorFaults);*/
 			Wait(0.05); // Wait 50 ms 
 		}
 
-		SmartDashboard::Log("Exiting Teleop Mode...",Dashboard_Status); 
+		pDashboard->Log("Exiting Teleop Mode...",Dashboard_Status); 
 	}
 };
 
