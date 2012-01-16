@@ -21,14 +21,19 @@ protected:
 	CANJaguar 			m_rearLeftMotor;
 	CANJaguar  			m_rearRightMotor;
 	MotorSafetyHelper *	m_safetyHelper;
+	CANJaguar::ControlMode			m_currControlMode;
+	int					m_maxOutputSpeed;
 	
 public:
 	MecanumDrive( UINT32 frontLeftMotorCANAddress,
 			UINT32 frontRightMotorCANAddress,
 			UINT32 rearLeftMotorCANAddress,
-			UINT32 rearRightMotorCANAddress
+			UINT32 rearRightMotorCANAddress,
+			CANJaguar::ControlMode controlMode = CANJaguar::kSpeed
 			);
 	virtual void DoMecanum( float vX, float vY, float vRot );
+	
+	void SetMode( CANJaguar::ControlMode controlMode );
 
 	CANJaguar& 	FrontLeftMotor() { return m_frontLeftMotor; }
 	CANJaguar& 	FrontRightMotor() { return m_frontRightMotor; }
@@ -45,8 +50,11 @@ public:
 	void StopMotor();
 	void SetSafetyEnabled(bool enabled);
 	bool IsSafetyEnabled();
+	void GetDescription(char *);
 
 protected:
+	void InitMotor( CANJaguar& motor );
+	void CheckForRestartedMotor( CANJaguar& motor, const char *strDescription );	
 	void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
 	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);
 	
