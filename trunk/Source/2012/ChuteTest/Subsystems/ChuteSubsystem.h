@@ -2,15 +2,20 @@
 #define Chute_SUBSYSTEM_H
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
+#define STEERING_UPPER_BOUND_DEGREES 10
+#define STEERING_LOWER_BOUND_DEGREES -10
+#define STEERING_CENTER_POSITION_DEGREES 0
 
 /**
  *
  *
  * @author ExampleAuthor
  */
-class ChuteSubsystem: public Subsystem {
+class ChuteSubsystem: public PIDSubsystem {
 private:
-	Servo* steering;
+	
+	Jaguar* steeringMotor;
+	AnalogChannel* steeringPot;
 	Solenoid* liftingUp;
 	Solenoid* liftingDown;
 	Solenoid* triggerRightUp;
@@ -27,6 +32,10 @@ public:
 	void ChuteDown();
 	void TriggerOn();
 	void TriggerOff();
+	void UsePIDOutput(double);
+	double ReturnPIDInput();
+	void SetSteeringAngle(double angle);
+	
 };
 
 #endif
