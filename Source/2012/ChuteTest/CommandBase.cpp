@@ -1,6 +1,7 @@
 #include "CommandBase.h"
 #include "Subsystems/ExampleSubsystem.h"
 #include "Commands/Scheduler.h"
+#include "Subsystems/ChuteSubsystem.h"
 
 CommandBase::CommandBase(const char *name) : Command(name) {
 }

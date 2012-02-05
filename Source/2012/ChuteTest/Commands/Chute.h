@@ -1,5 +1,5 @@
-#ifndef TEST_CHUTE_H
-#define TEST_CHUTE_H
+#ifndef CHUTE_H
+#define CHUTE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class TestChute: public CommandBase {
+class Chute: public CommandBase {
 public:
-	TestChute();
+	Chute();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

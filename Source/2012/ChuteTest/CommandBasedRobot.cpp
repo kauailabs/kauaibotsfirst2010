@@ -2,7 +2,7 @@
 #include "Commands/Command.h"
 #include "Commands/ExampleCommand.h"
 #include "CommandBase.h"
-#include "Commands/TestChute.h"
+#include "Commands/Chute.h"
 
 class CommandBasedRobot : public IterativeRobot {
 private:
@@ -10,7 +10,9 @@ private:
 	
 	virtual void RobotInit() {
 		CommandBase::init();
-		autonomousCommand = new TestChute();
+		autonomousCommand = new Chute();
+		NetworkTable::Initialize();
+		SmartDashboard::GetInstance()->PutData(CommandBase::chute);
 	}
 	
 	virtual void AutonomousInit() {
