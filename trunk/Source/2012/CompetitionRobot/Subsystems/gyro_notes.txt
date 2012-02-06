@@ -1,0 +1,10 @@
+Custom gyro is the same as WPILib gyro, w/two changes:
+
+- 	static const float kDefaultVoltsPerDegreePerSecond = 0.0125;
+     
+    [in WPILib version, it's 0.007]
+    
+-   GetAngle() was changed to not report a value < -360 or > 360
+
+    [in WPILib version, value can be outside these ranges, as it
+     wraps]
