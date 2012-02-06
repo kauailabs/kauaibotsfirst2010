@@ -1,6 +1,6 @@
 #include "DriveSubsystem.h"
 #include "../Robotmap.h"
-#include "../Commands/DriveWithJoystick.h"
+#include "../Commands/Drive.h"
 
 #define DRIVE_FRONT_EDGEFINDER_CHANNEL 4
 #define DRIVE_RIGHT_EDGEFINDER_CHANNEL 5
@@ -40,7 +40,7 @@ void DriveSubsystem::InitializeSensors()
 
 void DriveSubsystem::InitDefaultCommand() {
 	// Set the default command for a subsystem here.
-	SetDefaultCommand(new DriveWithJoystick());
+	SetDefaultCommand(new Drive());
 }
 
 // Put methods for controlling this subsystem
