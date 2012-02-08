@@ -41,11 +41,11 @@ void Chute::Execute()
 	}
 	if (bSteerLeft)
 	{
-		chute->SetSteeringAngle(STEERING_LOWER_BOUND_DEGREES);
+		chute->SetSteeringAngle(chute->GetMinimumChuteAngle());
 	}
 	else if (bSteerRight)
 	{
-		chute->SetSteeringAngle(STEERING_UPPER_BOUND_DEGREES);
+		chute->SetSteeringAngle(chute->GetMaximumChuteAngle());
 	}
 	else
 	{
