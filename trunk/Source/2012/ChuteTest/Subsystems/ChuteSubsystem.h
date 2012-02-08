@@ -6,6 +6,7 @@
 #define STEERING_LOWER_BOUND_DEGREES -10
 #define STEERING_CENTER_POSITION_DEGREES 0
 
+
 /**
  *
  *
@@ -22,6 +23,11 @@ private:
 	Solenoid* triggerRightDown;
 	Solenoid* triggerLeftUp;
 	Solenoid* triggerLeftDown;
+	double minimumChuteAngle;
+	double maximumChuteAngle;
+	double maximumChuteVoltage;
+	double minimumChuteVoltage;
+
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 public:
@@ -35,6 +41,8 @@ public:
 	void UsePIDOutput(double);
 	double ReturnPIDInput();
 	void SetSteeringAngle(double angle);
+	double GetMinimumChuteAngle();
+	double GetMaximumChuteAngle();
 	
 };
 
