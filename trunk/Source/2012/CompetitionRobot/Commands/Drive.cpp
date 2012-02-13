@@ -14,13 +14,13 @@ void Drive::Execute()
 {
 	// Update PercentVbus vs. Speed Mode setting
 	bool bUsePercentVbusMode = oi->getDriverStation()->GetDigitalIn(1);
-	if ( drive->getMode() == CANJaguar::kPercentVbus )
+	if ( drive->GetControlMode() == CANJaguar::kPercentVbus )
 	{
-		if ( !bUsePercentVbusMode ) drive->setMode( CANJaguar::kSpeed );
+		if ( !bUsePercentVbusMode ) drive->SetControlMode( CANJaguar::kSpeed );
 	}
 	else
 	{
-		if ( bUsePercentVbusMode ) drive->setMode( CANJaguar::kPercentVbus );
+		if ( bUsePercentVbusMode ) drive->SetControlMode( CANJaguar::kPercentVbus );
 	}
 
 	// Drive with current joystick values.
