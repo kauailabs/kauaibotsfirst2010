@@ -5,6 +5,7 @@
 static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 #define DEGREES_IN_A_CIRCLE	360
+const float cLowGearDriveRatio = .3333;
 
 DriveSubsystem::DriveSubsystem() : 
 	PIDSubsystem(	"DriveSubsystem",
@@ -19,11 +20,12 @@ DriveSubsystem::DriveSubsystem() :
 	rightRanger(RIGHT_RANGEFINDER_CHANNEL),
 	rearRanger(REAR_RANGEFINDER_CHANNEL),
 	leftRanger(LEFT_RANGEFINDER_CHANNEL),
-	frontLeftEdgeFinder(DRIVE_FRONT_LEFT_EDGEFINDER_CHANNEL),
-	frontRightEdgeFinder(DRIVE_FRONT_RIGHT_EDGEFINDER_CHANNEL),
-	rearLeftEdgeFinder(DRIVE_REAR_LEFT_EDGEFINDER_CHANNEL),
-	rearRightEdgeFinder(DRIVE_REAR_RIGHT_EDGEFINDER_CHANNEL)
+	frontEdgeFinder(DRIVE_FRONT_EDGEFINDER_CHANNEL),
+	rightEdgeFinder(DRIVE_RIGHT_EDGEFINDER_CHANNEL),
+	rearEdgeFinder(DRIVE_REAR_EDGEFINDER_CHANNEL),
+	leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL)
 {	
+	SetDriveGear(DriveSubsystem::kHighGear);
 	InitializeSensors();
 	
 	// Initialize the Auto-rotation feature
@@ -71,6 +73,13 @@ void DriveSubsystem::InitDefaultCommand() {
 
 void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
 {
+	if ( m_DriveGear == DriveSubsystem::kLowGear )
+	{
+		vX		= vX   * cLowGearDriveRatio;
+		vY		= vY   * cLowGearDriveRatio;
+		vRot	= vRot * cLowGearDriveRatio;
+	}
+	
     if ( m_bAutoRotationMode )         
     {                 
     	vRot = ThreadSafeGetAutoRotateMotorOutputValue();                 
@@ -80,12 +89,12 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
 	
 	drive.DoMecanum( vX, vY, vRot );
 }
-CANJaguar::ControlMode DriveSubsystem::getMode()
+CANJaguar::ControlMode DriveSubsystem::GetControlMode()
 {
 	return drive.GetMode();
 }
 
-void DriveSubsystem::setMode( CANJaguar::ControlMode newMode )
+void DriveSubsystem::SetControlMode( CANJaguar::ControlMode newMode )
 {
 	drive.SetMode( newMode );
 }
@@ -105,12 +114,12 @@ void DriveSubsystem::GetRangesInches( double& frontRange, double& rightRange, do
 	leftRange 	= leftRanger.GetRangeInches();
 }
 
-void DriveSubsystem::GetEdges( bool &frontLeft, bool& frontRight, bool& rearRight, bool& rearLeft)
+void DriveSubsystem::GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge)
 {
-	frontLeft	= (frontLeftEdgeFinder.Get() != 0);
-	frontRight	= (frontRightEdgeFinder.Get() != 0);
-	rearLeft	= (rearLeftEdgeFinder.Get() != 0);
-	rearRight	= (rearRightEdgeFinder.Get() != 0);
+	frontEdge	= (frontEdgeFinder.Get() != 0);
+	rightEdge	= (rightEdgeFinder.Get() != 0);
+	rearEdge	= (rearEdgeFinder.Get() != 0);
+	leftEdge	= (leftEdgeFinder.Get() != 0);
 }
 
 double DriveSubsystem::ClipGyroAngle( double dInputAngle )
@@ -196,4 +205,15 @@ bool DriveSubsystem::GetAutoRotationTargetReadings( bool& bOnTarget, double& dSe
 	dAngularError = GetPIDController()->GetError();
 	return true;
 }
+
+void DriveSubsystem::SetDriveGear( DriveSubsystem::DriveGear gear )
+{
+	m_DriveGear = gear;
+}
+
+DriveSubsystem::DriveGear DriveSubsystem::GetDriveGear()
+{
+	return m_DriveGear;
+}
+
 

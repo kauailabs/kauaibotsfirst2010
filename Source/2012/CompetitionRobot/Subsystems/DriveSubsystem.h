@@ -10,38 +10,12 @@
  *
  * @author slibert
  */
-class DriveSubsystem: public PIDSubsystem {
-private:
-	// It's desirable that everything possible under private except
-	// for methods that implement subsystem capabilities
-	MecanumDrive	drive;
-	Gyro			yaw;
-	Gyro			pitch;
-	Gyro			roll;
-	RangeFinder		frontRanger;
-	RangeFinder		rightRanger;
-	RangeFinder		rearRanger;
-	RangeFinder		leftRanger;
-	DigitalInput	frontLeftEdgeFinder;
-	DigitalInput	frontRightEdgeFinder;
-	DigitalInput	rearLeftEdgeFinder;
-	DigitalInput	rearRightEdgeFinder;
-protected:
-	void InitializeSensors();
-	double ReturnPIDInput();
-	void UsePIDOutput(double);
-
-    bool m_bAutoRotationMode;
-    bool m_bAutoRotateSetpointSet;
-    float m_pendingAutoRotateAmount;  	// Temporary until m_bAutoRotateSetpointSet == true
-
-    // Thread-safe accesors for auto-rotation amount         
-	float ThreadSafeGetAutoRotateMotorOutputValue();         
-	void ThreadSafeSetAutoMotorOutputValue( float rot );    
-	
-	double ClipGyroAngle( double dInputAngle );
-    
+class DriveSubsystem: public PIDSubsystem 
+{
 public:
+	
+	enum DriveGear { kLowGear, kHighGear };
+	
 	DriveSubsystem();
 	void InitDefaultCommand();
 
@@ -52,11 +26,14 @@ public:
 
 	// Drive Modes
 	
-	CANJaguar::ControlMode getMode();
-	void setMode( CANJaguar::ControlMode );
+	CANJaguar::ControlMode GetControlMode();
+	void SetControlMode( CANJaguar::ControlMode );
 
 	void SetAutoRotationMode( bool bEnable, double dTargetAngle );
 	bool GetAutoRotationMode();
+	
+	void SetDriveGear( DriveSubsystem::DriveGear gear );
+	DriveSubsystem::DriveGear GetDriveGear();
 	
 	// Returns true if in auto-rotation mode, false otherwise.
 	// If the return value is true:
@@ -70,7 +47,38 @@ public:
 	
 	void GetEulerAngles( double& yaw, double& pitch, double& roll);
 	void GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange );
-	void GetEdges( bool &frontLeft, bool& frontRight, bool& rearRight, bool& rearLeft);
+	void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
+
+private:
+	// It's desirable that everything possible under private except
+	// for methods that implement subsystem capabilities
+	MecanumDrive	drive;
+	Gyro			yaw;
+	Gyro			pitch;
+	Gyro			roll;
+	RangeFinder		frontRanger;
+	RangeFinder		rightRanger;
+	RangeFinder		rearRanger;
+	RangeFinder		leftRanger;
+	DigitalInput	frontEdgeFinder;
+	DigitalInput	rightEdgeFinder;
+	DigitalInput	rearEdgeFinder;
+	DigitalInput	leftEdgeFinder;
+protected:
+	void InitializeSensors();
+	double ReturnPIDInput();
+	void UsePIDOutput(double);
+
+    bool m_bAutoRotationMode;
+    bool m_bAutoRotateSetpointSet;
+    float m_pendingAutoRotateAmount;  	// Temporary until m_bAutoRotateSetpointSet == true
+    DriveGear m_DriveGear;
+    
+    // Thread-safe accesors for auto-rotation amount         
+	float ThreadSafeGetAutoRotateMotorOutputValue();         
+	void ThreadSafeSetAutoMotorOutputValue( float rot );    
+	
+	double ClipGyroAngle( double dInputAngle );    
 };
 
 #endif
