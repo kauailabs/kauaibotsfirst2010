@@ -12,5 +12,7 @@ public:
 	bool IsFinished();
 	void End();
 	void Interrupted();
+protected:
+	double InputJoystickAdjust( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead);
 };
 #endif

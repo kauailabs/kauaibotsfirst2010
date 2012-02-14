@@ -5,14 +5,19 @@
 static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 #define DEGREES_IN_A_CIRCLE	360
-const float cLowGearDriveRatio = .3333;
+const float cDefaultLowGearRatio = .3333;
 
 DriveSubsystem::DriveSubsystem() : 
 	PIDSubsystem(	"DriveSubsystem",
 					Preferences::GetInstance()->GetDouble("DriveAutoRotate_P",0.024),
 					Preferences::GetInstance()->GetDouble("DriveAutoRotate_I",0.0012),
 					Preferences::GetInstance()->GetDouble("DriveAutoRotate_D",0.00) ),
-	drive(LEFT_FRONT_CAN_ADDRESS,RIGHT_FRONT_CAN_ADDRESS,LEFT_REAR_CAN_ADDRESS,RIGHT_REAR_CAN_ADDRESS,CANJaguar::kSpeed),
+	drive(	LEFT_FRONT_CAN_ADDRESS,
+			RIGHT_FRONT_CAN_ADDRESS,
+			LEFT_REAR_CAN_ADDRESS,
+			RIGHT_REAR_CAN_ADDRESS,
+			CANJaguar::kSpeed,
+			Preferences::GetInstance()->GetInt("DriveSubsystemMaxRPMs", DEFAULT_MAX_RPMS) ),
 	yaw(DRIVE_YAW_GYRO_CHANNEL),
 	pitch(DRIVE_PITCH_GRYO_CHANNEL),
 	roll(DRIVE_ROLL_GYRO_CHANNEL),
@@ -25,6 +30,7 @@ DriveSubsystem::DriveSubsystem() :
 	rearEdgeFinder(DRIVE_REAR_EDGEFINDER_CHANNEL),
 	leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL)
 {	
+	m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveSubsystemLowGearRatio",cDefaultLowGearRatio);
 	SetDriveGear(DriveSubsystem::kHighGear);
 	InitializeSensors();
 	
@@ -75,9 +81,9 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
 {
 	if ( m_DriveGear == DriveSubsystem::kLowGear )
 	{
-		vX		= vX   * cLowGearDriveRatio;
-		vY		= vY   * cLowGearDriveRatio;
-		vRot	= vRot * cLowGearDriveRatio;
+		vX		= vX   * m_LowGearRatio;
+		vY		= vY   * m_LowGearRatio;
+		vRot	= vRot * m_LowGearRatio;
 	}
 	
     if ( m_bAutoRotationMode )         
@@ -88,6 +94,8 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
     }
 	
 	drive.DoMecanum( vX, vY, vRot );
+	
+	UpdateDashboardWithSensors();	
 }
 CANJaguar::ControlMode DriveSubsystem::GetControlMode()
 {
@@ -214,6 +222,25 @@ void DriveSubsystem::SetDriveGear( DriveSubsystem::DriveGear gear )
 DriveSubsystem::DriveGear DriveSubsystem::GetDriveGear()
 {
 	return m_DriveGear;
+}
+
+void DriveSubsystem::UpdateDashboardWithSensors()
+{
+	SmartDashboard *pDashboard = SmartDashboard::GetInstance();
+	if ( pDashboard )
+	{
+		pDashboard->PutDouble(  "YawAngle",		ClipGyroAngle(yaw.GetAngle()) );
+		pDashboard->PutDouble(  "PitchAngle", 	ClipGyroAngle(pitch.GetAngle()) );
+		pDashboard->PutDouble(  "RollAngle", 	ClipGyroAngle(roll.GetAngle()) );
+		pDashboard->PutDouble(  "FrontRange", 	frontRanger.GetRangeInches());
+		pDashboard->PutDouble(  "RightRange", 	rightRanger.GetRangeInches());
+		pDashboard->PutDouble(  "RearRange", 	rearRanger.GetRangeInches());
+		pDashboard->PutDouble(  "LeftRange", 	leftRanger.GetRangeInches());
+		pDashboard->PutBoolean( "FrontEdge", 	(frontEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "RightEdge", 	(rightEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "RearEdge", 	(rearEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "LeftEdge", 	(leftEdgeFinder.Get() != 0));
+	}
 }
 
 
