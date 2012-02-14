@@ -12,6 +12,8 @@
 #include "WPILib.h"
 #include "constants.h"
 
+#define DEFAULT_MAX_RPMS    250
+
 class MecanumDrive : public MotorSafety
 {
 protected:
@@ -23,13 +25,15 @@ protected:
 	MotorSafetyHelper *	m_safetyHelper;
 	CANJaguar::ControlMode			m_currControlMode;
 	int					m_maxOutputSpeed;
+	int					m_maxSpeedModeRPMs;
 	
 public:
 	MecanumDrive( UINT32 frontLeftMotorCANAddress,
 			UINT32 frontRightMotorCANAddress,
 			UINT32 rearLeftMotorCANAddress,
 			UINT32 rearRightMotorCANAddress,
-			CANJaguar::ControlMode controlMode = CANJaguar::kSpeed
+			CANJaguar::ControlMode controlMode = CANJaguar::kSpeed,
+			int maxSpeedModeRPMs = DEFAULT_MAX_RPMS
 			);
 	virtual void DoMecanum( float vX, float vY, float vRot );
 	
@@ -40,6 +44,8 @@ public:
 	CANJaguar& 	FrontRightMotor() { return m_frontRightMotor; }
 	CANJaguar& 	RearLeftMotor() { return m_rearLeftMotor; }
 	CANJaguar& 	RearRightMotor() { return m_rearRightMotor; }
+	
+	int GetMaxSpeedModeRPMs() { return m_maxSpeedModeRPMs; }
 	
 	virtual ~MecanumDrive();
 
@@ -57,8 +63,6 @@ protected:
 	void InitMotor( CANJaguar& motor );
 	void CheckForRestartedMotor( CANJaguar& motor, const char *strDescription );	
 	void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
-	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);
-	
-	double MecanumDrive::InputJoystickAdjust( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead);
+	void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);	
 };
 #endif

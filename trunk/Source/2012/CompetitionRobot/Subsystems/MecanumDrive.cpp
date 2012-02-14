@@ -15,7 +15,8 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	UINT32 frontRightMotorCANAddress,
 	UINT32 rearLeftMotorCANAddress,
 	UINT32 rearRightMotorCANAddress,
-	CANJaguar::ControlMode controlMode )
+	CANJaguar::ControlMode controlMode,
+	int maxSpeedModeRPMs )
 	: m_frontLeftMotor( frontLeftMotorCANAddress, CANJaguar::kPercentVbus)
 	, m_frontRightMotor( frontRightMotorCANAddress, CANJaguar::kPercentVbus)
 	, m_rearLeftMotor( rearLeftMotorCANAddress, CANJaguar::kPercentVbus)
@@ -27,11 +28,13 @@ MecanumDrive::MecanumDrive( UINT32 frontLeftMotorCANAddress,
 	m_rearLeftMotor.GetPowerCycled();
 	m_rearRightMotor.GetPowerCycled();
 	
+	m_maxSpeedModeRPMs = maxSpeedModeRPMs;
+	
 	SetMode( controlMode );
 	
 	// Init Motor Safety
 	m_safetyHelper = new MotorSafetyHelper(this);
-	m_safetyHelper->SetSafetyEnabled(false);
+	m_safetyHelper->SetSafetyEnabled(false);	
 }
 
 void MecanumDrive::SetMode( CANJaguar::ControlMode controlMode )
@@ -40,7 +43,7 @@ void MecanumDrive::SetMode( CANJaguar::ControlMode controlMode )
 
 	if ( m_currControlMode == CANJaguar::kSpeed )
 	{
-		m_maxOutputSpeed = 250;
+		m_maxOutputSpeed = m_maxSpeedModeRPMs;
 	}
 	else // kPercentVbus
 	{
@@ -113,23 +116,8 @@ void MecanumDrive::MecanumDriveInvKinematics( float velocities[3], float* pWheel
 	}
 }
 
-double MecanumDrive::InputJoystickAdjust( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead)
-{
-
-	double dJoystickOut = 0.0;
-	if ((dJoystickIn > dDead) || (dJoystickIn < (-1*dDead)))
-	{
-		dJoystickOut = ((dAdjustment * pow(dJoystickIn, dExponent)) + ((1 - dAdjustment) * dJoystickIn)) * dMultiplier;	
-	}
-	return dJoystickOut;
-}
-
 void MecanumDrive::DoMecanum( float vX, float vY, float vRot )
 {
-
-	vY = InputJoystickAdjust(vY, JoystickAdjust, JoystickPow, JoystickMult, JoystickDead);	
-	vX = InputJoystickAdjust(vX, JoystickAdjust2, JoystickPow2, JoystickMult2, JoystickDead2);
-	vRot = ROTATE_DIRECTION * InputJoystickAdjust(vRot, JoystickAdjust3, JoystickPow3, JoystickMult3, JoystickDead3);
 	//vRot = ROTATE_DIRECTION * vRot;
 	
 	float excessRatio = (float)1.0 / ( fabs(vX) + fabs(vY) + fabs(vRot) ); 

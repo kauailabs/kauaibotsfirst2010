@@ -29,6 +29,8 @@ public:
 	CANJaguar::ControlMode GetControlMode();
 	void SetControlMode( CANJaguar::ControlMode );
 
+	int  GetSpeedModeMaxRPMs() { return drive.GetMaxSpeedModeRPMs(); }
+	
 	void SetAutoRotationMode( bool bEnable, double dTargetAngle );
 	bool GetAutoRotationMode();
 	
@@ -73,12 +75,14 @@ protected:
     bool m_bAutoRotateSetpointSet;
     float m_pendingAutoRotateAmount;  	// Temporary until m_bAutoRotateSetpointSet == true
     DriveGear m_DriveGear;
+    float m_LowGearRatio;
     
     // Thread-safe accesors for auto-rotation amount         
 	float ThreadSafeGetAutoRotateMotorOutputValue();         
 	void ThreadSafeSetAutoMotorOutputValue( float rot );    
 	
 	double ClipGyroAngle( double dInputAngle );    
+	void UpdateDashboardWithSensors();
 };
 
 #endif
