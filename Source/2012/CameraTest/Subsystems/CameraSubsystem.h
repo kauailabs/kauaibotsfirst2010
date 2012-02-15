@@ -55,7 +55,8 @@ private:
     double m_MinTargetColEdgeScore;
     double m_MinTargetRowEdgeScore;
 
-	Threshold m_TargetThreshold;
+	Threshold m_TargetThresholdHSL;
+	Threshold m_HoopThresholdRGB;
     
 	void GrabAndDetectTargets();
 	void GrabAndDetectHoop();

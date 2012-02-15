@@ -11,7 +11,8 @@
 
 static SEM_ID cDetectionMutex = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
-// TODO: Tune HSL Thresholds based on video samples acquired on our practice field.
+// TODO: Tune HSL Thresholds for Target based on video samples acquired on our practice field.
+// TODO: Tune RGB Thresholds for Hoop based on video samples acquired on our practice field.
 
 CameraSubsystem::CameraSubsystem() : 
 	Subsystem("CameraSubsystem"),
@@ -20,12 +21,18 @@ CameraSubsystem::CameraSubsystem() :
 	camera(AxisCamera::GetInstance()),
 	cameraUp(CAMERA_UP_SOLENOID_CHANNEL),
 	cameraDown(CAMERA_DOWN_SOLENOID_CHANNEL),
-	m_TargetThreshold( 	Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinH", 78 ),
-						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxH", 184 ),
-						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinS", 102 ),
-						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxS", 255 ),
-						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinL", 47 ),
-						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxL", 239 ) )						
+	m_TargetThresholdHSL( 	Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinH", 78 ),
+							Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxH", 184 ),
+							Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinS", 102 ),
+							Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxS", 255 ),
+							Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinL", 47 ),
+							Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxL", 239 ) ),
+	m_HoopThresholdRGB(		Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMinR", 0 ),
+							Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMaxR", 34 ),
+							Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMinG", 0 ),
+							Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMaxG", 0 ),
+							Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMinB", 0 ),
+							Preferences::GetInstance()->GetInt ( "CameraHoopThresholdMaxB", 0 ) )			
 {
 	// Configure Camera Settings
 	
@@ -184,10 +191,7 @@ void CameraSubsystem::GrabAndDetectHoop()
 											{IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false, false}
 		};	
 		
-		// TODO: Tune RGB Thresholds based on video samples acquired on our practice field.
-		Threshold threshold(0, 34, 0, 0, 0, 0);
-		
-		BinaryImage *thresholdImage		= image->ThresholdRGB(threshold);	// get just the red pixels
+		BinaryImage *thresholdImage		= image->ThresholdRGB(m_HoopThresholdRGB);	// Only get the RBG values in range
 		BinaryImage *bigObjectsImage	= thresholdImage->RemoveSmallObjects(false, 2);  // remove small objects (noise)
 		BinaryImage *convexHullImage	= bigObjectsImage->ConvexHull(false);  // fill in partial and full rectangles
 		BinaryImage *filteredImage		= convexHullImage->ParticleFilter(criteria, 2);  // find the rectangles
@@ -233,7 +237,7 @@ void CameraSubsystem::GrabAndDetectTargets()
 										{IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false, false}
 	};	
 	
-	BinaryImage *thresholdImage		= image->ThresholdHSL(m_TargetThreshold);	// get just the luminant pixels
+	BinaryImage *thresholdImage		= image->ThresholdHSL(m_TargetThresholdHSL);	// get just the luminant pixels
 	BinaryImage *bigObjectsImage	= thresholdImage->RemoveSmallObjects(false, 2);  // remove small objects (noise)
 	BinaryImage *convexHullImage	= bigObjectsImage->ConvexHull(false);  // fill in partial and full rectangles
 	BinaryImage *filteredImage		= convexHullImage->ParticleFilter(criteria, 2);  // find the rectangles
