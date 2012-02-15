@@ -4,6 +4,7 @@
 #include "WPILib.h"
 #include "MecanumDrive.h"
 #include "RangeFinder.h"
+#include "FilteredAccelerometer.h"
 
 /**
  *
@@ -47,10 +48,13 @@ public:
 	
 	// Sensor Readings
 	
-	void GetEulerAngles( double& yaw, double& pitch, double& roll);
+	void GetEulerAnglesDegrees( double& yaw, double& pitch, double& roll);
 	void GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange );
 	void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
-
+	void GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
+	void GetWheelSpeedsRPM( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
+	void GetAcclerationG( double& accelX, double& accelY, double& accelZ );
+	
 private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
@@ -66,6 +70,9 @@ private:
 	DigitalInput	rightEdgeFinder;
 	DigitalInput	rearEdgeFinder;
 	DigitalInput	leftEdgeFinder;
+	FilteredAccelerometer	accelerometerX;
+	FilteredAccelerometer	accelerometerY;
+	FilteredAccelerometer	accelerometerZ;
 protected:
 	void InitializeSensors();
 	double ReturnPIDInput();

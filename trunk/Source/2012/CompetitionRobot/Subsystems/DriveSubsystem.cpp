@@ -28,7 +28,10 @@ DriveSubsystem::DriveSubsystem() :
 	frontEdgeFinder(DRIVE_FRONT_EDGEFINDER_CHANNEL),
 	rightEdgeFinder(DRIVE_RIGHT_EDGEFINDER_CHANNEL),
 	rearEdgeFinder(DRIVE_REAR_EDGEFINDER_CHANNEL),
-	leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL)
+	leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL),
+	accelerometerX(2,DRIVE_ACCELEROMETER_X_CHANNEL),
+	accelerometerY(2,DRIVE_ACCELEROMETER_Y_CHANNEL),
+	accelerometerZ(2,DRIVE_ACCELEROMETER_Z_CHANNEL)
 {	
 	m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveSubsystemLowGearRatio",cDefaultLowGearRatio);
 	SetDriveGear(DriveSubsystem::kHighGear);
@@ -107,7 +110,7 @@ void DriveSubsystem::SetControlMode( CANJaguar::ControlMode newMode )
 	drive.SetMode( newMode );
 }
 
-void DriveSubsystem::GetEulerAngles( double& yawAngle, double& pitchAngle, double& rollAngle)
+void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& pitchAngle, double& rollAngle)
 {
 	yawAngle	= ClipGyroAngle(yaw.GetAngle());
 	pitchAngle	= ClipGyroAngle(pitch.GetAngle());
@@ -243,4 +246,26 @@ void DriveSubsystem::UpdateDashboardWithSensors()
 	}
 }
 
+void DriveSubsystem::GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft )
+{
+	frontLeft 	= drive.FrontLeftMotor().GetOutputCurrent();
+	frontRight	= drive.FrontRightMotor().GetOutputCurrent();
+	rearRight	= drive.RearRightMotor().GetOutputCurrent();
+	rearLeft	= drive.RearLeftMotor().GetOutputCurrent();	
+}
+
+void DriveSubsystem::GetWheelSpeedsRPM( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft )
+{
+	frontLeft 	= drive.FrontLeftMotor().GetSpeed();
+	frontRight	= drive.FrontRightMotor().GetSpeed();
+	rearRight	= drive.RearRightMotor().GetSpeed();
+	rearLeft	= drive.RearLeftMotor().GetSpeed();
+}
+
+void DriveSubsystem::GetAcclerationG( double& accelX, double& accelY, double& accelZ )
+{
+	accelX = accelerometerX.GetAcceleration();
+	accelY = accelerometerY.GetAcceleration();
+	accelZ = accelerometerZ.GetAcceleration();
+}
 
