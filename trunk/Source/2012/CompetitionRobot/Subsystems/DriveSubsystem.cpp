@@ -232,17 +232,28 @@ void DriveSubsystem::UpdateDashboardWithSensors()
 	SmartDashboard *pDashboard = SmartDashboard::GetInstance();
 	if ( pDashboard )
 	{
-		pDashboard->PutDouble(  "YawAngle",		ClipGyroAngle(yaw.GetAngle()) );
-		pDashboard->PutDouble(  "PitchAngle", 	ClipGyroAngle(pitch.GetAngle()) );
-		pDashboard->PutDouble(  "RollAngle", 	ClipGyroAngle(roll.GetAngle()) );
-		pDashboard->PutDouble(  "FrontRange", 	frontRanger.GetRangeInches());
-		pDashboard->PutDouble(  "RightRange", 	rightRanger.GetRangeInches());
-		pDashboard->PutDouble(  "RearRange", 	rearRanger.GetRangeInches());
-		pDashboard->PutDouble(  "LeftRange", 	leftRanger.GetRangeInches());
-		pDashboard->PutBoolean( "FrontEdge", 	(frontEdgeFinder.Get() != 0));
-		pDashboard->PutBoolean( "RightEdge", 	(rightEdgeFinder.Get() != 0));
-		pDashboard->PutBoolean( "RearEdge", 	(rearEdgeFinder.Get() != 0));
-		pDashboard->PutBoolean( "LeftEdge", 	(leftEdgeFinder.Get() != 0));
+		pDashboard->PutDouble(  "YawAngle",			ClipGyroAngle(yaw.GetAngle()) );
+		pDashboard->PutDouble(  "PitchAngle", 		ClipGyroAngle(pitch.GetAngle()) );
+		pDashboard->PutDouble(  "RollAngle", 		ClipGyroAngle(roll.GetAngle()) );
+		pDashboard->PutDouble(  "FrontRange", 		frontRanger.GetRangeInches());
+		pDashboard->PutDouble(  "RightRange", 		rightRanger.GetRangeInches());
+		pDashboard->PutDouble(  "RearRange", 		rearRanger.GetRangeInches());
+		pDashboard->PutDouble(  "LeftRange", 		leftRanger.GetRangeInches());
+		pDashboard->PutBoolean( "FrontEdge", 		(frontEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "RightEdge", 		(rightEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "RearEdge", 		(rearEdgeFinder.Get() != 0));
+		pDashboard->PutBoolean( "LeftEdge", 		(leftEdgeFinder.Get() != 0));
+		pDashboard->PutDouble(  "Acceleration_X", 	accelerometerX.GetAcceleration());
+		pDashboard->PutDouble(  "Acceleration_Y", 	accelerometerY.GetAcceleration());
+		pDashboard->PutDouble(  "Acceleration_Z", 	accelerometerZ.GetAcceleration());
+		pDashboard->PutDouble(  "MotorAmps_FL",		drive.FrontLeftMotor().GetOutputCurrent());	
+		pDashboard->PutDouble(  "MotorAmps_FR",		drive.FrontRightMotor().GetOutputCurrent());	
+		pDashboard->PutDouble(  "MotorAmps_RR",		drive.RearRightMotor().GetOutputCurrent());	
+		pDashboard->PutDouble(  "MotorAmps_RL",		drive.RearLeftMotor().GetOutputCurrent());	
+		pDashboard->PutDouble(  "WheelRPM_FL",		drive.FrontLeftMotor().GetSpeed());	
+		pDashboard->PutDouble(  "WheelRPM_FR",		drive.FrontRightMotor().GetSpeed());	
+		pDashboard->PutDouble(  "WheelRPM_RR",		drive.RearRightMotor().GetSpeed());	
+		pDashboard->PutDouble(  "WheelRPM_RL",		drive.RearLeftMotor().GetSpeed());	
 	}
 }
 
