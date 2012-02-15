@@ -83,6 +83,8 @@ protected:
     float m_pendingAutoRotateAmount;  	// Temporary until m_bAutoRotateSetpointSet == true
     DriveGear m_DriveGear;
     float m_LowGearRatio;
+    unsigned long m_UpdateDashboardCount;
+    int m_UpdateDashboardRate;
     
     // Thread-safe accesors for auto-rotation amount         
 	float ThreadSafeGetAutoRotateMotorOutputValue();         

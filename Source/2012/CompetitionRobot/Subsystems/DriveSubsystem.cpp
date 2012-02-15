@@ -17,7 +17,7 @@ DriveSubsystem::DriveSubsystem() :
 			LEFT_REAR_CAN_ADDRESS,
 			RIGHT_REAR_CAN_ADDRESS,
 			CANJaguar::kSpeed,
-			Preferences::GetInstance()->GetInt("DriveSubsystemMaxRPMs", DEFAULT_MAX_RPMS) ),
+			Preferences::GetInstance()->GetInt("DriveMaxRPMs", DEFAULT_MAX_RPMS) ),
 	yaw(DRIVE_YAW_GYRO_CHANNEL),
 	pitch(DRIVE_PITCH_GRYO_CHANNEL),
 	roll(DRIVE_ROLL_GYRO_CHANNEL),
@@ -33,7 +33,9 @@ DriveSubsystem::DriveSubsystem() :
 	accelerometerY(2,DRIVE_ACCELEROMETER_Y_CHANNEL),
 	accelerometerZ(2,DRIVE_ACCELEROMETER_Z_CHANNEL)
 {	
-	m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveSubsystemLowGearRatio",cDefaultLowGearRatio);
+	m_UpdateDashboardCount = 0;
+	m_UpdateDashboardRate = Preferences::GetInstance()->GetInt("DriveUpdateDashboardRate", 4);
+	m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveLowGearRatio",cDefaultLowGearRatio);
 	SetDriveGear(DriveSubsystem::kHighGear);
 	InitializeSensors();
 	
@@ -98,7 +100,12 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
 	
 	drive.DoMecanum( vX, vY, vRot );
 	
-	UpdateDashboardWithSensors();	
+	// Periodically update the dashboard w/sensors
+	if ( ( m_UpdateDashboardCount % m_UpdateDashboardRate ) == 0 )
+	{
+		UpdateDashboardWithSensors();
+	}
+	m_UpdateDashboardCount++;
 }
 CANJaguar::ControlMode DriveSubsystem::GetControlMode()
 {
