@@ -11,13 +11,21 @@
 
 static SEM_ID cDetectionMutex = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
+// TODO: Tune HSL Thresholds based on video samples acquired on our practice field.
+
 CameraSubsystem::CameraSubsystem() : 
 	Subsystem("CameraSubsystem"),
 	Thread("CameraProcessingThread"),
 	m_bQuit(false),
 	camera(AxisCamera::GetInstance()),
 	cameraUp(CAMERA_UP_SOLENOID_CHANNEL),
-	cameraDown(CAMERA_DOWN_SOLENOID_CHANNEL)
+	cameraDown(CAMERA_DOWN_SOLENOID_CHANNEL),
+	m_TargetThreshold( 	Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinH", 78 ),
+						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxH", 184 ),
+						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinS", 102 ),
+						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxS", 255 ),
+						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMinL", 47 ),
+						Preferences::GetInstance()->GetInt ( "CameraTargetThresholdMaxL", 239 ) )						
 {
 	// Configure Camera Settings
 	
@@ -30,9 +38,14 @@ CameraSubsystem::CameraSubsystem() :
 	camera.WriteColorLevel(50);
 	// Contrast used w/test images (at Guerberville) was set to a Contrast of 50 (mid-bucket)
 
+	// Get the detection preferences
+    m_MinTargetRectangularScore = Preferences::GetInstance()->GetDouble( "CameraTargetMinRectangularScore",	0.0 );
+    m_MinTargetAspectRatioScore = Preferences::GetInstance()->GetDouble( "CameraTargetMinAspectRatioScore",	0.0 );
+    m_MinTargetColEdgeScore		= Preferences::GetInstance()->GetDouble( "CameraTargetMinColEdgeScore",	0.0 );
+    m_MinTargetRowEdgeScore		= Preferences::GetInstance()->GetDouble( "CameraTargetMinRowEdgeScore",	0.0 );
+	    
 	// Force the creation of all network tables used by this subsystem.
-	vector<Target> targets(4);
-	UpdateNetworkTable(targets,4);
+	UpdateNetworkTable(m_lastTarget,4);
 	UpdateNetworkTable(true,&m_lastHoop);
 	
 	SetDetectionMode( CameraSubsystem::kDetectNone );
@@ -66,8 +79,7 @@ void CameraSubsystem::ExecLoop ()
 			else // No detection; clear everything to "nothing detected"
 			{
 				UpdateNetworkTable(false,&m_lastHoop);
-				vector<Target> targets;
-				UpdateNetworkTable(targets, 0 );				
+				UpdateNetworkTable(m_lastTarget, 0 );				
 			}
 			semGive(dataAvailableSemaphore);
 		}
@@ -121,7 +133,7 @@ void CameraSubsystem::UpdateNetworkTable( bool bFoundHoop, Hoop *pHoop )
     }
 }
 
-void CameraSubsystem::UpdateNetworkTable(vector<Target>& targets, int iNumDetectedTargets )
+void CameraSubsystem::UpdateNetworkTable(Target * targets, int iNumDetectedTargets )
 {
     NetworkTable *pCameraTable = NetworkTable::GetTable("Camera");
     if(pCameraTable)
@@ -221,10 +233,7 @@ void CameraSubsystem::GrabAndDetectTargets()
 										{IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false, false}
 	};	
 	
-	// TODO: Tune HSL Thresholds based on video samples acquired on our practice field.
-	Threshold threshold(78, 184, 102, 255, 47, 239);
-	
-	BinaryImage *thresholdImage		= image->ThresholdHSL(threshold);	// get just the luminant pixels
+	BinaryImage *thresholdImage		= image->ThresholdHSL(m_TargetThreshold);	// get just the luminant pixels
 	BinaryImage *bigObjectsImage	= thresholdImage->RemoveSmallObjects(false, 2);  // remove small objects (noise)
 	BinaryImage *convexHullImage	= bigObjectsImage->ConvexHull(false);  // fill in partial and full rectangles
 	BinaryImage *filteredImage		= convexHullImage->ParticleFilter(criteria, 2);  // find the rectangles
@@ -307,40 +316,44 @@ void CameraSubsystem::GrabAndDetectTargets()
 		targets[i].m_Height 			= r->boundingRect.height;		
 	}
 	
-	// Find the highest-scoring targets (from 0 to 4 of them)
+	// Sort so that the highest-scoring targets are first 
 	std::sort(targets.begin(), targets.end());
 	
-	// TODO:  Filter the objects based on score.  Update the m_bDetected
-	// member variable if they pass.  For now, let them all through
-	
-	int iNumBestTargets = targets.size();
-	if ( iNumBestTargets > cNumTargets )
-	{
-		iNumBestTargets = cNumTargets;
-	}
+	int iNumPossibleTargets = targets.size();
 
+	int iValidTargets = 0;
 	// Update the thread-safe detection objects
 	{
 		Synchronized sync(cDetectionMutex);         	
-		for(int iTarget = 0;iTarget < iNumBestTargets; iTarget++)
+		for(int iTarget = 0; iTarget < iNumPossibleTargets; iTarget++)
 		{
-			targets[iTarget].m_bDetected = true;	// TODO: Update based on passing score
+			if ( iValidTargets > cNumTargets )
+			{
+				break;	// No more than 4 targets should ever be detected
+			}
 			
-			CalculateTargetAngle( targets[iTarget] );
-			CalculateTargetHeight( targets[iTarget] );
-			CalculateDistance( targets[iTarget] );
-			m_lastTarget[iTarget] = targets[iTarget];
+			if ( IsValidTarget( targets[iTarget] ) )
+			{
+				targets[iTarget].m_bDetected = true;
+			
+				CalculateTargetAngle( targets[iTarget] );
+				CalculateTargetHeight( targets[iTarget] );
+				CalculateDistance( targets[iTarget] );
+				
+				m_lastTarget[iValidTargets] = targets[iTarget];
+				iValidTargets++;
+			}
 		}
 		
 		// Mark any undetected targets
 		
-		for ( int iUndetectedTarget = iNumBestTargets; iUndetectedTarget < cNumTargets; iUndetectedTarget++ )
+		for ( int iUndetectedTarget = iValidTargets; iUndetectedTarget < cNumTargets; iUndetectedTarget++ )
 		{
 			m_lastTarget[iUndetectedTarget].m_bDetected = false;
 		}
 	}
     
-    UpdateNetworkTable(targets, iNumBestTargets );
+    UpdateNetworkTable( m_lastTarget, iValidTargets );
     
     // be sure to delete images after using them
 	delete reports;
@@ -349,6 +362,16 @@ void CameraSubsystem::GrabAndDetectTargets()
 	delete bigObjectsImage;
 	delete thresholdImage;
 	delete image;
+}
+
+bool CameraSubsystem::IsValidTarget( Target& t )
+{
+    bool bValid = 	t.m_RectangularScore >= m_MinTargetRectangularScore;
+    bValid &=		t.m_AspectRatioScore >= m_MinTargetAspectRatioScore;
+    bValid &=		t.m_ColEdgeScore >= m_MinTargetColEdgeScore;
+    bValid &=		t.m_RowEdgeScore >= m_MinTargetRowEdgeScore;
+	
+    return bValid;
 }
 
 // Put methods for controlling this subsystem

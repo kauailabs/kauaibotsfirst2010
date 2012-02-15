@@ -48,17 +48,25 @@ private:
 	Solenoid cameraDown;
 	Target m_lastTarget[4];
 	Hoop m_lastHoop;
+	
+	// Get the detection preferences
+    double m_MinTargetRectangularScore;
+    double m_MinTargetAspectRatioScore;
+    double m_MinTargetColEdgeScore;
+    double m_MinTargetRowEdgeScore;
+
+	Threshold m_TargetThreshold;
+    
 	void GrabAndDetectTargets();
 	void GrabAndDetectHoop();
-    void UpdateNetworkTable( vector<Target>& targets, int iNumBestTargets );
+    void UpdateNetworkTable( Target* targets, int iNumBestTargets );
     void UpdateNetworkTable( bool bFoundHoop, Hoop *pHoop );
 	void InitDefaultCommand();
 	void ExecLoop ();
 	void CalculateDistance( Target& t );
 	void CalculateTargetAngle(Target& t);
 	void CalculateTargetHeight(Target& t);
-
-
+	bool IsValidTarget( Target& t );
 };
 
 #endif
