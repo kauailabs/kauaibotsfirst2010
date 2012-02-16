@@ -52,10 +52,8 @@ void ChuteSubsystem::ChuteDown()
 void ChuteSubsystem::TriggerOn()
 {
 
-	triggerLeftUp->Set(false);
-	triggerLeftDown->Set(true);
-	triggerRightUp->Set(false);
-	triggerRightDown->Set(true);
+	triggerUp->Set(true);
+
 }
 
 void ChuteSubsystem::TriggerOff()
