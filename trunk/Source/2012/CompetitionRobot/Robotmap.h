@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define DRIVE_YAW_GYRO_CHANNEL 1
-#define DRIVE_PITCH_GRYO_CHANNEL 2
+#define DRIVE_ROLL_GYRO_CHANNEL 2
 #define FRONT_RANGEFINDER_CHANNEL 4
 #define RIGHT_RANGEFINDER_CHANNEL 5
 #define REAR_RANGEFINDER_CHANNEL 6
@@ -32,7 +32,6 @@
 // Analog Breakout Board 2 Sensors
 ////////////////////////////////////////////////////////////////////////////////
 
-#define DRIVE_ROLL_GYRO_CHANNEL 2
 #define DRIVE_ACCELEROMETER_X_CHANNEL 3
 #define DRIVE_ACCELEROMETER_Y_CHANNEL 4
 #define DRIVE_ACCELEROMETER_Z_CHANNEL 5
