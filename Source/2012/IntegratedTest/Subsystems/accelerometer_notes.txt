@@ -1,0 +1,7 @@
+FilteredAccelerometer differs from WPILib version Accelerometer in 
+only one way:
+This code is added to the end of the InitAccelerometer() method:
+	// Set the averaging total to larger than the default;
+	// this is to overcome the nois signal from the accelerometer
+	// when the default averaging window width is used.
+	m_analogChannel->SetAverageBits(10);
