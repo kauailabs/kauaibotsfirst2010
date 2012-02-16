@@ -14,10 +14,7 @@ ChuteSubsystem::ChuteSubsystem() : PIDSubsystem("ChuteSubsystem",2.3,0,0)
 	steeringPot=new AnalogChannel(STEERING_POTENTIOMETER_MODULE, STEERING_POTENTIOMETER_CHANNEL);
 	liftingUp=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_UP_SOLENOID_CHANNEL);
 	liftingDown=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_DOWN_SOLENOID_CHANNEL);
-	triggerRightUp=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_RIGHT_UP_SOLENOID_CHANNEL);
-	triggerRightDown=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_RIGHT_DOWN_SOLENOID_CHANNEL);
-	triggerLeftDown=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_LEFT_DOWN_SOLENOID_CHANNEL);
-	triggerLeftUp=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_LEFT_UP_SOLENOID_CHANNEL);
+	triggerUp=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_UP_SOLENOID_CHANNEL);
 	SetSetpointRange(STEERING_LOWER_BOUND_DEGREES, STEERING_UPPER_BOUND_DEGREES);
 	SetSetpoint(STEERING_CENTER_POSITION_DEGREES);
 	Enable();
@@ -63,10 +60,7 @@ void ChuteSubsystem::TriggerOn()
 
 void ChuteSubsystem::TriggerOff()
 {
-	triggerLeftUp->Set(true);
-	triggerLeftDown->Set(false);
-	triggerRightUp->Set(true);
-	triggerRightDown->Set(false);
+	triggerUp->Set(false);
 }  
 void ChuteSubsystem::UsePIDOutput(double output)
 {
