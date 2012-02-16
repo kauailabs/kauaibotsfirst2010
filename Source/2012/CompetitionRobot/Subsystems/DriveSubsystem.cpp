@@ -19,8 +19,7 @@ DriveSubsystem::DriveSubsystem() :
 			CANJaguar::kSpeed,
 			Preferences::GetInstance()->GetInt("DriveMaxRPMs", DEFAULT_MAX_RPMS) ),
 	yaw(DRIVE_YAW_GYRO_CHANNEL),
-	pitch(DRIVE_PITCH_GRYO_CHANNEL),
-	roll(2,DRIVE_ROLL_GYRO_CHANNEL),
+	roll(DRIVE_ROLL_GYRO_CHANNEL),
 	frontRanger(FRONT_RANGEFINDER_CHANNEL),
 	rightRanger(RIGHT_RANGEFINDER_CHANNEL),
 	rearRanger(REAR_RANGEFINDER_CHANNEL),
@@ -69,7 +68,6 @@ void DriveSubsystem::InitializeSensors()
 	//         
 	// Initialize sensivity of the AD22305 Gyroscope         
 	yaw.SetSensitivity(.007);  	
-	pitch.SetSensitivity(.007);  	
 	roll.SetSensitivity(.007);  	
 }
 
@@ -117,10 +115,9 @@ void DriveSubsystem::SetControlMode( CANJaguar::ControlMode newMode )
 	drive.SetMode( newMode );
 }
 
-void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& pitchAngle, double& rollAngle)
+void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& rollAngle)
 {
 	yawAngle	= ClipGyroAngle(yaw.GetAngle());
-	pitchAngle	= ClipGyroAngle(pitch.GetAngle());
 	rollAngle	= ClipGyroAngle(roll.GetAngle());
 }
 
@@ -240,7 +237,6 @@ void DriveSubsystem::UpdateDashboardWithSensors()
 	if ( pDashboard )
 	{
 		pDashboard->PutDouble(  "YawAngle",			ClipGyroAngle(yaw.GetAngle()) );
-		pDashboard->PutDouble(  "PitchAngle", 		ClipGyroAngle(pitch.GetAngle()) );
 		pDashboard->PutDouble(  "RollAngle", 		ClipGyroAngle(roll.GetAngle()) );
 		pDashboard->PutDouble(  "FrontRange", 		frontRanger.GetRangeInches());
 		pDashboard->PutDouble(  "RightRange", 		rightRanger.GetRangeInches());

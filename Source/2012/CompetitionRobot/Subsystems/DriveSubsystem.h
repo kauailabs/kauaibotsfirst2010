@@ -48,7 +48,7 @@ public:
 	
 	// Sensor Readings
 	
-	void GetEulerAnglesDegrees( double& yaw, double& pitch, double& roll);
+	void GetEulerAnglesDegrees( double& yaw, double& roll);
 	void GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange );
 	void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
 	void GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
@@ -60,7 +60,6 @@ private:
 	// for methods that implement subsystem capabilities
 	MecanumDrive	drive;
 	Gyro			yaw;
-	Gyro			pitch;
 	Gyro			roll;
 	RangeFinder		frontRanger;
 	RangeFinder		rightRanger;
