@@ -20,7 +20,7 @@ DriveSubsystem::DriveSubsystem() :
 			Preferences::GetInstance()->GetInt("DriveMaxRPMs", DEFAULT_MAX_RPMS) ),
 	yaw(DRIVE_YAW_GYRO_CHANNEL),
 	pitch(DRIVE_PITCH_GRYO_CHANNEL),
-	roll(DRIVE_ROLL_GYRO_CHANNEL),
+	roll(2,DRIVE_ROLL_GYRO_CHANNEL),
 	frontRanger(FRONT_RANGEFINDER_CHANNEL),
 	rightRanger(RIGHT_RANGEFINDER_CHANNEL),
 	rearRanger(REAR_RANGEFINDER_CHANNEL),
