@@ -1,22 +1,38 @@
 #include "ChuteSubsystem.h"
 #include "../Robotmap.h"
 #include "../Commands/Chute.h"
-#define STEERING_UPPER_BOUND_DEGREES 10
-#define STEERING_LOWER_BOUND_DEGREES -10
+#include "Preferences.h"
+#include "math.h"
 #define STEERING_CENTER_POSITION_DEGREES 0
 
 ChuteSubsystem::ChuteSubsystem() : PIDSubsystem("ChuteSubsystem",2.3,0,0) 
 {
+        minimumChuteAngle=Preferences::GetInstance()->GetDouble("MinimumChuteAngle", -10);
+        maximumChuteAngle=Preferences::GetInstance()->GetDouble("MaximumChuteAngle", 10);
+        maximumChuteVoltage=Preferences::GetInstance()->GetDouble("MaximumChuteVoltage", 5);
+        minimumChuteVoltage=Preferences::GetInstance()->GetDouble("MinimumChuteVoltage", 0);
         steeringMotor=new Jaguar(STEERING_JAGUAR_CHANNEL);
         steeringPot=new AnalogChannel(STEERING_POTENTIOMETER_MODULE, STEERING_POTENTIOMETER_CHANNEL);
         liftingUp=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_UP_SOLENOID_CHANNEL);
         liftingDown=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_DOWN_SOLENOID_CHANNEL);
-        triggerUp=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_UP_SOLENOID_CHANNEL);
-        SetSetpointRange(STEERING_LOWER_BOUND_DEGREES, STEERING_UPPER_BOUND_DEGREES);
+        triggerOn=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_ON_SOLENOID_CHANNEL);
+        triggerOff=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_OFF_SOLENOID_CHANNEL);
+        SetSetpointRange(minimumChuteAngle, maximumChuteAngle);
+
         SetSetpoint(STEERING_CENTER_POSITION_DEGREES);
         Enable();
         
         }
+
+double ChuteSubsystem::GetMinimumChuteAngle()
+{
+        return minimumChuteAngle;
+}
+
+double ChuteSubsystem::GetMaximumChuteAngle()
+{
+        return maximumChuteAngle;
+}
 
 void ChuteSubsystem::InitDefaultCommand() 
 {
@@ -39,12 +55,14 @@ void ChuteSubsystem::ChuteDown()
 void ChuteSubsystem::TriggerOn()
 {
 
-        triggerUp->Set(true);
+        triggerOff->Set(false);
+        triggerOn->Set(true);
 }
 
 void ChuteSubsystem::TriggerOff()
 {
-        triggerUp->Set(false);
+        triggerOff->Set(true);
+        triggerOn->Set(false);
 }  
 void ChuteSubsystem::UsePIDOutput(double output)
 {
@@ -53,13 +71,14 @@ void ChuteSubsystem::UsePIDOutput(double output)
 
 double ChuteSubsystem::ReturnPIDInput()
 {
-        return steeringPot->GetAverageVoltage() / 5.0;
+        return steeringPot->GetAverageVoltage()* (maximumChuteAngle + fabs(minimumChuteAngle))/(maximumChuteVoltage - minimumChuteVoltage) + minimumChuteAngle;
 }
 
 void ChuteSubsystem::SetSteeringAngle(double angle)
 {
         SetSetpoint(angle);
 }
+
 
 
         
