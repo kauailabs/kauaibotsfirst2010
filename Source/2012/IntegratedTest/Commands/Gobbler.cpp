@@ -15,7 +15,7 @@ void Gobbler::Initialize() {
 void Gobbler::Execute() {
 	Joystick*pjoystick;
 	pjoystick = oi->getJoystick();
-	bool reversegobbler=pjoystick->GetRawButton(11);
+	bool reversegobbler=pjoystick->GetRawButton(8);
 	if(reversegobbler)
 	{
 		gobbler->Reverse();

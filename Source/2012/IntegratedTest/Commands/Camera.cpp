@@ -47,7 +47,10 @@ void Camera::Execute() {
         
         // If Driver Station Input 4 is on, up periscope
         // else down periscope
-        if ( oi->getDriverStation()->GetDigitalIn(4) )
+        Joystick*pjoystick;
+        pjoystick = oi->getJoystick();
+        bool periscopeup=pjoystick->GetRawButton(9);
+        if (periscopeup)
         {
                 camera->UpPeriscope();
         }
