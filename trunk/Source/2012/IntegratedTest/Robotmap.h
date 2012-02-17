@@ -31,9 +31,10 @@
 // Servo and Solenoid Adresses (Chute Subsystem)
 /////////////////////////////////////////////////////////////////////////////////////
 #define LIFTING_UP_SOLENOID_CHANNEL 5
+#define TRIGGER_ON_SOLENOID_CHANNEL 1
+#define TRIGGER_OFF_SOLENOID_CHANNEL 2
 #define STEERING_JAGUAR_CHANNEL 7
 #define LIFTING_DOWN_SOLENOID_CHANNEL 6
-#define TRIGGER_UP_SOLENOID_CHANNEL 1
 #define STEERING_POTENTIOMETER_CHANNEL 1
 #define STEERING_POTENTIOMETER_MODULE 2
 #define FIRST_SOLENOID_MODULE 1
