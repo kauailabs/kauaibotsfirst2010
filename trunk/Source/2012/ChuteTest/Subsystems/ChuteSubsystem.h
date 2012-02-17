@@ -19,7 +19,8 @@ private:
 	AnalogChannel* steeringPot;
 	Solenoid* liftingUp;
 	Solenoid* liftingDown;
-	Solenoid* triggerUp;;
+	Solenoid* triggerOn;
+	Solenoid* triggerOff;
 	double minimumChuteAngle;
 	double maximumChuteAngle;
 	double maximumChuteVoltage;

@@ -2,6 +2,7 @@
 #include "../Robotmap.h"
 #include "../Commands/Chute.h"
 #include "Preferences.h"
+#include "math.h"
 #define STEERING_CENTER_POSITION_DEGREES 0
 
 ChuteSubsystem::ChuteSubsystem() : PIDSubsystem("ChuteSubsystem",2.3,0,0) 
@@ -14,8 +15,10 @@ ChuteSubsystem::ChuteSubsystem() : PIDSubsystem("ChuteSubsystem",2.3,0,0)
 	steeringPot=new AnalogChannel(STEERING_POTENTIOMETER_MODULE, STEERING_POTENTIOMETER_CHANNEL);
 	liftingUp=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_UP_SOLENOID_CHANNEL);
 	liftingDown=new Solenoid(FIRST_SOLENOID_MODULE, LIFTING_DOWN_SOLENOID_CHANNEL);
-	triggerUp=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_UP_SOLENOID_CHANNEL);
-	SetSetpointRange(STEERING_LOWER_BOUND_DEGREES, STEERING_UPPER_BOUND_DEGREES);
+	triggerOn=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_ON_SOLENOID_CHANNEL);
+	triggerOff=new Solenoid(FIRST_SOLENOID_MODULE, TRIGGER_OFF_SOLENOID_CHANNEL);
+	SetSetpointRange(minimumChuteAngle, maximumChuteAngle);
+
 	SetSetpoint(STEERING_CENTER_POSITION_DEGREES);
 	Enable();
 	
@@ -52,13 +55,14 @@ void ChuteSubsystem::ChuteDown()
 void ChuteSubsystem::TriggerOn()
 {
 
-	triggerUp->Set(true);
-
+	triggerOff->Set(false);
+	triggerOn->Set(true);
 }
 
 void ChuteSubsystem::TriggerOff()
 {
-	triggerUp->Set(false);
+	triggerOff->Set(true);
+	triggerOn->Set(false);
 }  
 void ChuteSubsystem::UsePIDOutput(double output)
 {
@@ -67,7 +71,7 @@ void ChuteSubsystem::UsePIDOutput(double output)
 
 double ChuteSubsystem::ReturnPIDInput()
 {
-	return steeringPot->GetAverageVoltage()* 4 + -10;
+	return steeringPot->GetAverageVoltage()* (maximumChuteAngle + fabs(minimumChuteAngle))/(maximumChuteVoltage - minimumChuteVoltage) + minimumChuteAngle;
 }
 
 void ChuteSubsystem::SetSteeringAngle(double angle)
