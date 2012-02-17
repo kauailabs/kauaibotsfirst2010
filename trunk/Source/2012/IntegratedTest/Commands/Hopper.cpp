@@ -12,7 +12,10 @@ void Hopper::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Hopper::Execute() {
-        if (oi->getDriverStation()->GetDigitalIn(1))
+		Joystick*zjoystick;
+		zjoystick = oi->getJoystick();
+		bool hopperup=zjoystick->GetRawButton(7);
+        if (hopperup)
         {
                 hopper->On();
         }
