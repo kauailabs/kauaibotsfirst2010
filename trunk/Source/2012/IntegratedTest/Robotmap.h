@@ -35,8 +35,8 @@
 #define TRIGGER_OFF_SOLENOID_CHANNEL 2
 #define STEERING_JAGUAR_CHANNEL 7
 #define LIFTING_DOWN_SOLENOID_CHANNEL 6
-#define STEERING_POTENTIOMETER_CHANNEL 1
-#define STEERING_POTENTIOMETER_MODULE 2
+#define STEERING_POTENTIOMETER_CHANNEL 3
+#define STEERING_POTENTIOMETER_MODULE 1
 #define FIRST_SOLENOID_MODULE 1
 ////////////////////////////////////////////////////////////////////////////////
 // CAN Bus Addresses (Drive Subsystem)
