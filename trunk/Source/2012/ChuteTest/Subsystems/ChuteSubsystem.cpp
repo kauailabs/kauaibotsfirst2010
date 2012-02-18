@@ -24,6 +24,7 @@ ChuteSubsystem::ChuteSubsystem() : PIDSubsystem("ChuteSubsystem",2.3,0,0)
 	
 	}
 
+
 double ChuteSubsystem::GetMinimumChuteAngle()
 {
 	return minimumChuteAngle;

@@ -41,7 +41,6 @@ public:
 	void SetSteeringAngle(double angle);
 	double GetMinimumChuteAngle();
 	double GetMaximumChuteAngle();
-	
 };
 
 #endif
