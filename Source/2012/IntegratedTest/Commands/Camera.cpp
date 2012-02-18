@@ -63,7 +63,7 @@ void Camera::Execute() {
         // Digital Input 6 on:  Chute angle of 10
         // else:                Chute angle of 0
         
-        if ( oi->getDriverStation()->GetDigitalIn(5))
+        /*if ( oi->getDriverStation()->GetDigitalIn(5))
         {
                 SmartDashboard::GetInstance()->PutDouble("ChuteAngle",-10.0);           
         }
@@ -74,7 +74,7 @@ void Camera::Execute() {
         else
         {
                 SmartDashboard::GetInstance()->PutDouble("ChuteAngle",0.0);
-        }
+        }*/
 }
 
 // Make this return true when this Command no longer needs to run execute()

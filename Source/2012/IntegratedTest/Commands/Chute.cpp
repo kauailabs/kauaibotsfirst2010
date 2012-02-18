@@ -18,13 +18,12 @@ void Chute::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Chute::Execute() 
 {
-		Joystick*zjoystick;
-		zjoystick = oi->getJoystick();
-		bool ChuteUp=zjoystick->GetRawButton(4);
-		bool TriggerOn=zjoystick->GetRawButton(5);
-		bool SteerLeft=zjoystick->GetRawButton(2);
-		bool SteerRight=zjoystick->GetRawButton(3);
-        if (ChuteUp)
+        bool bChuteUp = !oi->getDriverStation()->GetDigitalIn(1);
+        bool bTriggerOn = !oi->getDriverStation()->GetDigitalIn(2);
+        bool bSteerLeft = !oi->getDriverStation()->GetDigitalIn(3);
+        bool bSteerRight = !oi->getDriverStation()->GetDigitalIn(4);
+        
+        if (bChuteUp)
         {
                 chute->ChuteUp();
         }
@@ -32,7 +31,7 @@ void Chute::Execute()
         {
                 chute->ChuteDown();
         }
-        if (TriggerOn)
+        if (bTriggerOn)
         {
                 chute->TriggerOn();
         }
@@ -40,18 +39,33 @@ void Chute::Execute()
         {
                 chute->TriggerOff();
         }
-        if (SteerLeft)
+        if (bSteerLeft)
         {
-                chute->SetSteeringAngle(STEERING_LOWER_BOUND_DEGREES);
+                chute->SetSteeringAngle(chute->GetMinimumChuteAngle());
         }
-        else if (SteerRight)
+        else if (bSteerRight)
         {
-                chute->SetSteeringAngle(STEERING_UPPER_BOUND_DEGREES);
+                chute->SetSteeringAngle(chute->GetMaximumChuteAngle());
         }
         else
         {
                 chute->SetSteeringAngle(STEERING_CENTER_POSITION_DEGREES);
         }
+         // Digital Input 5 on:  Chute angle of -10         
+        // Digital Input 6 on:  Chute angle of 10         
+        // else:                Chute angle of 0                  
+        if ( oi->getDriverStation()->GetDigitalIn(5))         
+        {                 
+                SmartDashboard::GetInstance()->PutDouble("ChuteAngle",-10.0);                   
+        }         
+        else if ( oi->getDriverStation()->GetDigitalIn(6))        
+        {                 
+        SmartDashboard::GetInstance()->PutDouble("ChuteAngle",10.0);                    
+        }         
+        else        
+        {                 
+                SmartDashboard::GetInstance()->PutDouble("ChuteAngle",0.0);         
+        } 
 }
 
 
