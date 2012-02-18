@@ -18,10 +18,12 @@ void Chute::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Chute::Execute() 
 {
-        bool bChuteUp = !oi->getDriverStation()->GetDigitalIn(1);
-        bool bTriggerOn = !oi->getDriverStation()->GetDigitalIn(2);
-        bool bSteerLeft = !oi->getDriverStation()->GetDigitalIn(3);
-        bool bSteerRight = !oi->getDriverStation()->GetDigitalIn(4);
+		Joystick*zjoystick;
+		zjoystick = oi->getJoystick();
+        bool bChuteUp = zjoystick->GetRawButton(4);
+        bool bTriggerOn = zjoystick->GetRawButton(5);
+        bool bSteerLeft = zjoystick->GetRawButton(2);
+        bool bSteerRight = zjoystick->GetRawButton(3);
         
         if (bChuteUp)
         {
