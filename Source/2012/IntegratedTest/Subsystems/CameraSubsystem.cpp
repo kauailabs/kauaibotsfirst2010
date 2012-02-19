@@ -444,8 +444,8 @@ void CameraSubsystem::UpPeriscope()
 
 void CameraSubsystem::DownPeriscope()
 {
+    	cameraUp.Set(false);
         cameraDown.Set(true);
-        cameraUp.Set(false);
 }
 
 bool CameraSubsystem::IsPeriscopeUp()
