@@ -80,7 +80,11 @@ void ChuteSubsystem::SetSteeringAngle(double angle)
         SetSetpoint(angle);
 }
 
-
+void ChuteSubsystem::UpdateStatus()
+{
+   SmartDashboard::GetInstance()->PutDouble("ChuteAngle", ReturnPIDInput());                  
+   SmartDashboard::GetInstance()->PutDouble("ChutePotVoltage",  steeringPot->GetAverageVoltage());
+}
 
         
 
