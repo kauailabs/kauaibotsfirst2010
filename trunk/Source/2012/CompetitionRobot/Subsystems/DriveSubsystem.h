@@ -5,6 +5,7 @@
 #include "MecanumDrive.h"
 #include "RangeFinder.h"
 #include "FilteredAccelerometer.h"
+#include "IntegratingAccelerometer.h"
 
 /**
  *
@@ -53,7 +54,9 @@ public:
 	void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
 	void GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
 	void GetWheelSpeedsRPM( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
-	void GetAcclerationG( double& accelX, double& accelY, double& accelZ );
+	void GetAcclerationFeetSecSquared( double& accelX, double& accelY, double& accelZ );
+	void GetVelocityFeetSec( double& velX, double& velY, double& velZ );
+	void GetDistanceFeet( double& distX, double& distY, double& d);
 	
 private:
 	// It's desirable that everything possible under private except
@@ -69,9 +72,7 @@ private:
 	DigitalInput	rightEdgeFinder;
 	DigitalInput	rearEdgeFinder;
 	DigitalInput	leftEdgeFinder;
-	FilteredAccelerometer	accelerometerX;
-	FilteredAccelerometer	accelerometerY;
-	FilteredAccelerometer	accelerometerZ;
+	IntegratingAccelerometer accelerometer;
 protected:
 	void InitializeSensors();
 	double ReturnPIDInput();
@@ -91,6 +92,10 @@ protected:
 	
 	double ClipGyroAngle( double dInputAngle );    
 	void UpdateDashboardWithSensors();
+	
+	// Recalibrates the sensors.  Note that this will take
+	// a second or so to execute.
+	void ResetSensors();
 };
 
 #endif

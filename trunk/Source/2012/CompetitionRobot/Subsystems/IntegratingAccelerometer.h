@@ -193,6 +193,11 @@ public:
         END_REGION;
     }
 
+    void Calibrate()
+    {
+        Calibrate(ACCEL_NUM_CAL_PTS, ACCEL_CAL_INTERVAL);    	
+    }
+    
     IntegratingAccelerometer(UINT8 moduleNumber,
         float  period = 0.02 ) :
         	ADXL345_I2C( moduleNumber )
@@ -215,7 +220,7 @@ public:
         m_yDist = 0.0;
         m_zDist = 0.0;
         m_bEnabled = false;
-        Calibrate(ACCEL_NUM_CAL_PTS, ACCEL_CAL_INTERVAL);
+        Calibrate();
         m_notifier->StartPeriodic(period);
     }
 
