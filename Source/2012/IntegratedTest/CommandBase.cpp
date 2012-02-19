@@ -5,6 +5,7 @@
 #include "Subsystems/TilterSubsystem.h"
 #include "Subsystems/CompressorSubsystem.h"
 #include "Subsystems/HopperSubsystem.h"
+#include "Subsystems/TrafficCopSubsystem.h"
 #include "Commands/Scheduler.h"
 #include "Subsystems/CameraSubsystem.h"
 
@@ -22,6 +23,7 @@ TilterSubsystem* CommandBase::tilter = NULL;
 CompressorSubsystem* CommandBase::compressor = NULL;
 HopperSubsystem* CommandBase::hopper = NULL;
 CameraSubsystem* CommandBase::camera = NULL;
+TrafficCopSubsystem* CommandBase::trafficcop = NULL;
 OI* CommandBase::oi = NULL;
 
 void CommandBase::init() {
@@ -34,5 +36,6 @@ void CommandBase::init() {
 	compressor = new CompressorSubsystem();
 	hopper = new HopperSubsystem();
 	camera = new CameraSubsystem();
+	trafficcop = new TrafficCopSubsystem();
 	oi = new OI();
 }

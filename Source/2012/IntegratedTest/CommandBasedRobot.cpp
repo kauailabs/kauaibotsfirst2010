@@ -6,6 +6,7 @@
 #include "Commands/Tilter.h"
 #include "Commands/Hopper.h"
 #include "Commands/Camera.h"
+#include "Commands/TrafficCop.h"
 #include "CommandBase.h"
 
 class CommandBasedRobot : public IterativeRobot {
@@ -22,6 +23,7 @@ private:
 		sd->PutData(CommandBase::hopper);
 		sd->PutData(CommandBase::tilter);
 		sd->PutData(CommandBase::camera);
+		sd->PutData(CommandBase::trafficcop);
 		autonomousCommand = new Drive();
 	}
 	
