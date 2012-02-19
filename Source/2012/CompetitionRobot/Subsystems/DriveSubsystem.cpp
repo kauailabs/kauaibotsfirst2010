@@ -28,9 +28,7 @@ DriveSubsystem::DriveSubsystem() :
 	rightEdgeFinder(DRIVE_RIGHT_EDGEFINDER_CHANNEL),
 	rearEdgeFinder(DRIVE_REAR_EDGEFINDER_CHANNEL),
 	leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL),
-	accelerometerX(2,DRIVE_ACCELEROMETER_X_CHANNEL),
-	accelerometerY(2,DRIVE_ACCELEROMETER_Y_CHANNEL),
-	accelerometerZ(2,DRIVE_ACCELEROMETER_Z_CHANNEL)
+	accelerometer(ACCELEROMETER_DSC_MODULE)
 {	
 	m_UpdateDashboardCount = 0;
 	m_UpdateDashboardRate = Preferences::GetInstance()->GetInt("DriveUpdateDashboardRate", 4);
@@ -69,6 +67,8 @@ void DriveSubsystem::InitializeSensors()
 	// Initialize sensivity of the AD22305 Gyroscope         
 	yaw.SetSensitivity(.007);  	
 	roll.SetSensitivity(.007);  	
+	
+	accelerometer.SetEnabled(true);
 }
 
 void DriveSubsystem::InitDefaultCommand() {
@@ -246,9 +246,6 @@ void DriveSubsystem::UpdateDashboardWithSensors()
 		pDashboard->PutBoolean( "RightEdge", 		(rightEdgeFinder.Get() != 0));
 		pDashboard->PutBoolean( "RearEdge", 		(rearEdgeFinder.Get() != 0));
 		pDashboard->PutBoolean( "LeftEdge", 		(leftEdgeFinder.Get() != 0));
-		pDashboard->PutDouble(  "Acceleration_X", 	accelerometerX.GetAcceleration());
-		pDashboard->PutDouble(  "Acceleration_Y", 	accelerometerY.GetAcceleration());
-		pDashboard->PutDouble(  "Acceleration_Z", 	accelerometerZ.GetAcceleration());
 		pDashboard->PutDouble(  "MotorAmps_FL",		drive.FrontLeftMotor().GetOutputCurrent());	
 		pDashboard->PutDouble(  "MotorAmps_FR",		drive.FrontRightMotor().GetOutputCurrent());	
 		pDashboard->PutDouble(  "MotorAmps_RR",		drive.RearRightMotor().GetOutputCurrent());	
@@ -257,6 +254,18 @@ void DriveSubsystem::UpdateDashboardWithSensors()
 		pDashboard->PutDouble(  "WheelRPM_FR",		drive.FrontRightMotor().GetSpeed());	
 		pDashboard->PutDouble(  "WheelRPM_RR",		drive.RearRightMotor().GetSpeed());	
 		pDashboard->PutDouble(  "WheelRPM_RL",		drive.RearLeftMotor().GetSpeed());	
+
+		pDashboard->PutDouble(  "Acceleration_X", 	accelerometer.GetAccelX());
+		pDashboard->PutDouble(  "Acceleration_Y", 	accelerometer.GetAccelY());
+		pDashboard->PutDouble(  "Acceleration_Z", 	accelerometer.GetAccelZ());
+		
+		pDashboard->PutDouble(	"Velocity_X",		accelerometer.GetVelocityX());
+		pDashboard->PutDouble(	"Velocity_Y",		accelerometer.GetVelocityY());
+		pDashboard->PutDouble(	"Velocity_Z",		accelerometer.GetVelocityZ());
+		
+		pDashboard->PutDouble(	"Distance_X",		accelerometer.GetDistanceX());
+		pDashboard->PutDouble(	"Distance_Y",		accelerometer.GetDistanceY());
+		pDashboard->PutDouble(	"Distance_Z",		accelerometer.GetDistanceZ());
 	}
 }
 
@@ -276,10 +285,32 @@ void DriveSubsystem::GetWheelSpeedsRPM( double& frontLeft, double& frontRight, d
 	rearLeft	= drive.RearLeftMotor().GetSpeed();
 }
 
-void DriveSubsystem::GetAcclerationG( double& accelX, double& accelY, double& accelZ )
+void DriveSubsystem::GetAcclerationFeetSecSquared( double& accelX, double& accelY, double& accelZ )
 {
-	accelX = accelerometerX.GetAcceleration();
-	accelY = accelerometerY.GetAcceleration();
-	accelZ = accelerometerZ.GetAcceleration();
+	accelX = accelerometer.GetAccelX();
+	accelY = accelerometer.GetAccelY();
+	accelZ = accelerometer.GetAccelZ();
 }
 
+void DriveSubsystem::GetVelocityFeetSec( double& velX, double& velY, double& velZ )
+{
+	velX = accelerometer.GetVelocityX();
+	velY = accelerometer.GetVelocityY();
+	velZ = accelerometer.GetVelocityZ();
+}
+
+void DriveSubsystem::GetDistanceFeet( double& distX, double& distY, double& distZ)
+{
+	distX = accelerometer.GetDistanceX();
+	distY = accelerometer.GetDistanceY();
+	distZ = accelerometer.GetDistanceZ();
+}
+
+void DriveSubsystem::ResetSensors()
+{
+	accelerometer.SetEnabled(false);
+	accelerometer.Calibrate();
+	accelerometer.SetEnabled(true);
+	yaw.Reset();
+	roll.Reset();
+}
