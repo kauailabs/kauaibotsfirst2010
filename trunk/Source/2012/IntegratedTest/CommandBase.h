@@ -9,6 +9,7 @@
 #include "Subsystems/CompressorSubsystem.h"
 #include "Subsystems/HopperSubsystem.h"
 #include "Subsystems/CameraSubsystem.h"
+#include "Subsystems/TrafficCopSubsystem.h"
 #include "OI.h"
 
 
@@ -30,6 +31,7 @@ public:
 	static CompressorSubsystem *compressor;
 	static HopperSubsystem *hopper;
 	static CameraSubsystem *camera;
+	static TrafficCopSubsystem *trafficcop;
 	static OI *oi;
 };
 
