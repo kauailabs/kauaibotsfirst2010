@@ -21,11 +21,7 @@ void Gobbler::Execute() {
 	{
 		gobbler->Forward();
 	}
-	else
-	{
-		gobbler->Stop();
-	}
-	if(reversegobbler)
+	else if (reversegobbler)
 	{
 		gobbler->Reverse();
 	}
