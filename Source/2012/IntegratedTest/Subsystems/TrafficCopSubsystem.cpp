@@ -1,33 +1,34 @@
 #include "TrafficCopSubsystem.h"
 #include "../Robotmap.h"
+#include "../Commands/TrafficCop.h"
 
 TrafficCopSubsystem::TrafficCopSubsystem() : Subsystem("TrafficCopSubsystem") 
 {
-
+	relay = new Relay(TRAFFIC_COP_SPIKE_RELAY);
 }
     
 void TrafficCopSubsystem::InitDefaultCommand() 
 {
         // Set the default command for a subsystem here.
-        //SetDefaultCommand(new MySpecialCommand());
+        SetDefaultCommand(new TrafficCop());
 }
 
 void TrafficCopSubsystem::Forward()
 {
-        forward->Set(Relay::kForward);
+       relay->Set(Relay::kForward);
         
 }
 void TrafficCopSubsystem::Back()
 {
-        back->Set(Relay::kReverse);
+	relay->Set(Relay::kReverse);
 }
 void TrafficCopSubsystem::Stop()
 {
-        stop->Set(Relay::kOn);
+	relay->Set(Relay::kOn);
 }
 void TrafficCopSubsystem::Off()
 {
-        off->Set(Relay::kOff);
+	relay->Set(Relay::kOff);
 }
 
 // Put methods for controlling this subsystem

@@ -10,10 +10,7 @@
  */
 class TrafficCopSubsystem: public Subsystem {
 private:
-        Relay* forward;
-        Relay* back;
-        Relay* stop;
-        Relay* off;
+        Relay* relay;
 public:
         TrafficCopSubsystem();
         void InitDefaultCommand();

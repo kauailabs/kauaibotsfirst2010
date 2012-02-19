@@ -53,21 +53,7 @@ void Chute::Execute()
         {
                 chute->SetSteeringAngle(STEERING_CENTER_POSITION_DEGREES);
         }
-         // Digital Input 5 on:  Chute angle of -10         
-        // Digital Input 6 on:  Chute angle of 10         
-        // else:                Chute angle of 0                  
-        if ( oi->getDriverStation()->GetDigitalIn(5))         
-        {                 
-                SmartDashboard::GetInstance()->PutDouble("ChuteAngle",-10.0);                   
-        }         
-        else if ( oi->getDriverStation()->GetDigitalIn(6))        
-        {                 
-        SmartDashboard::GetInstance()->PutDouble("ChuteAngle",10.0);                    
-        }         
-        else        
-        {                 
-                SmartDashboard::GetInstance()->PutDouble("ChuteAngle",0.0);         
-        } 
+        chute->UpdateStatus();
 }
 
 
