@@ -14,16 +14,14 @@ void Gobbler::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void Gobbler::Execute() {
 	Joystick*pjoystick;
+	Joystick*yjoystick;
 	pjoystick = oi->getJoystick();
-	bool forwardgobbler=pjoystick->GetRawButton(10);
-	bool reversegobbler=pjoystick->GetRawButton(11);
-	if(forwardgobbler)
+	yjoystick = oi->getShooterJoystick();
+	bool forwardgobbler=pjoystick->GetRawButton(2);
+	bool forwardshootgobbler=yjoystick->GetRawButton(2);
+	if(forwardgobbler or forwardshootgobbler)
 	{
 		gobbler->Forward();
-	}
-	else if (reversegobbler)
-	{
-		gobbler->Reverse();
 	}
 	else
 	{

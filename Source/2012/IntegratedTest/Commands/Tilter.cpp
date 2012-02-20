@@ -14,7 +14,7 @@ void Tilter::Initialize() {
 void Tilter::Execute() {
 		Joystick*zjoystick;
 		zjoystick = oi->getJoystick();
-		bool tilterdown=zjoystick->GetRawButton(6);
+		bool tilterdown=zjoystick->GetRawButton(1);
 		if(tilterdown)
 		{
 			tilter->Down();

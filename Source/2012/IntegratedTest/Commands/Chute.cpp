@@ -19,33 +19,27 @@ void Chute::Initialize()
 void Chute::Execute() 
 {
 		Joystick*zjoystick;
-		zjoystick = oi->getJoystick();
-        bool bChuteUp = zjoystick->GetRawButton(4);
-        bool bTriggerOn = zjoystick->GetRawButton(5);
-        bool bSteerLeft = zjoystick->GetRawButton(2);
-        bool bSteerRight = zjoystick->GetRawButton(3);
+		zjoystick = oi->getShooterJoystick();
+        bool ChuteUpTriggerOn = zjoystick->GetRawButton(1);
+        //bool TriggerOn = zjoystick->GetRawButton(5);
+        bool SteerLeft = zjoystick->GetX();
+        bool SteerRight = zjoystick->GetX();
         
-        if (bChuteUp)
+        if (ChuteUpTriggerOn)
         {
                 chute->ChuteUp();
-        }
-        else
-        {
-                chute->ChuteDown();
-        }
-        if (bTriggerOn)
-        {
                 chute->TriggerOn();
         }
         else
         {
+                chute->ChuteDown();
                 chute->TriggerOff();
         }
-        if (bSteerLeft)
+        if (SteerLeft > 0)
         {
                 chute->SetSteeringAngle(chute->GetMinimumChuteAngle());
         }
-        else if (bSteerRight)
+        else if (SteerRight < 0)
         {
                 chute->SetSteeringAngle(chute->GetMaximumChuteAngle());
         }

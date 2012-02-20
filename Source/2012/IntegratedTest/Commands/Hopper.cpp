@@ -13,8 +13,8 @@ void Hopper::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void Hopper::Execute() {
 		Joystick*zjoystick;
-		zjoystick = oi->getJoystick();
-		bool hopperup=zjoystick->GetRawButton(7);
+		zjoystick = oi->getShooterJoystick();
+		bool hopperup=zjoystick->GetRawButton(5);
         if (hopperup)
         {
                 hopper->On();
