@@ -8,11 +8,9 @@ Chute::Chute()
 }
 
 // Called just before this Command runs the first time
-void Chute::Initialize() 
-{
-
-        
-        
+void Chute::Initialize() {
+		m_chuteUp = false;
+	    m_lastButtonState = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -20,21 +18,27 @@ void Chute::Execute()
 {
 		Joystick*zjoystick;
 		zjoystick = oi->getShooterJoystick();
-        bool ChuteUpTriggerOn = zjoystick->GetRawButton(1);
+        bool currentButton = zjoystick->GetRawButton(1);
         //bool TriggerOn = zjoystick->GetRawButton(5);
-        bool SteerLeft = zjoystick->GetX();
-        bool SteerRight = zjoystick->GetX();
-        
-        if (ChuteUpTriggerOn)
+        if(currentButton && !m_lastButtonState)
         {
-                chute->ChuteUp();
-                chute->TriggerOn();
+        	m_chuteUp = !m_chuteUp;
+        }
+        m_lastButtonState = currentButton;
+        if(!m_chuteUp)
+        {
+        	chute->ChuteUp();
+        	chute->TriggerOn();
         }
         else
         {
-                chute->ChuteDown();
-                chute->TriggerOff();
+        	chute->ChuteDown();
+        	chute->TriggerOff();
         }
+        SmartDashboard*sd=SmartDashboard::GetInstance();
+        sd->PutBoolean("Tilter Down",m_chuteUp);
+        bool SteerLeft = zjoystick->GetX();
+        bool SteerRight = zjoystick->GetX();
         if (SteerLeft > 0)
         {
                 chute->SetSteeringAngle(chute->GetMinimumChuteAngle());

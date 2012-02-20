@@ -8,6 +8,8 @@ Camera::Camera() {
 // Called just before this Command runs the first time
 void Camera::Initialize() {
         bCameraReady = false;
+        m_cameraUp = false;
+        m_lastButtonState = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -49,16 +51,22 @@ void Camera::Execute() {
         // else down periscope
         Joystick*pjoystick;
         pjoystick = oi->getShooterJoystick();
-        bool periscopeup=pjoystick->GetRawButton(4);
-        if (periscopeup)
+        bool currentButton=pjoystick->GetRawButton(4);
+        if(currentButton && !m_lastButtonState)
         {
-                camera->UpPeriscope();
+        	m_cameraUp = !m_cameraUp;
+       	}
+       	m_lastButtonState = currentButton;
+       	if(!m_cameraUp)
+       	{
+       		camera->UpPeriscope();
         }
-        else
-        {
-                camera->DownPeriscope();
+       	else
+       	{
+       		camera->DownPeriscope();
         }
-        
+        SmartDashboard*sd=SmartDashboard::GetInstance();
+        sd->PutBoolean("Tilter Down",m_cameraUp);
         // Digital Input 5 on:  Chute angle of -10
         // Digital Input 6 on:  Chute angle of 10
         // else:                Chute angle of 0

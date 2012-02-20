@@ -16,6 +16,8 @@ public:
         virtual bool IsFinished();
         virtual void End();
         virtual void Interrupted();
+        bool m_tilterDown;
+        bool m_lastButtonState;
 };
 
 #endif

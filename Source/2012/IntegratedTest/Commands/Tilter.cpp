@@ -8,21 +8,31 @@ Tilter::Tilter() {
 
 // Called just before this Command runs the first time
 void Tilter::Initialize() {
+		m_tilterDown = false;
+		m_lastButtonState = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Tilter::Execute() {
 		Joystick*zjoystick;
 		zjoystick = oi->getJoystick();
-		bool tilterdown=zjoystick->GetRawButton(1);
-		if(tilterdown)
+		bool currentButton=zjoystick->GetRawButton(1);
+		if(currentButton && !m_lastButtonState)
+		//if ( ( currentButton == true ) && ( m_lastButtonState == false ) )
 		{
-			tilter->Down();
+			m_tilterDown = !m_tilterDown;
 		}
-		else
+		m_lastButtonState = currentButton;
+		if(!m_tilterDown)
 		{
 			tilter->Up();
 		}
+		else
+		{
+			tilter->Down();
+		}
+		SmartDashboard*sd=SmartDashboard::GetInstance();
+		sd->PutBoolean("Tilter Down",m_tilterDown);
 }
 
 // Make this return true when this Command no longer needs to run execute()
