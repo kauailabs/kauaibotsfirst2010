@@ -17,8 +17,8 @@ void Gobbler::Execute() {
 	Joystick*yjoystick;
 	pjoystick = oi->getJoystick();
 	yjoystick = oi->getShooterJoystick();
-	bool forwardgobbler=pjoystick->GetRawButton(2);
-	bool forwardshootgobbler=yjoystick->GetRawButton(2);
+	bool forwardgobbler=pjoystick->GetRawButton(3);
+	bool forwardshootgobbler=yjoystick->GetRawButton(3);
 	if(forwardgobbler or forwardshootgobbler)
 	{
 		gobbler->Forward();
