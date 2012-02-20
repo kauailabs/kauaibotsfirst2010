@@ -17,6 +17,8 @@ public:
         virtual bool IsFinished();
         virtual void End();
         virtual void Interrupted();
+        bool m_cameraUp;
+        bool m_lastButtonState;
 };
 
 #endif
