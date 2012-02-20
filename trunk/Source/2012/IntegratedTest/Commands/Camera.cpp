@@ -15,7 +15,7 @@ void Camera::Execute() {
         // Digital Input 1 provides a way to 'capture' an image
         // which is written to the robot's flash file-system
         // This occurs when input 1 is toggled on then off
-        if ( oi->getDriverStation()->GetDigitalIn(1) )
+        if ( oi->getDriverStation()->GetDigitalIn(4) )
         {
                 bCameraReady = true;
         }
@@ -48,8 +48,8 @@ void Camera::Execute() {
         // If Driver Station Input 4 is on, up periscope
         // else down periscope
         Joystick*pjoystick;
-        pjoystick = oi->getJoystick();
-        bool periscopeup=pjoystick->GetRawButton(9);
+        pjoystick = oi->getShooterJoystick();
+        bool periscopeup=pjoystick->GetRawButton(4);
         if (periscopeup)
         {
                 camera->UpPeriscope();

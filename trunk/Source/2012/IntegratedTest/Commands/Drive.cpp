@@ -43,8 +43,8 @@ void Drive::Execute()
         x = InputJoystickAdjust(x, JoystickAdjust2, JoystickPow2, JoystickMult2, JoystickDead2);
         twist = ROTATE_DIRECTION * InputJoystickAdjust(twist, JoystickAdjust3, JoystickPow3, JoystickMult3, JoystickDead3);
         
-        //drive->DoMecanum(x,y,twist);
-        drive->DoMecanum(y,x,twist);
+        drive->DoMecanum(x*-1,y*-1,twist);
+        //drive->DoMecanum(y,x,twist);
 }
 
 bool Drive::IsFinished() 
