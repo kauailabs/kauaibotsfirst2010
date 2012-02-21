@@ -20,7 +20,7 @@ class I2C;
 class ADXL345_I2C : public SensorBase
 {
 protected:
-	static const UINT8 kAddress = 0xA6; // 0x3A;
+	static const UINT8 kAddress = 0x3A;
 	static const UINT8 kPowerCtlRegister = 0x2D;
 	static const UINT8 kDataFormatRegister = 0x31;
 	static const UINT8 kDataRegister = 0x32;
