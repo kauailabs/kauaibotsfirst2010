@@ -21,7 +21,7 @@ void Gobbler::Execute() {
 	bool forwardshootgobbler=yjoystick->GetRawButton(3);
 	if(forwardgobbler or forwardshootgobbler)
 	{
-		gobbler->Forward();
+		gobbler->Reverse();
 	}
 	else
 	{
