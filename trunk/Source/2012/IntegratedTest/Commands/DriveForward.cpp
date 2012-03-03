@@ -12,15 +12,26 @@ DriveForward::DriveForward() {
 
 // Called just before this Command runs the first time
 void DriveForward::Initialize() {
-	
+
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveForward::Execute() {
-	int x=1;
-	int y=-1;
-	int z=1;
-	drive->DoMecanum(x,y,z);
+	double x=1;
+	double y=-1;
+	double z=1;
+	drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
+	if(leftRange > 10){
+		drive->DoMecanum(x,y,z);
+		drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
+	}
+	else if (leftRange < 10){
+		double x=.5;
+		double y=-.5;
+		double z=.5;
+		drive->DoMecanum(x,y,z);
+		drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
