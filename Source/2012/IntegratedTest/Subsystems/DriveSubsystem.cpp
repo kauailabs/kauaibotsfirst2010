@@ -1,6 +1,7 @@
 #include "DriveSubsystem.h"
 #include "../Robotmap.h"
 #include "../Commands/Drive.h"
+#include <math.h>
 
 static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
@@ -313,4 +314,17 @@ void DriveSubsystem::ResetSensors()
         accelerometer.SetEnabled(true);
         yaw.Reset();
         roll.Reset();
+}
+
+double GetSecondsToTravelLinearDistance( bool x, double distanceInches, double RPMs )
+{
+	double wheelCircumference = wheelDiameter * double(3.1415926);
+	if ( x )
+	{	
+		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches)));
+	}
+	else
+	{
+		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches))) * 2;		
+	}
 }

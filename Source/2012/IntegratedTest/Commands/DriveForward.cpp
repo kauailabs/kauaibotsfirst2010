@@ -8,6 +8,8 @@ DriveForward::DriveForward() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	Requires(drive);
+	double timeoutSeconds;
+	SetTimeout(timeoutSeconds);
 }
 
 // Called just before this Command runs the first time
@@ -17,26 +19,40 @@ void DriveForward::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void DriveForward::Execute() {
-	double x=1;
-	double y=-1;
-	double z=1;
+	double x;
+	double y;
+	double rot;
+	double frontRange;
+	double rightRange;
+	double rearRange;
+	double leftRange;
 	drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
 	if(leftRange > 10){
-		drive->DoMecanum(x,y,z);
+		x=1;
+		y=1;
+		rot=1;
+		drive->DoMecanum(x,y,rot);
 		drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
 	}
-	else if (leftRange < 10){
+	else{
 		double x=.5;
 		double y=-.5;
-		double z=.5;
-		drive->DoMecanum(x,y,z);
+		double rot=.5;
+		drive->DoMecanum(x,y,rot);
 		drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
 	}
 }
-
 // Make this return true when this Command no longer needs to run execute()
 bool DriveForward::IsFinished() {
-	return false;
+	double frontRange;
+	double rightRange;
+	double rearRange;
+	double leftRange;
+	drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
+	if (leftRange < 6){
+		return true;
+	}
+	return IsTimedOut();
 }
 
 // Called once after isFinished returns true

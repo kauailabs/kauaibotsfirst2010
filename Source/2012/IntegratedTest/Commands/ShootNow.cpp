@@ -1,31 +1,31 @@
-#include "BridgeTilterDown.h"
+#include "ShootNow.h"
 
-BridgeTilterDown::BridgeTilterDown() {
+ShootNow::ShootNow() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
-	Requires(tilter);
 }
 
 // Called just before this Command runs the first time
-void BridgeTilterDown::Initialize() {
-
+void ShootNow::Initialize() {
+	
 }
+
 // Called repeatedly when this Command is scheduled to run
-void BridgeTilterDown::Execute() { 
-			tilter->Down();
+void ShootNow::Execute() {
+	
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool BridgeTilterDown::IsFinished() {
+bool ShootNow::IsFinished() {
 	return false;
 }
 
 // Called once after isFinished returns true
-void BridgeTilterDown::End() {
+void ShootNow::End() {
 	
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void BridgeTilterDown::Interrupted() {
+void ShootNow::Interrupted() {
 }
