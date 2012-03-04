@@ -33,6 +33,8 @@ public:
 
         int  GetSpeedModeMaxRPMs() { return drive.GetMaxSpeedModeRPMs(); }
         
+        double GetSecondsToTravelLinearDistance( bool x, double distanceInches, double RPMs );
+        
         void SetAutoRotationMode( bool bEnable, double dTargetAngle );
         bool GetAutoRotationMode();
         

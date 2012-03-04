@@ -7,11 +7,14 @@
 #include "Commands/Hopper.h"
 #include "Commands/Camera.h"
 #include "Commands/TrafficCop.h"
+#include "Commands/AutonomousPlayRight.h"
+#include "Commands/AutonomousPlayLeft.h"
 #include "CommandBase.h"
 
 class CommandBasedRobot : public IterativeRobot {
 private:
 	Command *autonomousCommand;
+	SendableChooser autoChooser;
 	
 	virtual void RobotInit() {
 		CommandBase::init();
@@ -24,10 +27,13 @@ private:
 		sd->PutData(CommandBase::tilter);
 		sd->PutData(CommandBase::camera);
 		sd->PutData(CommandBase::trafficcop);
-		autonomousCommand = new Drive();
+		autoChooser.AddDefault("DunkRight",new AutonomousPlayRight());
+		autoChooser.AddObject("DunkLeft",new AutonomousPlayLeft());
+		sd->PutData("Autonomous Mode Chooser", &autoChooser);
 	}
 	
 	virtual void AutonomousInit() {
+		autonomousCommand = (Command*)autoChooser.GetSelected();
 		autonomousCommand->Start();
 	}
 	
