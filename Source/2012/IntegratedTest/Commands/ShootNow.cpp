@@ -1,10 +1,11 @@
 #include "ShootNow.h"
 
-ShootNow::ShootNow() {
+ShootNow::ShootNow(bool bShoot) {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	Requires(gobbler);
 	Requires(chute);
+	m_bShoot = bShoot;
 }
 
 // Called just before this Command runs the first time
@@ -14,10 +15,18 @@ void ShootNow::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void ShootNow::Execute() {
-	chute->ChuteUp();
-	chute->TriggerOn();
-	gobbler->Forward();
-	
+	if ( m_bShoot )
+	{
+		gobbler->Forward();
+		chute->ChuteUp();
+		chute->TriggerOn();
+	}
+	else
+	{
+		gobbler->Stop();
+		chute->ChuteDown();
+		chute->TriggerOff();		
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
