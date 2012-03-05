@@ -57,7 +57,7 @@ void Camera::Execute() {
         	m_cameraUp = !m_cameraUp;
        	}
        	m_lastButtonState = currentButton;
-       	if(!m_cameraUp)
+       	if(m_cameraUp)
        	{
        		camera->UpPeriscope();
         }
