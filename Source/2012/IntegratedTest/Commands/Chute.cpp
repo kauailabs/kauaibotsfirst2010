@@ -25,7 +25,7 @@ void Chute::Execute()
         	m_chuteUp = !m_chuteUp;
         }
         m_lastButtonState = currentButton;
-        if(!m_chuteUp)
+        if(m_chuteUp)
         {
         	chute->ChuteUp();
         	chute->TriggerOn();
