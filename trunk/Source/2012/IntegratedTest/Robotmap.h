@@ -52,7 +52,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define DRIVE_YAW_GYRO_CHANNEL 1
-#define DRIVE_ROLL_GYRO_CHANNEL 2
+#define DRIVE_PITCH_GYRO_CHANNEL 2
 #define FRONT_RANGEFINDER_CHANNEL 4
 #define RIGHT_RANGEFINDER_CHANNEL 5
 #define REAR_RANGEFINDER_CHANNEL 6
