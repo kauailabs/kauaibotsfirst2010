@@ -84,6 +84,8 @@ private:
                                     DEADBAND(m_accelData.ZAxis,
                                              m_deadBand.ZAxis);
 
+                //printf("Accel (m/s^2):  %lf, %lf, %lf\n", m_accelData.XAxis, m_accelData.YAxis, m_accelData.ZAxis );
+                
                                 // Calculate Velocity (m/s)
 
                 m_xVel += m_accelData.XAxis*period;
@@ -234,6 +236,13 @@ public:
         }
     }
 
+    void GetAccelGs( double& x, double& y, double& z )
+    {
+    	x = m_accelData.XAxis / GRAVITY_CONSTANT;
+    	y = m_accelData.YAxis / GRAVITY_CONSTANT;
+    	z = m_accelData.ZAxis / GRAVITY_CONSTANT;
+    }
+    
     double GetAccelX()  // X Axis in feet/second squared
     {
         double value = m_accelData.XAxis*FEET_PER_METER;
