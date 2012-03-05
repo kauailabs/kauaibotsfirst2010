@@ -18,18 +18,19 @@ private:
 	
 	virtual void RobotInit() {
 		CommandBase::init();
-		NetworkTable::Initialize();
+		//NetworkTable::Initialize();
 		SmartDashboard*sd=SmartDashboard::GetInstance();
-		sd->PutData(CommandBase::chute);
-		sd->PutData(CommandBase::gobbler);
-		sd->PutData(CommandBase::drive);
-		sd->PutData(CommandBase::hopper);
-		sd->PutData(CommandBase::tilter);
-		sd->PutData(CommandBase::camera);
-		sd->PutData(CommandBase::trafficcop);
+		//sd->PutData(CommandBase::chute);
+		//sd->PutData(CommandBase::gobbler);
+		//sd->PutData(CommandBase::drive);
+		//sd->PutData(CommandBase::hopper);
+		//sd->PutData(CommandBase::tilter);
+		//sd->PutData(CommandBase::camera);
+		//sd->PutData(CommandBase::trafficcop);
 		autoChooser.AddDefault("DunkRight",new AutonomousPlayRight());
 		autoChooser.AddObject("DunkLeft",new AutonomousPlayLeft());
 		sd->PutData("Autonomous Mode Chooser", &autoChooser);
+		autonomousCommand = 0;
 	}
 	
 	virtual void AutonomousInit() {
@@ -46,7 +47,10 @@ private:
 		// teleop starts running. If you want the autonomous to 
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		autonomousCommand->Cancel();
+		if ( autonomousCommand )
+		{
+			autonomousCommand->Cancel();
+		}
 	}
 	
 	virtual void TeleopPeriodic() {
