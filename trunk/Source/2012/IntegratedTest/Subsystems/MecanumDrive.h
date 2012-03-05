@@ -58,11 +58,11 @@ public:
         void SetSafetyEnabled(bool enabled);
         bool IsSafetyEnabled();
         void GetDescription(char *);
+        void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
+        void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);      
 
 protected:
         void InitMotor( CANJaguar& motor );
         void CheckForRestartedMotor( CANJaguar& motor, const char *strDescription );    
-        void MecanumDriveFwdKinematics( float wheelSpeeds[4], float* pVelocities );
-        void MecanumDriveInvKinematics( float velocities[3], float* pWheelSpeeds);      
 };
 #endif
