@@ -21,9 +21,7 @@ public:
         DriveSubsystem();
         void InitDefaultCommand();
 
-        // Note:  vX, vY, vRot are velocities.  These values are currently from -1 to 1.
-        // TODO:  Review this w/Quinn - should they be in RPM units if CANJaguar::ControlMode = Speed?
-        
+        // Note:  vX, vY, vRot are velocities.  These values are a ratio from -1 to 1.        
         void DoMecanum( float vX, float vY, float vRot );
 
         // Drive Modes
@@ -51,21 +49,28 @@ public:
         
         // Sensor Readings
         
-        void GetEulerAnglesDegrees( double& yaw, double& roll);
+        void GetEulerAnglesDegrees( double& yaw, double& pitch);
         void GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange );
         void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
         void GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
         void GetWheelSpeedsRPM( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
         void GetAcclerationFeetSecSquared( double& accelX, double& accelY, double& accelZ );
+        void GetAccelerationGs( double& accelX, double& accelY, double& accelZ );
         void GetVelocityFeetSec( double& velX, double& velY, double& velZ );
         void GetDistanceFeet( double& distX, double& distY, double& d);
         
+        // Returns the derived velocities (in the same units as provided to DoMecanum)
+        // based on inputs from the encoders, and processed using Mecanum Fwd Kinematics
+        
+        void GetWheelVelocitiesRatio( float& x, float& y, float& rot );
+        void ResetGyros();
+         
 private:
         // It's desirable that everything possible under private except
         // for methods that implement subsystem capabilities
         MecanumDrive    drive;
         Gyro                    yaw;
-        Gyro                    roll;
+        Gyro                    pitch;
         RangeFinder             frontRanger;
         RangeFinder             rightRanger;
         RangeFinder             rearRanger;

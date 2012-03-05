@@ -20,7 +20,7 @@ DriveSubsystem::DriveSubsystem() :
                         CANJaguar::kSpeed,
                         Preferences::GetInstance()->GetInt("DriveMaxRPMs", DEFAULT_MAX_RPMS) ),
         yaw(DRIVE_YAW_GYRO_CHANNEL),
-        roll(DRIVE_ROLL_GYRO_CHANNEL),
+        pitch(DRIVE_PITCH_GYRO_CHANNEL),
         frontRanger(FRONT_RANGEFINDER_CHANNEL),
         rightRanger(RIGHT_RANGEFINDER_CHANNEL),
         rearRanger(REAR_RANGEFINDER_CHANNEL),
@@ -67,8 +67,9 @@ void DriveSubsystem::InitializeSensors()
         //         
         // Initialize sensivity of the AD22305 Gyroscope         
         yaw.SetSensitivity(.007);       
-        roll.SetSensitivity(.007);      
-        
+        pitch.SetSensitivity(.007);      
+        yaw.Reset();
+        pitch.Reset();
         accelerometer.SetEnabled(true);
 }
 
@@ -116,10 +117,10 @@ void DriveSubsystem::SetControlMode( CANJaguar::ControlMode newMode )
         drive.SetMode( newMode );
 }
 
-void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& rollAngle)
+void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& pitchAngle)
 {
         yawAngle        = ClipGyroAngle(yaw.GetAngle());
-        rollAngle       = ClipGyroAngle(roll.GetAngle());
+        pitchAngle      = ClipGyroAngle(pitch.GetAngle());
 }
 
 void DriveSubsystem::GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange )
@@ -238,15 +239,15 @@ void DriveSubsystem::UpdateDashboardWithSensors()
         if ( pDashboard )
         {
                 pDashboard->PutDouble(  "YawAngle",                     ClipGyroAngle(yaw.GetAngle()) );
-                pDashboard->PutDouble(  "RollAngle",            ClipGyroAngle(roll.GetAngle()) );
+                pDashboard->PutDouble(  "PitchAngle",            ClipGyroAngle(pitch.GetAngle()) );
                 pDashboard->PutDouble(  "FrontRange",           frontRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RightRange",           rightRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RearRange",            rearRanger.GetRangeInches());
                 pDashboard->PutDouble(  "LeftRange",            leftRanger.GetRangeInches());
-                pDashboard->PutBoolean( "FrontEdge",            (frontEdgeFinder.Get() != 0));
-                pDashboard->PutBoolean( "RightEdge",            (rightEdgeFinder.Get() != 0));
-                pDashboard->PutBoolean( "RearEdge",             (rearEdgeFinder.Get() != 0));
-                pDashboard->PutBoolean( "LeftEdge",             (leftEdgeFinder.Get() != 0));
+                //pDashboard->PutBoolean( "FrontEdge",            (frontEdgeFinder.Get() != 0));
+                //pDashboard->PutBoolean( "RightEdge",            (rightEdgeFinder.Get() != 0));
+                //pDashboard->PutBoolean( "RearEdge",             (rearEdgeFinder.Get() != 0));
+                //pDashboard->PutBoolean( "LeftEdge",             (leftEdgeFinder.Get() != 0));
                 pDashboard->PutDouble(  "MotorAmps_FL",         drive.FrontLeftMotor().GetOutputCurrent());     
                 pDashboard->PutDouble(  "MotorAmps_FR",         drive.FrontRightMotor().GetOutputCurrent());    
                 pDashboard->PutDouble(  "MotorAmps_RR",         drive.RearRightMotor().GetOutputCurrent());     
@@ -256,17 +257,19 @@ void DriveSubsystem::UpdateDashboardWithSensors()
                 pDashboard->PutDouble(  "WheelRPM_RR",          drive.RearRightMotor().GetSpeed());     
                 pDashboard->PutDouble(  "WheelRPM_RL",          drive.RearLeftMotor().GetSpeed());      
 
-                pDashboard->PutDouble(  "Acceleration_X",       accelerometer.GetAccelX());
-                pDashboard->PutDouble(  "Acceleration_Y",       accelerometer.GetAccelY());
-                pDashboard->PutDouble(  "Acceleration_Z",       accelerometer.GetAccelZ());
+                double accelX, accelY, accelZ = 0;
+                GetAccelerationGs( accelX, accelY, accelZ );
+                pDashboard->PutDouble(  "Acceleration_X",       accelX);
+                pDashboard->PutDouble(  "Acceleration_Y",       accelY);
+                pDashboard->PutDouble(  "Acceleration_Z",       accelZ);
                 
-                pDashboard->PutDouble(  "Velocity_X",           accelerometer.GetVelocityX());
+                /*pDashboard->PutDouble(  "Velocity_X",           accelerometer.GetVelocityX());
                 pDashboard->PutDouble(  "Velocity_Y",           accelerometer.GetVelocityY());
                 pDashboard->PutDouble(  "Velocity_Z",           accelerometer.GetVelocityZ());
                 
                 pDashboard->PutDouble(  "Distance_X",           accelerometer.GetDistanceX());
                 pDashboard->PutDouble(  "Distance_Y",           accelerometer.GetDistanceY());
-                pDashboard->PutDouble(  "Distance_Z",           accelerometer.GetDistanceZ());
+                pDashboard->PutDouble(  "Distance_Z",           accelerometer.GetDistanceZ());*/
         }
 }
 
@@ -284,6 +287,11 @@ void DriveSubsystem::GetWheelSpeedsRPM( double& frontLeft, double& frontRight, d
         frontRight      = drive.FrontRightMotor().GetSpeed();
         rearRight       = drive.RearRightMotor().GetSpeed();
         rearLeft        = drive.RearLeftMotor().GetSpeed();
+}
+
+void DriveSubsystem::GetAccelerationGs( double& accelX, double& accelY, double& accelZ )
+{
+	accelerometer.GetAccelGs( accelX, accelY, accelZ );
 }
 
 void DriveSubsystem::GetAcclerationFeetSecSquared( double& accelX, double& accelY, double& accelZ )
@@ -312,11 +320,16 @@ void DriveSubsystem::ResetSensors()
         accelerometer.SetEnabled(false);
         accelerometer.Calibrate();
         accelerometer.SetEnabled(true);
-        yaw.Reset();
-        roll.Reset();
+        ResetGyros();
 }
 
-double GetSecondsToTravelLinearDistance( bool x, double distanceInches, double RPMs )
+void DriveSubsystem::ResetGyros()
+{
+    yaw.Reset();
+    pitch.Reset();	
+}
+
+double DriveSubsystem::GetSecondsToTravelLinearDistance( bool x, double distanceInches, double RPMs )
 {
 	double wheelCircumference = wheelDiameter * double(3.1415926);
 	if ( x )
@@ -328,3 +341,32 @@ double GetSecondsToTravelLinearDistance( bool x, double distanceInches, double R
 		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches))) * 2;		
 	}
 }
+
+void DriveSubsystem::GetWheelVelocitiesRatio( float& x, float& y, float& rot )
+{
+	double frontLeftRPM;
+	double frontRightRPM;
+	double rearRightRPM;
+	double rearLeftRPM;
+	
+	GetWheelSpeedsRPM( frontLeftRPM, frontRightRPM, rearRightRPM, rearLeftRPM );
+	
+	// convert wheel speeds in RPMs to a ratio
+	double maxRPMs = GetSpeedModeMaxRPMs();
+	
+	// Note that Mecanum drive uses order:  FL, FR, RL, RR - a different order than this class.
+	float driveSpeeds[4];
+	driveSpeeds[0] = frontLeftRPM/maxRPMs;
+	driveSpeeds[1] = frontRightRPM/maxRPMs;
+	driveSpeeds[2] = rearLeftRPM/maxRPMs;
+	driveSpeeds[3] = rearRightRPM/maxRPMs;
+	
+	// Run the forward kinematics to derive the x, y and rot velocities (ratios)
+	float velocities[3];
+	drive.MecanumDriveFwdKinematics( driveSpeeds, velocities );
+	
+    x = velocities[0];
+	y = velocities[1];
+	rot = velocities[2];
+}
+
