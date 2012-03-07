@@ -23,6 +23,15 @@ void Drive::Execute()
         {
                 if ( bUsePercentVbusMode ) drive->SetControlMode( CANJaguar::kPercentVbus );
         }
+        bool UseBridgeCreep = oi->getDriverStation()->GetDigitalIn(6);
+        if (UseBridgeCreep){
+        	enum DriveGear { kLowGear, kHighGear };
+        	drive->SetDriveGear( DriveSubsystem::kLowGear );
+        }
+        else{
+        	enum DriveGear { kLowGear, kHighGear };
+        	drive->SetDriveGear(DriveSubsystem::kHighGear);
+        }
 
         // Drive with current joystick values.
         Joystick *pJoystick = oi->getJoystick();

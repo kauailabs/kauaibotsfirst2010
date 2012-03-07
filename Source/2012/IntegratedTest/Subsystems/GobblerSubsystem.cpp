@@ -4,8 +4,8 @@
 
 GobblerSubsystem::GobblerSubsystem() : Subsystem("GobblerSubsystem")
 {
-        firstMotor=new Victor(FIRST_GOBBLER_MOTOR_PWM_CHANNEL);
-        secondMotor=new Victor(SECOND_GOBBLER_MOTOR_PWM_CHANNEL);
+        firstMotor=new Victor(FIRST_GOBBLER_MOTOR_JAGUAR_CHANNEL);
+        secondMotor=new Victor(SECOND_GOBBLER_MOTOR_JAGUAR_CHANNEL);
 }
  
 GobblerSubsystem::~GobblerSubsystem()

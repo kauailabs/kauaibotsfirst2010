@@ -34,6 +34,7 @@ private:
 	}
 	
 	virtual void AutonomousInit() {
+		SetPeriod(0.02);
 		autonomousCommand = (Command*)autoChooser.GetSelected();
 		autonomousCommand->Start();
 	}
@@ -47,6 +48,7 @@ private:
 		// teleop starts running. If you want the autonomous to 
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		SetPeriod(0.0);
 		if ( autonomousCommand )
 		{
 			autonomousCommand->Cancel();
