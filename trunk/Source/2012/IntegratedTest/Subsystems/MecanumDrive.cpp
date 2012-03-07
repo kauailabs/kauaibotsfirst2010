@@ -66,7 +66,8 @@ void MecanumDrive::InitMotor( CANJaguar& motor )
         motor.ChangeControlMode( m_currControlMode );
         if ( m_currControlMode == CANJaguar::kSpeed )
         {
-                motor.ConfigEncoderCodesPerRev(360);
+                //motor.ConfigEncoderCodesPerRev(360);
+        		motor.ConfigEncoderCodesPerRev(250);
                 motor.ConfigMaxOutputVoltage(12.0);
                 motor.ConfigNeutralMode(CANJaguar::kNeutralMode_Brake);
                 motor.SetPID(.7,.004,0);

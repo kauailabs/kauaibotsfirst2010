@@ -4,7 +4,7 @@
 #include "../Commands/Hopper.h"
 
 HopperSubsystem::HopperSubsystem() : Subsystem("HopperSubsystem") {
-        hopperMotor = new Victor(HOPPERMOTOR_VICTOR_CHANNEL);
+        hopperMotor = new Victor(HOPPERMOTOR_JAGUAR_CHANNEL);
 
 }
     
