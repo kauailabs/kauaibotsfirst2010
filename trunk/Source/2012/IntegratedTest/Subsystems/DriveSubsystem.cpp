@@ -6,7 +6,7 @@
 static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 #define DEGREES_IN_A_CIRCLE     360
-const float cDefaultLowGearRatio = .50;
+const float cDefaultLowGearRatio = .333;
 
 DriveSubsystem::DriveSubsystem() : 
         PIDSubsystem(   "DriveSubsystem",

@@ -10,7 +10,7 @@
  */
 class ShootNow: public CommandBase {
 public:
-	ShootNow(bool bShoot);
+	ShootNow(bool bShoot, float timeRun);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
@@ -18,6 +18,7 @@ public:
 	virtual void Interrupted();
 	
 	bool m_bShoot;
+	float m_timeRun;
 };
 
 #endif
