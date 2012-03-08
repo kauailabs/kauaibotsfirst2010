@@ -23,8 +23,8 @@ void GobblerSubsystem::InitDefaultCommand()
 
 void GobblerSubsystem::Forward()
 {
-        firstMotor->Set(-1);
-        secondMotor->Set(1);
+        firstMotor->Set(1);
+        secondMotor->Set(-1);
 }
 void GobblerSubsystem::Stop()
 {
@@ -34,8 +34,8 @@ void GobblerSubsystem::Stop()
 
 void GobblerSubsystem::Reverse()
 {
-        firstMotor->Set(1);
-        secondMotor->Set(-1);
+        firstMotor->Set(-1);
+        secondMotor->Set(1);
 }
 
 // Put methods for controlling this subsystem

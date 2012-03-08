@@ -39,10 +39,10 @@ void DriveDistance::Execute() {
 			 if(driveSpeed<0 and m_x){
 				 	 rangeICareAbout = leftRange;
 			 }
-			 else if(driveSpeed>=0 and !m_x){
+			 else if(driveSpeed<=0 and !m_x){
 			 	 rangeICareAbout = rightRange;
 			 }
-			 else if(driveSpeed<0 and m_x){
+			 else if(driveSpeed>0 and m_x){
 			 	 rangeICareAbout = rearRange;
 			 }
 			 else if(driveSpeed>=0 and !m_x){

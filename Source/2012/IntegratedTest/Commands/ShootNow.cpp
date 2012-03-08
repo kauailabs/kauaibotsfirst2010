@@ -1,16 +1,17 @@
 #include "ShootNow.h"
 
-ShootNow::ShootNow(bool bShoot) {
+ShootNow::ShootNow(bool bShoot, float timeRun) {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	Requires(gobbler);
 	Requires(chute);
 	m_bShoot = bShoot;
+	m_timeRun = timeRun;
 }
 
 // Called just before this Command runs the first time
 void ShootNow::Initialize() {
-	
+	SetTimeout(m_timeRun);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -31,7 +32,8 @@ void ShootNow::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool ShootNow::IsFinished() {
-	return false;
+	return IsTimedOut();
+	
 }
 
 // Called once after isFinished returns true
