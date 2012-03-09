@@ -37,13 +37,13 @@ void DriveDistance::Execute() {
 			 drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
 			 double rangeICareAbout;
 			 if(driveSpeed<0 and m_x){
-				 	 rangeICareAbout = leftRange;
+				 rangeICareAbout = rearRange;
 			 }
 			 else if(driveSpeed<=0 and !m_x){
 			 	 rangeICareAbout = rightRange;
 			 }
 			 else if(driveSpeed>0 and m_x){
-			 	 rangeICareAbout = rearRange;
+			 	 rangeICareAbout = frontRange;
 			 }
 			 else if(driveSpeed>=0 and !m_x){
 			 	 rangeICareAbout = frontRange;
