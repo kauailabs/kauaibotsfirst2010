@@ -10,14 +10,13 @@ DriveDistance::DriveDistance(bool x,double distanceInches,double RPMs,bool ifRan
 	m_ifRange = ifRange;
 	m_distanceInches = distanceInches;
 	m_cycles = int(seconds / 0.02);
-	m_currentCycle = 0;
 	m_x = x;
 	m_RPMs = RPMs;
 }
 
 // Called just before this Command runs the first time
 void DriveDistance::Initialize() {
-	
+	m_currentCycle = 0;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -36,18 +35,18 @@ void DriveDistance::Execute() {
 		 if (m_ifRange){
 			 drive->GetRangesInches(frontRange,rightRange,rearRange,leftRange);
 			 double rangeICareAbout;
-			 if(driveSpeed<0 and m_x){
-				 rangeICareAbout = rearRange;
+			 
+			 if ( m_x )
+			 {
+				 if ( driveSpeed < 0 )  rangeICareAbout = leftRange;
+				 else					rangeICareAbout = rightRange;	
 			 }
-			 else if(driveSpeed<=0 and !m_x){
-			 	 rangeICareAbout = rightRange;
+			 else
+			 {
+				 if ( driveSpeed < 0 )  rangeICareAbout = rearRange;
+				 else					rangeICareAbout = frontRange;	
 			 }
-			 else if(driveSpeed>0 and m_x){
-			 	 rangeICareAbout = frontRange;
-			 }
-			 else if(driveSpeed>=0 and !m_x){
-			 	 rangeICareAbout = frontRange;
-			 }
+			 
 			 if (rangeICareAbout <= safetyRange){
 				 double ratio = double(1)/(rangeICareAbout/safetyRange);
 				 driveSpeed*=ratio;
