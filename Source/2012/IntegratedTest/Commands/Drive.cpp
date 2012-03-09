@@ -9,6 +9,8 @@ Drive::Drive()
 
 void Drive::Initialize() 
 {
+		m_creepOn = false;
+		m_lastButtonState = false;
 }
 
 void Drive::Execute() 
@@ -23,18 +25,22 @@ void Drive::Execute()
         {
                 if ( bUsePercentVbusMode ) drive->SetControlMode( CANJaguar::kPercentVbus );
         }
-        bool UseBridgeCreep = oi->getDriverStation()->GetDigitalIn(6);
-        if (UseBridgeCreep){
-        	enum DriveGear { kLowGear, kHighGear };
-        	drive->SetDriveGear( DriveSubsystem::kLowGear );
-        }
-        else{
-        	enum DriveGear { kLowGear, kHighGear };
-        	drive->SetDriveGear(DriveSubsystem::kHighGear);
-        }
-
-        // Drive with current joystick values.
         Joystick *pJoystick = oi->getJoystick();
+        bool currentButton = pJoystick->GetRawButton(2);
+        if(currentButton && !m_lastButtonState)
+                {
+                	m_creepOn = !m_creepOn;
+                }
+                m_lastButtonState = currentButton;
+                if(m_creepOn){
+                	enum DriveGear { kLowGear, kHighGear };
+                    drive->SetDriveGear( DriveSubsystem::kLowGear );
+                }
+                else{
+                  	enum DriveGear { kLowGear, kHighGear };
+                    drive->SetDriveGear(DriveSubsystem::kHighGear);
+                }
+        // Drive with current joystick values.
         double twist = pJoystick->GetTwist();
         if (fabs(twist) < DEADZONE)
                 twist = 0;
