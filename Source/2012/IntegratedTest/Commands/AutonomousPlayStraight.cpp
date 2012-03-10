@@ -1,20 +1,16 @@
-#include "AutonomousPlayLeft.h"
-#include "ShootNow.h"
+#include "AutonomousPlayStraight.h"
 #include "DriveDistance.h"
+#include "ShootNow.h"
+#include "WaitTime.h"
 
-AutonomousPlayLeft::AutonomousPlayLeft() {
+AutonomousPlayStraight::AutonomousPlayStraight() {
         // Add Commands here:
         // e.g. AddSequential(new Command1());
         //      AddSequential(new Command2());
         // these will run in order.
-	
-		AddSequential(new DriveDistance(false,-5,125,false));
-		//AddSequential(new WaitTime(1.0));
 		AddParallel(new ShootNow(true, 15.0));
-		AddSequential(new DriveDistance(true,75,125,false));
+		AddSequential(new DriveDistance(false,75,125,true));
 		//AddSequential(new WaitTime(1.0));
-		AddSequential(new DriveDistance(false,5,125,false));
-		
         // To run multiple commands at the same time,
         // use AddParallel()
         // e.g. AddParallel(new Command1());

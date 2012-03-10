@@ -9,6 +9,7 @@
 #include "Commands/TrafficCop.h"
 #include "Commands/AutonomousPlayRight.h"
 #include "Commands/AutonomousPlayLeft.h"
+#include "Commands/AutonomousPlayStraight.h"
 #include "CommandBase.h"
 
 class CommandBasedRobot : public IterativeRobot {
@@ -29,6 +30,7 @@ private:
 		//sd->PutData(CommandBase::trafficcop);
 		autoChooser.AddDefault("DunkRight",new AutonomousPlayRight());
 		autoChooser.AddObject("DunkLeft",new AutonomousPlayLeft());
+		autoChooser.AddObject("DunkStraight",new AutonomousPlayStraight());
 		sd->PutData("Autonomous Mode Chooser", &autoChooser);
 		autonomousCommand = 0;
 	}
