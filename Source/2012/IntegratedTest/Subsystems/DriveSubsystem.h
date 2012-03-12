@@ -4,8 +4,16 @@
 #include "WPILib.h"
 #include "MecanumDrive.h"
 #include "RangeFinder.h"
+
+//#define USE_MINIIMU9AHRS 1
+//
+// Comment this in to use the MiniIMU9AHRS board
+#ifdef USE_MINIIMU9AHRS
+#include "MiniIMU9AHRS.h"
+#else
 #include "FilteredAccelerometer.h"
 #include "IntegratingAccelerometer.h"
+#endif
 
 /**
  *
@@ -49,7 +57,7 @@ public:
         
         // Sensor Readings
         
-        void GetEulerAnglesDegrees( double& yaw, double& pitch);
+        void GetEulerAnglesDegrees( double& pitch, double& roll, double& yaw);
         void GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange );
         void GetEdges( bool &frontEdge, bool& rightEdge, bool& rearEdge, bool& leftEdge);
         void GetMotorCurrentAmps( double& frontLeft, double& frontRight, double& rearRight, double& rearLeft );
@@ -69,8 +77,6 @@ private:
         // It's desirable that everything possible under private except
         // for methods that implement subsystem capabilities
         MecanumDrive    drive;
-        Gyro                    yaw;
-        Gyro                    pitch;
         RangeFinder             frontRanger;
         RangeFinder             rightRanger;
         RangeFinder             rearRanger;
@@ -79,7 +85,13 @@ private:
         DigitalInput    rightEdgeFinder;
         DigitalInput    rearEdgeFinder;
         DigitalInput    leftEdgeFinder;
+#ifdef USE_MINIIMU9AHRS
+        MiniIMU9AHRS    imu;
+#else
+        Gyro                    yaw;
+        Gyro                    pitch;
         IntegratingAccelerometer accelerometer;
+#endif
 protected:
         void InitializeSensors();
         double ReturnPIDInput();

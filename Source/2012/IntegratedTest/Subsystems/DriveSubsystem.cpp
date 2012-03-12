@@ -19,8 +19,6 @@ DriveSubsystem::DriveSubsystem() :
                         RIGHT_REAR_CAN_ADDRESS,
                         CANJaguar::kSpeed,
                         Preferences::GetInstance()->GetInt("DriveMaxRPMs", DEFAULT_MAX_RPMS) ),
-        yaw(DRIVE_YAW_GYRO_CHANNEL),
-        pitch(DRIVE_PITCH_GYRO_CHANNEL),
         frontRanger(FRONT_RANGEFINDER_CHANNEL),
         rightRanger(RIGHT_RANGEFINDER_CHANNEL),
         rearRanger(REAR_RANGEFINDER_CHANNEL),
@@ -28,8 +26,12 @@ DriveSubsystem::DriveSubsystem() :
         frontEdgeFinder(DRIVE_FRONT_EDGEFINDER_CHANNEL),
         rightEdgeFinder(DRIVE_RIGHT_EDGEFINDER_CHANNEL),
         rearEdgeFinder(DRIVE_REAR_EDGEFINDER_CHANNEL),
-        leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL),
+        leftEdgeFinder(DRIVE_LEFT_EDGEFINDER_CHANNEL)
+#ifndef USE_MINIIMU9AHRS
+        ,yaw(DRIVE_YAW_GYRO_CHANNEL),
+        pitch(DRIVE_PITCH_GYRO_CHANNEL),
         accelerometer(ACCELEROMETER_DSC_MODULE)
+#endif
 {       
         m_UpdateDashboardCount = 0;
         m_UpdateDashboardRate = Preferences::GetInstance()->GetInt("DriveUpdateDashboardRate", 4);
@@ -66,11 +68,13 @@ void DriveSubsystem::InitializeSensors()
         // Gyro is initialized, including calibration, in constructor
         //         
         // Initialize sensivity of the AD22305 Gyroscope         
-        yaw.SetSensitivity(.007);       
+#ifndef USE_MINIIMU9AHRS
+		yaw.SetSensitivity(.007);       
         pitch.SetSensitivity(.007);      
         yaw.Reset();
         pitch.Reset();
         accelerometer.SetEnabled(true);
+#endif
 }
 
 void DriveSubsystem::InitDefaultCommand() {
@@ -117,10 +121,15 @@ void DriveSubsystem::SetControlMode( CANJaguar::ControlMode newMode )
         drive.SetMode( newMode );
 }
 
-void DriveSubsystem::GetEulerAnglesDegrees( double& yawAngle, double& pitchAngle)
+void DriveSubsystem::GetEulerAnglesDegrees( double& pitchAngle, double& rollAngle, double& yawAngle)
 {
+#ifndef USE_MINIIMU9AHRS
         yawAngle        = ClipGyroAngle(yaw.GetAngle());
         pitchAngle      = ClipGyroAngle(pitch.GetAngle());
+        rollAngle		= 0.0;
+#else
+        imu.GetEulerAnglesDegrees(pitchAngle,rollAngle,yawAngle);
+#endif
 }
 
 void DriveSubsystem::GetRangesInches( double& frontRange, double& rightRange, double& rearRange, double& leftRange )
@@ -162,7 +171,9 @@ double DriveSubsystem::ClipGyroAngle( double dInputAngle )
 
 double DriveSubsystem::ReturnPIDInput()
 {
-        return ClipGyroAngle( yaw.GetAngle() );
+	double pitchAngle, rollAngle, yawAngle;
+	GetEulerAnglesDegrees(pitchAngle,rollAngle,yawAngle);
+    return ClipGyroAngle( yawAngle );
 }
 
 // NOTE:  This method is invoked by the PID controller, and occurs on a 
@@ -238,16 +249,23 @@ void DriveSubsystem::UpdateDashboardWithSensors()
         SmartDashboard *pDashboard = SmartDashboard::GetInstance();
         if ( pDashboard )
         {
-                pDashboard->PutDouble(  "YawAngle",                     ClipGyroAngle(yaw.GetAngle()) );
-                pDashboard->PutDouble(  "PitchAngle",            ClipGyroAngle(pitch.GetAngle()) );
+            	double pitch, roll, yaw;
+            	pitch = roll = yaw = 0.0;
+            	GetEulerAnglesDegrees(pitch,roll,yaw);
+                pDashboard->PutDouble(  "YawAngle",             yaw);
+                pDashboard->PutDouble(  "PitchAngle",           pitch);
+                pDashboard->PutDouble(  "RollAngle",            roll);
+
                 pDashboard->PutDouble(  "FrontRange",           frontRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RightRange",           rightRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RearRange",            rearRanger.GetRangeInches());
                 pDashboard->PutDouble(  "LeftRange",            leftRanger.GetRangeInches());
+                
                 //pDashboard->PutBoolean( "FrontEdge",            (frontEdgeFinder.Get() != 0));
                 //pDashboard->PutBoolean( "RightEdge",            (rightEdgeFinder.Get() != 0));
                 //pDashboard->PutBoolean( "RearEdge",             (rearEdgeFinder.Get() != 0));
                 //pDashboard->PutBoolean( "LeftEdge",             (leftEdgeFinder.Get() != 0));
+                
                 pDashboard->PutDouble(  "MotorAmps_FL",         drive.FrontLeftMotor().GetOutputCurrent());     
                 pDashboard->PutDouble(  "MotorAmps_FR",         drive.FrontRightMotor().GetOutputCurrent());    
                 pDashboard->PutDouble(  "MotorAmps_RR",         drive.RearRightMotor().GetOutputCurrent());     
@@ -291,54 +309,45 @@ void DriveSubsystem::GetWheelSpeedsRPM( double& frontLeft, double& frontRight, d
 
 void DriveSubsystem::GetAccelerationGs( double& accelX, double& accelY, double& accelZ )
 {
+#ifndef USE_MINIIMU9AHRS
 	accelerometer.GetAccelGs( accelX, accelY, accelZ );
-}
-
-void DriveSubsystem::GetAcclerationFeetSecSquared( double& accelX, double& accelY, double& accelZ )
-{
-        accelX = accelerometer.GetAccelX();
-        accelY = accelerometer.GetAccelY();
-        accelZ = accelerometer.GetAccelZ();
-}
-
-void DriveSubsystem::GetVelocityFeetSec( double& velX, double& velY, double& velZ )
-{
-        velX = accelerometer.GetVelocityX();
-        velY = accelerometer.GetVelocityY();
-        velZ = accelerometer.GetVelocityZ();
-}
-
-void DriveSubsystem::GetDistanceFeet( double& distX, double& distY, double& distZ)
-{
-        distX = accelerometer.GetDistanceX();
-        distY = accelerometer.GetDistanceY();
-        distZ = accelerometer.GetDistanceZ();
+#else
+	imu.GetAccelGs( accelX, accelY, accelZ );
+#endif
 }
 
 void DriveSubsystem::ResetSensors()
 {
+#ifndef USE_MINIIMU9AHRS	
         accelerometer.SetEnabled(false);
         accelerometer.Calibrate();
         accelerometer.SetEnabled(true);
         ResetGyros();
+#else
+#endif
 }
 
 void DriveSubsystem::ResetGyros()
 {
+#ifndef USE_MINIIMU9AHRS	
     yaw.Reset();
     pitch.Reset();	
+#else
+#endif
 }
 
 double DriveSubsystem::GetSecondsToTravelLinearDistance( bool x, double distanceInches, double RPMs )
 {
-	double wheelCircumference = wheelDiameter * double(3.1415926);
-	if ( x )
+	double wheelCircumference = double(3.1415926) * wheelDiameter;
+    if ( x )
 	{	
-		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches)));
+		// Side-to-side motion takes twice the time as forward-reverse, due to
+		// the offsetting forces required to mecanum.
+		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches))) * 2;
 	}
 	else
 	{
-		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches))) * 2;		
+		return (double(60) / ((wheelCircumference * RPMs) / fabs(distanceInches)));		
 	}
 }
 
