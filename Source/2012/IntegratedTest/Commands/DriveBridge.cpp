@@ -21,14 +21,14 @@ void DriveBridge::Execute()
 {
 	if ( true )
 	{
-		double yawAngle, pitchAngle;
+		double pitchAngle, rollAngle, yawAngle;
 		double accelX, accelY, accelZ;
 		
 		double offBalancePitchGyroAngleThresholdDegrees = 10; //??
 		double onBalancePitchGyroAngleThresholdDegrees  = 5;  //??
 		double onBalancePitchAccelAngleTresholdDegrees = 5; // ??
 		
-		drive->GetEulerAnglesDegrees(yawAngle, pitchAngle);
+		drive->GetEulerAnglesDegrees(pitchAngle, rollAngle, yawAngle);
 		drive->GetAccelerationGs( accelX, accelY, accelZ );
 		
 		// Determine whether assisted balance mode is in effect;
