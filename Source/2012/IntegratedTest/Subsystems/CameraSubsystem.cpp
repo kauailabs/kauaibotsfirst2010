@@ -56,7 +56,11 @@ CameraSubsystem::CameraSubsystem() :
         UpdateNetworkTable(true,&m_lastHoop);
         
         SetDetectionMode( CameraSubsystem::kDetectNone );
-        Thread::Start();
+        
+        // Scott Libert, 3/10/2012 - Disable Camera Image Processing
+        // 
+        //Thread::Start();
+        //
 }
     
 void CameraSubsystem::InitDefaultCommand() {
