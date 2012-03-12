@@ -20,9 +20,6 @@ public:
 	double m_distanceInches;
 	bool m_x;
 	double m_RPMs;
-	int m_cycles;
-	int m_currentCycle;
-	
 };
 
 #endif
