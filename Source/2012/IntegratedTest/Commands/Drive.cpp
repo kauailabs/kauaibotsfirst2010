@@ -69,16 +69,16 @@ bool Drive::IsFinished()
 
 void Drive::End() 
 {
+    drive->DoMecanum(0,0,0);        // Stop the drive
 }
 
 void Drive::Interrupted() 
 {
-        drive->DoMecanum(0,0,0);        // Stop the drive
+	drive->DoMecanum(0,0,0);        // Stop the drive
 }
 
 double Drive::InputJoystickAdjust( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead)
 {
-
         double dJoystickOut = 0.0;
         if ((dJoystickIn > dDead) || (dJoystickIn < (-1*dDead)))
         {
