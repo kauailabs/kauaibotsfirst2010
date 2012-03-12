@@ -9,7 +9,7 @@ AutonomousPlayStraight::AutonomousPlayStraight() {
         //      AddSequential(new Command2());
         // these will run in order.
 		AddParallel(new ShootNow(true, 15.0));
-		AddSequential(new DriveDistance(false,75,125,true));
+		AddSequential(new DriveDistance(false,-15,50,true));
 		//AddSequential(new WaitTime(1.0));
         // To run multiple commands at the same time,
         // use AddParallel()
