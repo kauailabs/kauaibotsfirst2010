@@ -6,15 +6,15 @@ DriveDistance::DriveDistance(bool x,double distanceInches,double RPMs,bool ifRan
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	Requires(drive);
-
-	// Calculate the amount of time to drive
-	double seconds 		= drive->GetSecondsToTravelLinearDistance( m_x, m_distanceInches, m_RPMs );
-	SetTimeout(seconds);	
-
+	
 	m_ifRange 			= ifRange;
 	m_distanceInches 	= distanceInches;
 	m_x 				= x;
 	m_RPMs 				= RPMs;
+
+	// Calculate the amount of time to drive
+	double seconds 		= drive->GetSecondsToTravelLinearDistance( m_x, m_distanceInches, m_RPMs );
+	SetTimeout(seconds);	
 }
 
 // Called just before this Command runs the first time

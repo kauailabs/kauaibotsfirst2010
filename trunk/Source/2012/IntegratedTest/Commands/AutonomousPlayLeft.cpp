@@ -8,12 +8,12 @@ AutonomousPlayLeft::AutonomousPlayLeft() {
         //      AddSequential(new Command2());
         // these will run in order.
 	
-		AddSequential(new DriveDistance(false,-10,125,false));
+		AddSequential(new DriveDistance(false,-16,125,false));
 		//AddSequential(new WaitTime(1.0));
-		AddParallel(new ShootNow(true, 15.0));
-		AddSequential(new DriveDistance(true,37.5,125,false));
+		AddParallel(new ShootNow(true, 32.0));
+		AddSequential(new DriveDistance(true,100,125,true));
 		//AddSequential(new WaitTime(1.0));
-		AddSequential(new DriveDistance(false,10,125,false));
+		AddSequential(new DriveDistance(false,16,125,false));
 		
         // To run multiple commands at the same time,
         // use AddParallel()
