@@ -1,12 +1,13 @@
 #include "ShootNow.h"
 
-ShootNow::ShootNow(bool bShoot, float timeRun) {
+ShootNow::ShootNow(bool bShoot, float timeRun, bool rollersOn) {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	Requires(gobbler);
 	Requires(chute);
 	m_bShoot = bShoot;
 	m_timeRun = timeRun;
+	m_rollersOn = rollersOn;
 }
 
 // Called just before this Command runs the first time
@@ -18,9 +19,17 @@ void ShootNow::Initialize() {
 void ShootNow::Execute() {
 	if ( m_bShoot )
 	{
-		gobbler->Forward();
-		chute->ChuteUp();
-		chute->TriggerOn();
+		if (m_rollersOn)
+		{
+			gobbler->Forward();
+			chute->ChuteUp();
+			chute->TriggerOn();
+		}
+		else
+		{
+			chute->ChuteUp();
+			chute->TriggerOn();	
+		}
 	}
 	else
 	{
