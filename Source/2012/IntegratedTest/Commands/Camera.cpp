@@ -14,9 +14,9 @@ void Camera::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Camera::Execute() {
-        // Digital Input 1 provides a way to 'capture' an image
+        // Digital Input 4 provides a way to 'capture' an image
         // which is written to the robot's flash file-system
-        // This occurs when input 1 is toggled on then off
+        // This occurs when input 4 is toggled on then off
         if ( oi->getDriverStation()->GetDigitalIn(4) )
         {
                 bCameraReady = true;
