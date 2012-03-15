@@ -10,8 +10,8 @@ AutonomousPlayLeft::AutonomousPlayLeft() {
 	
 		AddSequential(new DriveDistance(false,-16,125,false));
 		//AddSequential(new WaitTime(1.0));
-		AddParallel(new ShootNow(true, 32.0));
-		AddSequential(new DriveDistance(true,100,125,true));
+		AddParallel(new ShootNow(true, 15.0));
+		AddSequential(new DriveDistance(true,80,125,false));
 		//AddSequential(new WaitTime(1.0));
 		AddSequential(new DriveDistance(false,16,125,false));
 		
