@@ -68,9 +68,9 @@ void L3G4200D::read()
 	uint8_t zla = Wire.read();
 	uint8_t zha = Wire.read();
 
-	short x = xha << 8 | xla;
-	short y = yha << 8 | yla;
-	short z = zha << 8 | zla;
+	short x = (short(xha) << 8) | (short(xla) & 0x00FF);
+	short y = (short(yha) << 8) | (short(yla) & 0x00FF);
+	short z = (short(zha) << 8) | (short(zla) & 0x00FF);
 	
 	g.x = x;
 	g.y = y;
