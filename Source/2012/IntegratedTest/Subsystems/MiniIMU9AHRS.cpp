@@ -108,7 +108,7 @@ void setup()
 { 
   I2C_Init();
 
-  delay(1500);			// TODO:  Once it works, tune this to be shorter....
+  //delay(1500);			// TODO:  Once it works, tune this to be shorter....
  
   Accel_Init();
   Compass_Init();
@@ -130,15 +130,15 @@ void setup()
     
   AN_OFFSET[5]-=GRAVITY*SENSOR_SIGN[5];
   
-  printf( "IMU Offsets:  G X: %4d, Y: %4d, Z: %4d,  A X: %4d, Y: %4d, Z: %4d\n",
+  /*printf( "IMU Offsets:  G X: %4d, Y: %4d, Z: %4d,  A X: %4d, Y: %4d, Z: %4d\n",
 		  AN_OFFSET[0],
 		  AN_OFFSET[1],
 		  AN_OFFSET[2],
 		  AN_OFFSET[3],
 		  AN_OFFSET[4],
-		  AN_OFFSET[5] );
+		  AN_OFFSET[5] );*/
 		  
-  delay(2000);				// TODO:  Once it works, tune this to be shorter; this delay seems unnecessary....
+  delay(200);				// TODO:  Once it works, tune this to be shorter; this delay seems unnecessary....
     
   timer=millis();
   delay(20);
@@ -174,7 +174,7 @@ void MiniIMU9AHRS::loop() //Main Loop
 			Read_Compass();    	// Read I2C magnetometer
 			Compass_Heading(); 	// Calculate magnetic heading  
 
-		    printf("A X: %4d Y: %4d Z: %4d  G X: %4d Y: %4d Z: %4d  M X: %4d Y: %4d Z: %4d\n",
+		    /*printf("A X: %4d Y: %4d Z: %4d  G X: %4d Y: %4d Z: %4d  M X: %4d Y: %4d Z: %4d\n",
 		    		accel_x,
 		    		accel_y,
 		    		accel_z,
@@ -183,7 +183,7 @@ void MiniIMU9AHRS::loop() //Main Loop
 		    		gyro_z,
 		    		magnetom_x,
 		    		magnetom_y,
-		    		magnetom_z);
+		    		magnetom_z);*/
 		}
     }
     END_REGION;
@@ -199,7 +199,17 @@ void MiniIMU9AHRS::loop() //Main Loop
     CRITICAL_REGION(m_semaphore)
 	{
     	Euler_angles();
+    	
+    	const float rad_to_deg = (180.0 / M_PI);
+    	
+    	float pitchDegrees = pitch * rad_to_deg;
+    	float rollDegrees  = roll  * rad_to_deg;
+    	float yawDegrees   = yaw   * rad_to_deg;
+    	
+	    printf("Pitch:  %4.2f Roll:  %4.2f Yaw:  %4.2f\n", pitchDegrees, rollDegrees, yawDegrees );
+
 	}
+    
     END_REGION;
 }
 
@@ -232,6 +242,8 @@ MiniIMU9AHRS::~MiniIMU9AHRS()
     }	
 }
 
+const double rad_to_deg = (180.0 / M_PI);
+
 void MiniIMU9AHRS::GetEulerAnglesDegrees( double& currPitch, double& currRoll, double& currYaw )
 {
     CRITICAL_REGION(m_semaphore)
@@ -241,6 +253,12 @@ void MiniIMU9AHRS::GetEulerAnglesDegrees( double& currPitch, double& currRoll, d
 		currYaw 	= yaw;
 	}
     END_REGION;	
+
+    // Convert from Radians to Degrees
+    
+    currRoll  *= rad_to_deg;
+    currPitch *= rad_to_deg;
+    currYaw   *= rad_to_deg;
 }
 
 void MiniIMU9AHRS::GetAccelGs( double& x, double& y, double& z )
