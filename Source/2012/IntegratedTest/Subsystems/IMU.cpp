@@ -77,7 +77,7 @@ void Read_Gyro()
 void Accel_Init()
 {
   compass.writeAccReg(LSM303_CTRL_REG1_A, 0x27); // normal power mode, all axes enabled, 50 Hz
-  compass.writeAccReg(LSM303_CTRL_REG4_A, 0x00); // 2 g acceleration scale (was 0x30, 8g)
+  compass.writeAccReg(LSM303_CTRL_REG4_A, 0x30); // 8 g acceleration scale (was 0x00, 2g)
 }
 
 // Reads x,y and z accelerometer registers
