@@ -127,7 +127,7 @@ void DriveSubsystem::GetEulerAnglesDegrees( double& pitchAngle, double& rollAngl
         yawAngle        = ClipGyroAngle(yaw.GetAngle());
         pitchAngle      = ClipGyroAngle(pitch.GetAngle());
         rollAngle		= 0.0;
-#else
+#else        
         imu.GetEulerAnglesDegrees(pitchAngle,rollAngle,yawAngle);
 #endif
 }

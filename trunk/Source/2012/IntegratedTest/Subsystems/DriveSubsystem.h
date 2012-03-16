@@ -5,7 +5,7 @@
 #include "MecanumDrive.h"
 #include "RangeFinder.h"
 
-//#define USE_MINIIMU9AHRS 1
+#define USE_MINIIMU9AHRS 1
 //
 // Comment this in to use the MiniIMU9AHRS board
 #ifdef USE_MINIIMU9AHRS
