@@ -9,12 +9,13 @@ AutonomousPlayRight::AutonomousPlayRight() {
         //      AddSequential(new Command2());
         // these will run in order.
 	
+		AddSequential(new ShootNow(true, 1.5,false));
 		AddSequential(new DriveDistance(false,-16,125,false));
 		//AddSequential(new WaitTime(1.0));
-		AddParallel(new ShootNow(true, 15.0,true));
-		AddSequential(new DriveDistance(true,-80,125,false));
+		AddSequential(new DriveDistance(true,-85,125,false));
 		//AddSequential(new WaitTime(1.0));
-		AddSequential(new DriveDistance(false,16,125,false));
+		AddParallel(new ShootNow(true, 10.0,true));
+		AddSequential(new DriveDistance(false,18,125,false));
 		
         // To run multiple commands at the same time,
         // use AddParallel()

@@ -7,7 +7,6 @@ static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 #define DEGREES_IN_A_CIRCLE     360
 const float cDefaultLowGearRatio = .15;
-const float cDefaultHighGearRatio = .50;
 
 DriveSubsystem::DriveSubsystem() : 
         PIDSubsystem(   "DriveSubsystem",
@@ -37,7 +36,6 @@ DriveSubsystem::DriveSubsystem() :
         m_UpdateDashboardCount = 0;
         m_UpdateDashboardRate = Preferences::GetInstance()->GetInt("DriveUpdateDashboardRate", 4);
         m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveLowGearRatio",cDefaultLowGearRatio);
-        m_HighGearRatio = Preferences::GetInstance()->GetFloat("DriveHighGearRatio",cDefaultHighGearRatio);
         SetDriveGear(DriveSubsystem::kHighGear);
         InitializeSensors();
         
@@ -95,12 +93,6 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
                 vX              = vX   * m_LowGearRatio;
                 vY              = vY   * m_LowGearRatio;
                 vRot    		= vRot * m_LowGearRatio;
-        }
-        else
-        {
-        	    vX              = vX   * m_HighGearRatio;
-        	    vY              = vY   * m_HighGearRatio;
-        	    vRot    		= vRot * m_HighGearRatio;
         }
         
     if ( m_bAutoRotationMode )         

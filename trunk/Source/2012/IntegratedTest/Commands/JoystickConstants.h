@@ -14,17 +14,17 @@
 // Forward Backwards
 const double JoystickAdjust = 0.40; 
 const double JoystickPow = 3; 
-const double JoystickMult = 1;
+const double JoystickMult = .5;
 const double JoystickDead = 0; 
 // Side to Side
 const double JoystickAdjust2 = 0.40; 
 const double JoystickPow2 = 3; 
-const double JoystickMult2 = 1; 
+const double JoystickMult2 = .5; 
 const double JoystickDead2 = 0; 
 // Rotation
 const double JoystickAdjust3 = .4;
 const double JoystickPow3 = 3;
-const double JoystickMult3 = .7;
+const double JoystickMult3 = .35;
 const double JoystickDead3 = 0;
 /////////////////////////////////////////////////////////////////////////////////////
 
