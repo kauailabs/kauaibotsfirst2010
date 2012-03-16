@@ -94,7 +94,13 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
         {
                 vX              = vX   * m_LowGearRatio;
                 vY              = vY   * m_LowGearRatio;
-                vRot    = vRot * m_LowGearRatio;
+                vRot    		= vRot * m_LowGearRatio;
+        }
+        else
+        {
+        	    vX              = vX   * m_HighGearRatio;
+        	    vY              = vY   * m_HighGearRatio;
+        	    vRot    		= vRot * m_HighGearRatio;
         }
         
     if ( m_bAutoRotationMode )         
