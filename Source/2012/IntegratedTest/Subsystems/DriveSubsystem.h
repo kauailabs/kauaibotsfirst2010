@@ -102,6 +102,7 @@ protected:
     float m_pendingAutoRotateAmount;    // Temporary until m_bAutoRotateSetpointSet == true
     DriveGear m_DriveGear;
     float m_LowGearRatio;
+    float m_HighGearRatio;
     unsigned long m_UpdateDashboardCount;
     int m_UpdateDashboardRate;
     
