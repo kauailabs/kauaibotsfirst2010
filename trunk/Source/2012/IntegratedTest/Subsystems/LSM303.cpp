@@ -17,8 +17,6 @@
 //
 // Thus, if this pin were to be low, the I2C GYR_ADDRESS would be (0xD0 >> 1)
 
-#define M_PI		3.14159265358979323846  /* pi */
-
 // Constructors ////////////////////////////////////////////////////////////////
 
 LSM303::LSM303(void)
@@ -172,10 +170,19 @@ void LSM303::readAcc(void)
 	byte zla = Wire.read();
 	byte zha = Wire.read();
 
-	short x = (xha << 8 | xla) >> 4;
-	short y = (yha << 8 | yla) >> 4;
-	short z = (zha << 8 | zla) >> 4;
-
+	short x = ( ( ( (unsigned short)xha) << 8 ) | (((unsigned short)xla) & 0x00FF));
+	short y = ( ( ( (unsigned short)yha) << 8 ) | (((unsigned short)yla) & 0x00FF));
+	short z = ( ( ( (unsigned short)zha) << 8 ) | (((unsigned short)zla) & 0x00FF));
+	
+	x /= 16;
+	y /= 16;
+	z /= 16;
+	
+	/*
+	short x = short( ( ((unsigned short)(xha) << 8) | (unsigned short(xla) & 0x00FF) ) >> 4 );
+	short y = short( ( (unsigned short(yha) << 8) | (unsigned short(yla) & 0x00FF) ) >> 4 );
+	short z = short( ( (unsigned short(zha) << 8) | (unsigned short(zla) & 0x00FF) ) >> 4 );
+*/
 	a.x = x;  // Convert to float, including sign-extension
 	a.y = y;  // Convert to float, including sign-extension
 	a.z = z;  // Convert to float, including sign-extension
@@ -214,9 +221,9 @@ void LSM303::readMag(void)
 
 	}
 
-	short x = (xlm << 8 | xhm);
-	short y = (ylm << 8 | yhm);
-	short z = (zlm << 8 | zhm);
+	short x = ( ( ( (unsigned short)xhm) << 8 ) | (((unsigned short)xlm) & 0x00FF));
+	short y = ( ( ( (unsigned short)yhm) << 8 ) | (((unsigned short)ylm) & 0x00FF));
+	short z = ( ( ( (unsigned short)zhm) << 8 ) | (((unsigned short)zlm) & 0x00FF));
 	
 	m.x = x;	// Convert to float, including sign-extension
 	m.y = y;	// Convert to float, including sign-extension
