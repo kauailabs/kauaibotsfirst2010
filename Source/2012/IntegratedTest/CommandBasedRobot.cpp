@@ -23,7 +23,6 @@ private:
 		//NetworkTable::Initialize();
 		
 		SmartDashboard*sd=SmartDashboard::GetInstance();
-		//Preferences*prefs=Preferences::GetInstance();
 		//sd->PutData(CommandBase::chute);
 		//sd->PutData(CommandBase::gobbler);
 		//sd->PutData(CommandBase::drive);
@@ -31,7 +30,6 @@ private:
 		//sd->PutData(CommandBase::tilter);
 		//sd->PutData(CommandBase::camera);
 		//sd->PutData(CommandBase::trafficcop);
-		//prefs->GetFloat(drive*cDefaultLowGearRatio,0.0);
 		
 		autoChooser.AddDefault(	"DunkRight",	new AutonomousPlayRight());
 		autoChooser.AddObject(	"DunkLeft",		new AutonomousPlayLeft());

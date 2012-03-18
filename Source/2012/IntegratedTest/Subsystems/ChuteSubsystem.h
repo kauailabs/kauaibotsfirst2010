@@ -31,7 +31,7 @@ private:
 public:
         ChuteSubsystem();
         void InitDefaultCommand();
-        
+        bool IsUp();
         void ChuteUp();
         void ChuteDown();
         void TriggerOn();
