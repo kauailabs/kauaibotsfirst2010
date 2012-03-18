@@ -41,7 +41,9 @@ void ChuteSubsystem::InitDefaultCommand()
         // Set the default command for a subsystem here.
         //SetDefaultCommand(new MySpecialCommand());
 }
-
+bool ChuteSubsystem::IsUp(){
+	return liftingUp->Get();
+}
 void ChuteSubsystem::ChuteUp()
 {
         liftingUp->Set(true);

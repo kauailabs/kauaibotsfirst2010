@@ -25,15 +25,23 @@ void Chute::Execute()
         	m_chuteUp = !m_chuteUp;
         }
         m_lastButtonState = currentButton;
-        if(m_chuteUp)
-        {
-        	chute->ChuteUp();
-        	chute->TriggerOn();
-        }
-        else
+        if (!tilter->IsUp())
         {
         	chute->ChuteDown();
         	chute->TriggerOff();
+        }
+        else
+        {
+        	if(m_chuteUp)
+        	{
+        		chute->ChuteUp();
+        		chute->TriggerOn();
+        	}
+        	else
+        	{
+        	    chute->ChuteDown();
+        	    chute->TriggerOff();
+        	}
         }
         SmartDashboard*sd=SmartDashboard::GetInstance();
         sd->PutBoolean("Tilter Down",m_chuteUp);

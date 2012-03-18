@@ -23,13 +23,20 @@ void Tilter::Execute() {
 			m_tilterDown = !m_tilterDown;
 		}
 		m_lastButtonState = currentButton;
-		if(!m_tilterDown)
+		if (chute->IsUp())
 		{
 			tilter->Up();
 		}
 		else
 		{
-			tilter->Down();
+			if(!m_tilterDown)
+			{
+				tilter->Up();
+			}
+			else
+			{
+				tilter->Down();
+			}
 		}
 		SmartDashboard*sd=SmartDashboard::GetInstance();
 		sd->PutBoolean("Tilter Down",m_tilterDown);

@@ -15,7 +15,9 @@ void TilterSubsystem::InitDefaultCommand() {
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
-
+bool TilterSubsystem::IsUp(){
+	return tilterUp->Get();
+}
 void TilterSubsystem::Up()
 {
         tilterUp->Set(true);

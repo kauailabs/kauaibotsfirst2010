@@ -21,6 +21,7 @@ public:
         TilterSubsystem();
         
         void InitDefaultCommand();
+        bool IsUp();
         void Up();
         void Down();
 };
