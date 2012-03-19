@@ -10,7 +10,7 @@ TrafficCopSubsystem::TrafficCopSubsystem() : Subsystem("TrafficCopSubsystem")
 void TrafficCopSubsystem::InitDefaultCommand() 
 {
         // Set the default command for a subsystem here.
-        SetDefaultCommand(new TrafficCop());
+        //SetDefaultCommand(new TrafficCop());
 }
 
 void TrafficCopSubsystem::Forward()

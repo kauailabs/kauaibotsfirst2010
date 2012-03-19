@@ -63,6 +63,7 @@ private:
 	
 	virtual void TeleopInit() {
 
+
 		// Set the iteration time period to "0.0" ms.  This special
 		// value means that each teleop iteration (see TeleopPeriodic())
 		// will execute whenever a new packet is received from
@@ -70,7 +71,7 @@ private:
 		// as a non-zero period, this assures the fastest possible
 		// response to commands (e.g., joystick) from the driver station.
 		
-		SetPeriod(0.0);
+		SetPeriod(0.02);
 		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to 

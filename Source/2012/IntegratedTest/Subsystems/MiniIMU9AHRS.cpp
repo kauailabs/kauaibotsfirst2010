@@ -59,6 +59,10 @@ float roll;
 float pitch;
 float yaw;
 
+float lastRoll;
+float lastPitch;
+float lastYaw;
+
 float errorRollPitch[3]= {0,0,0}; 
 float errorYaw[3]= {0,0,0};
 
@@ -108,7 +112,7 @@ void setup()
 { 
   I2C_Init();
 
-  //delay(1500);			// TODO:  Once it works, tune this to be shorter....
+  delay(1500);			// TODO:  Once it works, tune this to be shorter....
  
   Accel_Init();
   Compass_Init();
@@ -138,11 +142,85 @@ void setup()
 		  AN_OFFSET[4],
 		  AN_OFFSET[5] );*/
 		  
-  delay(200);				// TODO:  Once it works, tune this to be shorter; this delay seems unnecessary....
+  delay(500);				// TODO:  Once it works, tune this to be shorter; this delay seems unnecessary....
     
   timer=millis();
   delay(20);
   counter=0;
+
+  lastPitch = 0;
+  lastRoll = 0;
+  lastYaw = 0;
+  
+#ifndef USE_MAGNETOMETER
+  MAG_Heading = 0;  
+#endif
+}
+
+// The goal here is to reset all variables to 'zero' out any drift
+// which may have occurred.
+
+#define NUM_ARRAY_ELEMENTS_1D(arr) ( sizeof((arr)) / sizeof((arr)[0]) )
+#define INIT_ARRAY_1D( arr, val )  for ( size_t i=0; i < NUM_ARRAY_ELEMENTS_1D(arr); i++ ) { arr[i] = val; }
+
+#define NUM_ARRAY_ELEMENTS_2D_X(arr) ( sizeof((arr)) / sizeof((arr)[0]) )
+#define NUM_ARRAY_ELEMENTS_2D_Y(arr) ( sizeof((arr[0])) / sizeof((arr)[0][0]) )
+#define INIT_ARRAY_2D( arr, val )  for ( size_t x=0; x < NUM_ARRAY_ELEMENTS_2D_X(arr); x++ ) { for ( size_t y=0; y < NUM_ARRAY_ELEMENTS_2D_Y(arr); y++ ) { arr[x][y] = val; } } 
+
+void MiniIMU9AHRS::reset()
+{
+    CRITICAL_REGION(m_semaphore)
+    {
+	
+	INIT_ARRAY_1D( errorRollPitch, 0 );
+	INIT_ARRAY_1D( errorYaw, 0 );
+	INIT_ARRAY_1D( AN, 0 );  // TODO:  Review if this is necessary
+	
+	INIT_ARRAY_1D( Accel_Vector, 0 );
+	INIT_ARRAY_1D( Gyro_Vector, 0 );
+	INIT_ARRAY_1D( Omega_Vector, 0 );
+	INIT_ARRAY_1D( Omega_P, 0 );
+	INIT_ARRAY_1D( Omega_I, 0 );
+	INIT_ARRAY_1D( Omega, 0 );
+	
+	INIT_ARRAY_2D( Temporary_Matrix, 0 );
+	
+	DCM_Matrix[0][0] = 1;
+	DCM_Matrix[0][1] = 0;
+	DCM_Matrix[0][2] = 0;
+	DCM_Matrix[1][0] = 0;
+	DCM_Matrix[1][1] = 1;
+	DCM_Matrix[1][2] = 0;
+	DCM_Matrix[2][0] = 0;
+	DCM_Matrix[2][1] = 0;
+	DCM_Matrix[2][2] = 1;
+	
+	Update_Matrix[0][0] = 0;
+	Update_Matrix[0][1] = 1;
+	Update_Matrix[0][2] = 2;
+	Update_Matrix[1][0] = 3;
+	Update_Matrix[1][1] = 4;
+	Update_Matrix[1][2] = 5;
+	Update_Matrix[2][0] = 6;
+	Update_Matrix[2][1] = 7;
+	Update_Matrix[2][2] = 8;
+	
+	counter=0;
+	gyro_sat=0;
+	
+	timer=millis();
+	delay(20);
+	counter=0;
+	
+	lastPitch = 0;
+	lastRoll = 0;
+	lastYaw = 0;
+	  
+	#ifndef USE_MAGNETOMETER
+	  MAG_Heading = 0;  
+	#endif	
+    }
+    END_REGION;	  
 }
 
 void MiniIMU9AHRS::loop() //Main Loop
@@ -168,6 +246,7 @@ void MiniIMU9AHRS::loop() //Main Loop
 		Read_Gyro();   			// Read gyro data
 		Read_Accel();     		// Read I2C accelerometer
 		
+#ifdef USE_MAGNETOMETER		
 		if (counter > 5)  		// Read compass data at 10Hz... (5 loop runs)
 		{
 			counter = 0;
@@ -185,6 +264,7 @@ void MiniIMU9AHRS::loop() //Main Loop
 		    		magnetom_y,
 		    		magnetom_z);*/
 		}
+#endif		
     }
     END_REGION;
     
@@ -198,16 +278,20 @@ void MiniIMU9AHRS::loop() //Main Loop
 
     CRITICAL_REGION(m_semaphore)
 	{
+    	lastRoll = roll;
+    	lastPitch = pitch;
+    	lastYaw = yaw;
+    	
     	Euler_angles();
     	
-    	const float rad_to_deg = (180.0 / M_PI);
+    	/*const float rad_to_deg = (180.0 / M_PI);
     	
     	float pitchDegrees = pitch * rad_to_deg;
     	float rollDegrees  = roll  * rad_to_deg;
     	float yawDegrees   = yaw   * rad_to_deg;
     	
 	    printf("Pitch:  %4.2f Roll:  %4.2f Yaw:  %4.2f\n", pitchDegrees, rollDegrees, yawDegrees );
-
+		*/
 	}
     
     END_REGION;
@@ -261,6 +345,36 @@ void MiniIMU9AHRS::GetEulerAnglesDegrees( double& currPitch, double& currRoll, d
     currYaw   *= rad_to_deg;
 }
 
+void MiniIMU9AHRS::GetDeltaEulerAnglesDegrees( double& deltaPitch, double& deltaRoll, double& deltaYaw )
+{
+	float currRoll, currPitch, currYaw, prevRoll, prevPitch, prevYaw;
+    
+	CRITICAL_REGION(m_semaphore)
+	{
+		currRoll 	= roll;
+		currPitch 	= pitch;
+		currYaw 	= yaw;
+		
+		prevRoll	= lastRoll;
+		prevPitch	= lastPitch;
+		prevYaw		= lastYaw;
+	}
+    END_REGION;		
+
+    deltaPitch 	= currPitch - prevPitch;
+    deltaRoll	= currRoll 	- prevRoll;
+    deltaYaw	= currYaw	- prevYaw;
+
+    // Convert from Radians to Degrees
+    
+    deltaPitch  *= rad_to_deg;
+    deltaRoll 	*= rad_to_deg;
+    deltaYaw   	*= rad_to_deg;
+
+}
+
+const float g_scalefactor = float(1) / .0039;	// 3.9mg per digit
+
 void MiniIMU9AHRS::GetAccelGs( double& x, double& y, double& z )
 {
     CRITICAL_REGION(m_semaphore)
@@ -269,6 +383,12 @@ void MiniIMU9AHRS::GetAccelGs( double& x, double& y, double& z )
     	y = accel_y;
     	z = accel_z;
 	}
+    
+    // scale to Gs
+    x /= g_scalefactor;
+    y /= g_scalefactor;
+    z /= g_scalefactor;
+    
     END_REGION;	
 }
 
@@ -301,5 +421,9 @@ void MiniIMU9AHRS::CalibrateCompass( int numIterations )
 
 double MiniIMU9AHRS::GetCompassHeading()
 {
-	return MAG_Heading;
+    CRITICAL_REGION(m_semaphore)
+	{
+    	return MAG_Heading;
+	}
+    END_REGION;	
 }

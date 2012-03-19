@@ -2,6 +2,7 @@
 #include "ShootNow.h"
 #include "DriveDistance.h"
 #include "WaitTime.h"
+#include "CameraUp.h"
 
 AutonomousPlayRight::AutonomousPlayRight() {
         // Add Commands here:
@@ -9,14 +10,15 @@ AutonomousPlayRight::AutonomousPlayRight() {
         //      AddSequential(new Command2());
         // these will run in order.
 	
+		AddParallel(new CameraUp(true));
 		AddSequential(new ShootNow(true, 1.5,false));
 		AddSequential(new DriveDistance(false,-16,125,false));
 		//AddSequential(new WaitTime(1.0));
 		AddSequential(new DriveDistance(true,-85,125,false));
 		//AddSequential(new WaitTime(1.0));
 		AddParallel(new ShootNow(true, 10.0,true));
-		AddSequential(new DriveDistance(false,18,125,false));
-		
+		AddSequential(new DriveDistance(false,30,125,false));
+		AddSequential(new CameraUp(false));
         // To run multiple commands at the same time,
         // use AddParallel()
         // e.g. AddParallel(new Command1());

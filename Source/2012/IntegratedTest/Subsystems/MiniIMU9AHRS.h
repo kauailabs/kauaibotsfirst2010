@@ -81,6 +81,8 @@ inline float constrain(float val,float min,float max)
 
 #define STATUS_LED 13 
 
+#define USE_MAGNETOMETER
+
 class MiniIMU9AHRS
 {
 private:
@@ -89,21 +91,29 @@ private:
     
     static void CallIntegrator( void *ahrs );
     void loop();
+    void reset();
     
 public:
 	MiniIMU9AHRS();
 	~MiniIMU9AHRS();
-    void GetEulerAnglesDegrees( double& pitch, double& roll, double& yaw );
+    
+	// Processed results from DCM Estimation Algorithm
+	
+	void GetEulerAnglesDegrees( double& pitch, double& roll, double& yaw );
+    double GetCompassHeading();
+    void GetDeltaEulerAnglesDegrees( double& deltaPitch, double& deltaRoll, double& deltaYaw );
+
+    // Raw data from sensors
+    
     void GetAccelGs( double& x, double& y, double& z );
     void GetAngularVelocityDegreesPerSec( double& x, double& y, double& z );
     void GetMagnetometerGauss( double& x, double& y, double& z );
-    double GetCompassHeading();
     
     // Calibration Routine
     //
     // Calibrate() calculates zero-g offsets and rotations 
     // for the accelerometer and gyroscope.  This routine currently
-    // takes 3-4 second to execute, and is automatically invoked
+    // takes ~600 milliseconds second to execute, and is automatically invoked
     // within the constructor of this class.
     //
     // Therefore, it is not typically required to invoke this method.

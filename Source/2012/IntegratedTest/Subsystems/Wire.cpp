@@ -153,6 +153,14 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
 		{
 			rxBufferLength = quantity;
 		}
+		else // Error; pretend we were able to read the data.
+		{
+			for ( int i = 0; i < quantity; i++ )
+			{
+				rxBuffer[rxBufferIndex + i] = 0;
+			}
+			rxBufferLength = quantity;
+		}
 	}
     return rxBufferLength;
 }

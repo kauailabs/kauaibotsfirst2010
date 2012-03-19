@@ -52,9 +52,9 @@ CameraSubsystem::CameraSubsystem() :
     m_MinTargetRowEdgeScore             = Preferences::GetInstance()->GetDouble( "CameraTargetMinRowEdgeScore", 0.0 );
             
         // Force the creation of all network tables used by this subsystem.
-        UpdateNetworkTable(m_lastTarget,4);
+        /*UpdateNetworkTable(m_lastTarget,4);
         UpdateNetworkTable(true,&m_lastHoop);
-        
+        */
         SetDetectionMode( CameraSubsystem::kDetectNone );
         
         // Scott Libert, 3/10/2012 - Disable Camera Image Processing

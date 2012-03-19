@@ -66,6 +66,8 @@ public:
         void GetAccelerationGs( double& accelX, double& accelY, double& accelZ );
         void GetVelocityFeetSec( double& velX, double& velY, double& velZ );
         void GetDistanceFeet( double& distX, double& distY, double& d);
+        void GetAngularVelocityDegreesPerSec( double& x, double& y, double& z);
+        void GetDeltaEulerAnglesDegrees( double& deltaPitch, double& deltaRoll, double& deltaYaw );
         
         // Returns the derived velocities (in the same units as provided to DoMecanum)
         // based on inputs from the encoders, and processed using Mecanum Fwd Kinematics
@@ -110,7 +112,7 @@ protected:
         void ThreadSafeSetAutoMotorOutputValue( float rot );    
         
         double ClipGyroAngle( double dInputAngle );    
-        void UpdateDashboardWithSensors();
+        void UpdateDashboardWithSensors( int iIteration /* 0 - 3 */ );
         
         // Recalibrates the sensors.  Note that this will take
         // a second or so to execute.

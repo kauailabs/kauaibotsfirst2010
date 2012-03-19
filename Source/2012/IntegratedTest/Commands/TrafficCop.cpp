@@ -2,7 +2,7 @@
 
 TrafficCop::TrafficCop() 
 {
-        Requires(trafficcop);
+        //Requires(trafficcop);
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 }
@@ -16,6 +16,7 @@ void TrafficCop::Initialize() {
 
 void TrafficCop::Execute() 
 {
+	/*
         bool bTrafficCopForward = oi->getDriverStation()->GetDigitalIn(7);
         bool bTrafficCopBack = oi->getDriverStation()->GetDigitalIn(8);
 
@@ -36,6 +37,7 @@ void TrafficCop::Execute()
         {
                 trafficcop->Off();
         }
+        */
 }
 
 // Make this return true when this Command no longer needs to run execute()

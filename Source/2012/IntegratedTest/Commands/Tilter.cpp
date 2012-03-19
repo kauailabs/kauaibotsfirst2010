@@ -38,8 +38,8 @@ void Tilter::Execute() {
 				tilter->Down();
 			}
 		}
-		SmartDashboard*sd=SmartDashboard::GetInstance();
-		sd->PutBoolean("Tilter Down",m_tilterDown);
+		/*SmartDashboard*sd=SmartDashboard::GetInstance();
+		sd->PutBoolean("Tilter Down",m_tilterDown);*/
 }
 
 // Make this return true when this Command no longer needs to run execute()
