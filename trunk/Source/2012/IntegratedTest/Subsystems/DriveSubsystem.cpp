@@ -6,7 +6,7 @@
 static SEM_ID cAutoRotateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);
 
 #define DEGREES_IN_A_CIRCLE     360
-const float cDefaultLowGearRatio = .25;
+const float cDefaultLowGearRatio = .15;
 
 DriveSubsystem::DriveSubsystem() : 
         PIDSubsystem(   "DriveSubsystem",
@@ -34,7 +34,7 @@ DriveSubsystem::DriveSubsystem() :
 #endif
 {       
         m_UpdateDashboardCount = 0;
-        m_UpdateDashboardRate = Preferences::GetInstance()->GetInt("DriveUpdateDashboardRate", 4);
+        m_UpdateDashboardRate = 4;
         m_LowGearRatio = Preferences::GetInstance()->GetFloat("DriveLowGearRatio",cDefaultLowGearRatio);
         SetDriveGear(DriveSubsystem::kHighGear);
         InitializeSensors();
@@ -105,10 +105,8 @@ void DriveSubsystem::DoMecanum( float vX, float vY, float vRot )
         drive.DoMecanum( vX, vY, vRot );
         
         // Periodically update the dashboard w/sensors
-        if ( ( m_UpdateDashboardCount % m_UpdateDashboardRate ) == 0 )
-        {
-                UpdateDashboardWithSensors();
-        }
+        int iIteration = ( m_UpdateDashboardCount % m_UpdateDashboardRate );
+        UpdateDashboardWithSensors(iIteration);
         m_UpdateDashboardCount++;
 }
 CANJaguar::ControlMode DriveSubsystem::GetControlMode()
@@ -129,6 +127,25 @@ void DriveSubsystem::GetEulerAnglesDegrees( double& pitchAngle, double& rollAngl
         rollAngle		= 0.0;
 #else        
         imu.GetEulerAnglesDegrees(pitchAngle,rollAngle,yawAngle);
+#endif
+}
+
+void DriveSubsystem::GetDeltaEulerAnglesDegrees( double& pitchAngle, double& rollAngle, double& yawAngle)
+{
+#ifndef USE_MINIIMU9AHRS
+        yawAngle        = 0;
+        pitchAngle      = 0;
+        rollAngle		= 0;
+#else        
+        imu.GetDeltaEulerAnglesDegrees(pitchAngle,rollAngle,yawAngle);
+#endif	
+}
+void DriveSubsystem::GetAngularVelocityDegreesPerSec( double& x, double& y, double& z)
+{
+#ifndef USE_MINIIMU9AHRS
+	x = y = z = 0.0;
+#else
+	imu.GetAngularVelocityDegreesPerSec( x, y, z );
 #endif
 }
 
@@ -244,50 +261,65 @@ DriveSubsystem::DriveGear DriveSubsystem::GetDriveGear()
         return m_DriveGear;
 }
 
-void DriveSubsystem::UpdateDashboardWithSensors()
+void DriveSubsystem::UpdateDashboardWithSensors( int iIteration )
 {
         SmartDashboard *pDashboard = SmartDashboard::GetInstance();
         if ( pDashboard )
         {
+        	if ( iIteration == 0 )
+        	{
             	double pitch, roll, yaw;
             	pitch = roll = yaw = 0.0;
-            	GetEulerAnglesDegrees(pitch,roll,yaw);
-                pDashboard->PutDouble(  "YawAngle",             yaw);
-                pDashboard->PutDouble(  "PitchAngle",           pitch);
+            	GetEulerAnglesDegrees( pitch, roll, yaw );
+                //pDashboard->PutDouble(  "YawAngle",             yaw);
+                
+            	pDashboard->PutDouble(  "PitchAngle",           pitch);
                 pDashboard->PutDouble(  "RollAngle",            roll);
 
+                double deltaPitch, deltaRoll, deltaYaw;
+                GetDeltaEulerAnglesDegrees( deltaPitch, deltaRoll, deltaYaw );
+                
+            	pDashboard->PutDouble(  "DeltaPitchAngle",           deltaPitch);
+                pDashboard->PutDouble(  "DeltaRollAngle",            deltaRoll);                
+ 
+                double velX, velY, velZ;
+                GetAngularVelocityDegreesPerSec( velX, velY, velZ );
+                
+                pDashboard->PutDouble(	"AngVelX",					velX );
+                pDashboard->PutDouble(	"AngVelY",					velY );
+                
+                /*
                 pDashboard->PutDouble(  "FrontRange",           frontRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RightRange",           rightRanger.GetRangeInches());
                 pDashboard->PutDouble(  "RearRange",            rearRanger.GetRangeInches());
                 pDashboard->PutDouble(  "LeftRange",            leftRanger.GetRangeInches());
+                */
                 
-                //pDashboard->PutBoolean( "FrontEdge",            (frontEdgeFinder.Get() != 0));
-                //pDashboard->PutBoolean( "RightEdge",            (rightEdgeFinder.Get() != 0));
-                //pDashboard->PutBoolean( "RearEdge",             (rearEdgeFinder.Get() != 0));
-                //pDashboard->PutBoolean( "LeftEdge",             (leftEdgeFinder.Get() != 0));
+                /*
+                pDashboard->PutBoolean( "FrontEdge",            (frontEdgeFinder.Get() != 0));
+                pDashboard->PutBoolean( "RightEdge",            (rightEdgeFinder.Get() != 0));
+                pDashboard->PutBoolean( "RearEdge",             (rearEdgeFinder.Get() != 0));
+                pDashboard->PutBoolean( "LeftEdge",             (leftEdgeFinder.Get() != 0));
+                */
                 
-                pDashboard->PutDouble(  "MotorAmps_FL",         drive.FrontLeftMotor().GetOutputCurrent());     
-                pDashboard->PutDouble(  "MotorAmps_FR",         drive.FrontRightMotor().GetOutputCurrent());    
-                pDashboard->PutDouble(  "MotorAmps_RR",         drive.RearRightMotor().GetOutputCurrent());     
-                pDashboard->PutDouble(  "MotorAmps_RL",         drive.RearLeftMotor().GetOutputCurrent());      
-                pDashboard->PutDouble(  "WheelRPM_FL",          drive.FrontLeftMotor().GetSpeed());     
-                pDashboard->PutDouble(  "WheelRPM_FR",          drive.FrontRightMotor().GetSpeed());    
-                pDashboard->PutDouble(  "WheelRPM_RR",          drive.RearRightMotor().GetSpeed());     
-                pDashboard->PutDouble(  "WheelRPM_RL",          drive.RearLeftMotor().GetSpeed());      
-
-                double accelX, accelY, accelZ = 0;
+                /*if ( iIteration == 0 )
+                {
+					pDashboard->PutDouble(  "MotorAmps_FL",         drive.FrontLeftMotor().GetOutputCurrent());     
+					pDashboard->PutDouble(  "MotorAmps_FR",         drive.FrontRightMotor().GetOutputCurrent());    
+					pDashboard->PutDouble(  "MotorAmps_RR",         drive.RearRightMotor().GetOutputCurrent());     
+					pDashboard->PutDouble(  "MotorAmps_RL",         drive.RearLeftMotor().GetOutputCurrent());      
+					pDashboard->PutDouble(  "WheelRPM_FL",          drive.FrontLeftMotor().GetSpeed());     
+					pDashboard->PutDouble(  "WheelRPM_FR",          drive.FrontRightMotor().GetSpeed());    
+					pDashboard->PutDouble(  "WheelRPM_RR",          drive.RearRightMotor().GetSpeed());     
+					pDashboard->PutDouble(  "WheelRPM_RL",          drive.RearLeftMotor().GetSpeed());      
+                }*/
+                
+                /*double accelX, accelY, accelZ = 0;
                 GetAccelerationGs( accelX, accelY, accelZ );
                 pDashboard->PutDouble(  "Acceleration_X",       accelX);
                 pDashboard->PutDouble(  "Acceleration_Y",       accelY);
-                pDashboard->PutDouble(  "Acceleration_Z",       accelZ);
-                
-                /*pDashboard->PutDouble(  "Velocity_X",           accelerometer.GetVelocityX());
-                pDashboard->PutDouble(  "Velocity_Y",           accelerometer.GetVelocityY());
-                pDashboard->PutDouble(  "Velocity_Z",           accelerometer.GetVelocityZ());
-                
-                pDashboard->PutDouble(  "Distance_X",           accelerometer.GetDistanceX());
-                pDashboard->PutDouble(  "Distance_Y",           accelerometer.GetDistanceY());
-                pDashboard->PutDouble(  "Distance_Z",           accelerometer.GetDistanceZ());*/
+                pDashboard->PutDouble(  "Acceleration_Z",       accelZ);*/
+        	}
         }
 }
 

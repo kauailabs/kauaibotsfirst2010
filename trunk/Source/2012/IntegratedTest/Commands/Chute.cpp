@@ -59,7 +59,7 @@ void Chute::Execute()
         {
                 chute->SetSteeringAngle(STEERING_CENTER_POSITION_DEGREES);
         }
-        chute->UpdateStatus();
+        //chute->UpdateStatus();
 }
 
 

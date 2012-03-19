@@ -14,7 +14,7 @@ void Hopper::Initialize() {
 void Hopper::Execute() {
 		Joystick*zjoystick;
 		zjoystick = oi->getShooterJoystick();
-		bool hopperup=zjoystick->GetRawButton(5);
+		bool hopperup=zjoystick->GetRawButton(4);
         if (hopperup)
         {
                 hopper->On();

@@ -51,22 +51,23 @@ void Camera::Execute() {
         // else down periscope
         Joystick*pjoystick;
         pjoystick = oi->getShooterJoystick();
-        bool currentButton=pjoystick->GetRawButton(4);
-        if(currentButton && !m_lastButtonState)
+        //bool currentButton=pjoystick->GetRawButton(4);
+        float hatValue = pjoystick->GetRawAxis(5);
+        /*if(currentButton && !m_lastButtonState)
         {
         	m_cameraUp = !m_cameraUp;
        	}
-       	m_lastButtonState = currentButton;
-       	if(m_cameraUp)
+       	m_lastButtonState = currentButton;*/
+       	if(hatValue < 0)
        	{
        		camera->UpPeriscope();
         }
-       	else
+       	else if ( hatValue > 0 )
        	{
        		camera->DownPeriscope();
         }
-        SmartDashboard*sd=SmartDashboard::GetInstance();
-        sd->PutBoolean("Tilter Down",m_cameraUp);
+        //SmartDashboard*sd=SmartDashboard::GetInstance();
+        //sd->PutBoolean("Tilter Down",m_cameraUp);
         // Digital Input 5 on:  Chute angle of -10
         // Digital Input 6 on:  Chute angle of 10
         // else:                Chute angle of 0
