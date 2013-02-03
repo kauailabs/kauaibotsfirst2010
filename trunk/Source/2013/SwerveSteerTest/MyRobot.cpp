@@ -19,6 +19,8 @@ public:
 		steer1(FRONT_SIDECAR, FRONT_LEFT_STEER_DATA, FRONT_LEFT_STEER_CHIPSELECT,FRONT_LEFT_STEER_CLOCK, FRONT_LEFT_STEER_MOTOR )
 	{
 		//myRobot.SetExpiration(0.1);
+		SmartDashboard::init();
+		SmartDashboard::PutData(&steer1);
 		steer1.Enable();
 	}
 
@@ -43,7 +45,7 @@ public:
 		{
 			//myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
 			double twist= stick.GetTwist();
-			steer1.SetSetpoint(twist*180);
+			steer1.SetSetpoint(twist);
 			
 			Wait(0.005);				// wait for a motor update time
 		}
