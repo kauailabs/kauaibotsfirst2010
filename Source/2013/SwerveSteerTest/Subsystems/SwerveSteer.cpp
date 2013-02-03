@@ -1,6 +1,7 @@
 #include "SwerveSteer.h"
 #include "../Robotmap.h"
 #include "SmartDashboard/SmartDashboard.h"
+#include <time.h>
 
 SwerveSteer::SwerveSteer(int dsc, int data_pin, int chipselect_pin, int clock_pin, int motor_channel) : 
 	PIDSubsystem("SwerveSteer", Kp, Ki, Kd),
@@ -9,6 +10,9 @@ SwerveSteer::SwerveSteer(int dsc, int data_pin, int chipselect_pin, int clock_pi
 	clock(dsc, clock_pin),
 	motor(dsc, motor_channel)
 {
+	GetPIDController()->SetContinuous(true);
+	GetPIDController()->SetInputRange(-1,1);
+	GetPIDController()->SetOutputRange(-1,1);
 	chip_select.Set(1);
 	clock.Set(1);
 	motor.SetSafetyEnabled(false);
@@ -19,7 +23,10 @@ SwerveSteer::SwerveSteer(int dsc, int data_pin, int chipselect_pin, int clock_pi
 }
 
 double SwerveSteer::ReturnPIDInput() {
-	
+	struct timespec ts;
+	ts.tv_sec=0;
+	ts.tv_sec=0;
+	ts.tv_nsec=500;
 	chip_select.Set(1);
 	unsigned short angle=0;
 	
@@ -27,10 +34,14 @@ double SwerveSteer::ReturnPIDInput() {
 	double real_Angle;
 	clock.Set(1);
 	chip_select.Set(0);
+	//Wait(.001);
+	nanosleep(&ts,NULL);
 	for (int i=0;i<12;i++)
 	{
 		clock.Set(0);
 		clock.Set(1);
+		//Wait(.001);
+		nanosleep(&ts,NULL);
 		bit=data.Get();
 		angle=angle<<1;
 		angle|=bit;
@@ -39,7 +50,11 @@ double SwerveSteer::ReturnPIDInput() {
 	clock.Set(1);
 	real_Angle=((double)angle*360)/4096;
 	real_Angle=real_Angle-180;
-	printf("angle: %f\n",real_Angle);
+	real_Angle/=180;
+	char buff[128];
+	sprintf(buff, "%f", real_Angle);
+	SmartDashboard::PutString("encoderAngle",buff);
+	printf("angle= %f\n", real_Angle);
 	return real_Angle;
 }
 

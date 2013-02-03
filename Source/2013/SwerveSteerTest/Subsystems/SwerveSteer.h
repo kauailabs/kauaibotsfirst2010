@@ -15,8 +15,8 @@ private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 	// set the P, I, and D constants here
-	static const double Kp = (1.0/180.0)*.5;
-	static const double Ki = 0.0;
+	static const double Kp = .05;
+	static const double Ki = 0.1;
 	static const double Kd = 0.0;
 	DigitalInput data;
 	DigitalOutput chip_select;
