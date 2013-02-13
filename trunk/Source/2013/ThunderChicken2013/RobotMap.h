@@ -12,6 +12,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 #include "WPILib.h"
+#include "Subsystems/AngleSensor.h"
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -35,25 +36,25 @@ public:
 	static SpeedController* climberfront_winch_motor;
 	static SpeedController* climberrear_winch_motor;
 	static SpeedController* swerveDriveSystemleft_front_steer_motor;
-	static Ultrasonic* swerveDriveSystemleft_front_angle_sensor;
+	static AngleSensor* swerveDriveSystemleft_front_angle_sensor;
 	static PIDController* swerveDriveSystemleft_front_steer;
 	static Encoder* swerveDriveSystemleft_front_rpm_sensor;
 	static SpeedController* swerveDriveSystemleft_front_drive_motor;
 	static PIDController* swerveDriveSystemleft_front_drive;
 	static SpeedController* swerveDriveSystemright_front_steer_motor;
-	static Ultrasonic* swerveDriveSystemright_front_angle_sensor;
+	static AngleSensor* swerveDriveSystemright_front_angle_sensor;
 	static PIDController* swerveDriveSystemright_front_steer;
 	static Encoder* swerveDriveSystemright_front_rpm_sensor;
 	static SpeedController* swerveDriveSystemright_front_drive_motor;
 	static PIDController* swerveDriveSystemright_front_drive;
 	static SpeedController* swerveDriveSystemleft_back_steer_motor;
-	static Ultrasonic* swerveDriveSystemleft_back_angle_sensor;
+	static AngleSensor* swerveDriveSystemleft_back_angle_sensor;
 	static PIDController* swerveDriveSystemleft_back_steer;
 	static Encoder* swerveDriveSystemleft_back_rpm_sensor;
 	static SpeedController* swerveDriveSystemleft_back_drive_motor;
 	static PIDController* swerveDriveSystemleft_back_drive;
 	static SpeedController* swerveDriveSystemright_back_steer_motor;
-	static Ultrasonic* swerveDriveSystemright_back_angle_sensor;
+	static AngleSensor* swerveDriveSystemright_back_angle_sensor;
 	static PIDController* swerveDriveSystemright_back_steer;
 	static SpeedController* swerveDriveSystemright_back_drive_motor;
 	static Encoder* swerveDriveSystemright_back_rpm_sensor;
