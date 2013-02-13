@@ -4,6 +4,7 @@
 #include "WPIErrors.h"
 #include "LiveWindow/LiveWindow.h"
 #include <time.h>
+#include <math.h>
 
 ProximitySensor::ProximitySensor(UINT8 analog_module,UINT32 analog_channel, SensorRange range) :
 	input(analog_module, analog_channel)
@@ -29,14 +30,44 @@ ProximitySensor::~ProximitySensor()
 /**
  * Return the actual distance in millimeters.
  * 
- * @return the current distance in millimetersheading of the robot in degrees. This distance is
- * based on calculation of the returned rate from the ProximitySensor.
+ * @return the current distance in millimeters.
  */
 
 float ProximitySensor::GetDistanceMM( void )
 {
-	float distance_mm = 0.0;
-
+	// Highest possible analog read valus is 4095
+	// corresponding voltage is 5V
+	
+	UINT16 counts = input.GetValue();
+	
+	// TODO:  Oversample and average
+	
+	float voltage = (5.0/4095) * counts;
+	
+	// Transform voltage to distance.  Exponential values
+	// were derived from the datasheets:
+	//
+	// GP2D120XJ00F (Short Range [30cm]):  https://www.sparkfun.com/datasheets/Sensors/Infrared/GP2D120XJ00F_SS.pdf
+	// GP2Y0A21YK (Medium Range [80cm]):  http://www.sparkfun.com/datasheets/Components/GP2Y0A21YK.pdf
+	// GP2Y0A02YK0F (Long Range [150cm]):  https://www.sparkfun.com/datasheets/Sensors/Infrared/gp2y0a02yk_e.pdf
+	
+	float distance_mm;
+	switch ( range )
+	{
+	case kShortRange:
+	
+		distance_mm = 126.27 * pow(voltage, -1.102);
+		break;
+		
+	case kMediumRange:
+		distance_mm = 267.1 * pow(voltage, -1.23);
+		break;
+		
+	case kLongRange:
+		distance_mm = 0.0;	// TODO
+		break;
+	}
+	
 	return distance_mm;
 }
 
