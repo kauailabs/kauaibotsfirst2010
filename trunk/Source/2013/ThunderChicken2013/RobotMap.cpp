@@ -20,9 +20,9 @@ SpeedController* RobotMap::shootermotor = NULL;
 Encoder* RobotMap::shooterencoder = NULL;
 DoubleSolenoid* RobotMap::magazinetrigger = NULL;
 DoubleSolenoid* RobotMap::magazinelifter = NULL;
-AnalogChannel* RobotMap::magazinefirsbee_counter = NULL;
+ProximitySensor* RobotMap::magazinefirsbee_counter = NULL;
 Compressor* RobotMap::pneumaticscompressor = NULL;
-AnalogChannel* RobotMap::tilterheight_sensor = NULL;
+ProximitySensor* RobotMap::tilterheight_sensor = NULL;
 SpeedController* RobotMap::tiltermotor = NULL;
 SpeedController* RobotMap::climberfront_winch_motor = NULL;
 SpeedController* RobotMap::climberrear_winch_motor = NULL;
@@ -76,13 +76,13 @@ void RobotMap::init() {
 	magazinelifter = new DoubleSolenoid(1, 3, 4);      
 	
 	
-	magazinefirsbee_counter = new AnalogChannel(1, 1);
+	magazinefirsbee_counter = new ProximitySensor(1, 1, ProximitySensor::kShortRange);
 	lw->AddSensor("Magazine", "firsbee_counter", magazinefirsbee_counter);
 	
 	pneumaticscompressor = new Compressor(2, 7, 1, 1);
 	
 	
-	tilterheight_sensor = new AnalogChannel(1, 2);
+	tilterheight_sensor = new ProximitySensor(1, 2, ProximitySensor::kMediumRange);
 	lw->AddSensor("Tilter", "height_sensor", tilterheight_sensor);
 	
 	tiltermotor = new Jaguar(1, 2);

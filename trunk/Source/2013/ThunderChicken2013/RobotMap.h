@@ -13,6 +13,7 @@
 #define ROBOTMAP_H
 #include "WPILib.h"
 #include "Subsystems/AngleSensor.h"
+#include "Subsystems/ProximitySensor.h"
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -29,9 +30,9 @@ public:
 	static Encoder* shooterencoder;
 	static DoubleSolenoid* magazinetrigger;
 	static DoubleSolenoid* magazinelifter;
-	static AnalogChannel* magazinefirsbee_counter;
+	static ProximitySensor* magazinefirsbee_counter;
 	static Compressor* pneumaticscompressor;
-	static AnalogChannel* tilterheight_sensor;
+	static ProximitySensor* tilterheight_sensor;
 	static SpeedController* tiltermotor;
 	static SpeedController* climberfront_winch_motor;
 	static SpeedController* climberrear_winch_motor;
