@@ -27,25 +27,25 @@ SpeedController* RobotMap::tiltermotor = NULL;
 SpeedController* RobotMap::climberfront_winch_motor = NULL;
 SpeedController* RobotMap::climberrear_winch_motor = NULL;
 SpeedController* RobotMap::swerveDriveSystemleft_front_steer_motor = NULL;
-Ultrasonic* RobotMap::swerveDriveSystemleft_front_angle_sensor = NULL;
+AngleSensor* RobotMap::swerveDriveSystemleft_front_angle_sensor = NULL;
 PIDController* RobotMap::swerveDriveSystemleft_front_steer = NULL;
 Encoder* RobotMap::swerveDriveSystemleft_front_rpm_sensor = NULL;
 SpeedController* RobotMap::swerveDriveSystemleft_front_drive_motor = NULL;
 PIDController* RobotMap::swerveDriveSystemleft_front_drive = NULL;
 SpeedController* RobotMap::swerveDriveSystemright_front_steer_motor = NULL;
-Ultrasonic* RobotMap::swerveDriveSystemright_front_angle_sensor = NULL;
+AngleSensor* RobotMap::swerveDriveSystemright_front_angle_sensor = NULL;
 PIDController* RobotMap::swerveDriveSystemright_front_steer = NULL;
 Encoder* RobotMap::swerveDriveSystemright_front_rpm_sensor = NULL;
 SpeedController* RobotMap::swerveDriveSystemright_front_drive_motor = NULL;
 PIDController* RobotMap::swerveDriveSystemright_front_drive = NULL;
 SpeedController* RobotMap::swerveDriveSystemleft_back_steer_motor = NULL;
-Ultrasonic* RobotMap::swerveDriveSystemleft_back_angle_sensor = NULL;
+AngleSensor* RobotMap::swerveDriveSystemleft_back_angle_sensor = NULL;
 PIDController* RobotMap::swerveDriveSystemleft_back_steer = NULL;
 Encoder* RobotMap::swerveDriveSystemleft_back_rpm_sensor = NULL;
 SpeedController* RobotMap::swerveDriveSystemleft_back_drive_motor = NULL;
 PIDController* RobotMap::swerveDriveSystemleft_back_drive = NULL;
 SpeedController* RobotMap::swerveDriveSystemright_back_steer_motor = NULL;
-Ultrasonic* RobotMap::swerveDriveSystemright_back_angle_sensor = NULL;
+AngleSensor* RobotMap::swerveDriveSystemright_back_angle_sensor = NULL;
 PIDController* RobotMap::swerveDriveSystemright_back_steer = NULL;
 SpeedController* RobotMap::swerveDriveSystemright_back_drive_motor = NULL;
 Encoder* RobotMap::swerveDriveSystemright_back_rpm_sensor = NULL;
@@ -97,7 +97,7 @@ void RobotMap::init() {
 	swerveDriveSystemleft_front_steer_motor = new Talon(1, 9);
 	lw->AddActuator("SwerveDriveSystem", "left_front_steer_motor", (Talon*) swerveDriveSystemleft_front_steer_motor);
 	
-	swerveDriveSystemleft_front_angle_sensor = new Ultrasonic(1, 14, 1, 13);
+	swerveDriveSystemleft_front_angle_sensor = new AngleSensor(1, 12, 14, 13);
 	lw->AddSensor("SwerveDriveSystem", "left_front_angle_sensor", swerveDriveSystemleft_front_angle_sensor);
 	
 	swerveDriveSystemleft_front_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemleft_front_angle_sensor, swerveDriveSystemleft_front_steer_motor, 0.02);
@@ -119,7 +119,7 @@ void RobotMap::init() {
 	swerveDriveSystemright_front_steer_motor = new Talon(1, 7);
 	lw->AddActuator("SwerveDriveSystem", "right_front_steer_motor", (Talon*) swerveDriveSystemright_front_steer_motor);
 	
-	swerveDriveSystemright_front_angle_sensor = new Ultrasonic(1, 9, 1, 8);
+	swerveDriveSystemright_front_angle_sensor = new AngleSensor(1, 7, 9, 8);
 	lw->AddSensor("SwerveDriveSystem", "right_front_angle_sensor", swerveDriveSystemright_front_angle_sensor);
 	
 	swerveDriveSystemright_front_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemright_front_angle_sensor, swerveDriveSystemright_front_steer_motor, 0.02);
@@ -141,7 +141,7 @@ void RobotMap::init() {
 	swerveDriveSystemleft_back_steer_motor = new Talon(2, 9);
 	lw->AddActuator("SwerveDriveSystem", "left_back_steer_motor", (Talon*) swerveDriveSystemleft_back_steer_motor);
 	
-	swerveDriveSystemleft_back_angle_sensor = new Ultrasonic(2, 14, 2, 13);
+	swerveDriveSystemleft_back_angle_sensor = new AngleSensor(2, 12, 14, 13);
 	lw->AddSensor("SwerveDriveSystem", "left_back_angle_sensor", swerveDriveSystemleft_back_angle_sensor);
 	
 	swerveDriveSystemleft_back_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemleft_back_angle_sensor, swerveDriveSystemleft_back_steer_motor, 0.02);
@@ -163,7 +163,7 @@ void RobotMap::init() {
 	swerveDriveSystemright_back_steer_motor = new Talon(2, 7);
 	lw->AddActuator("SwerveDriveSystem", "right_back_steer_motor", (Talon*) swerveDriveSystemright_back_steer_motor);
 	
-	swerveDriveSystemright_back_angle_sensor = new Ultrasonic(2, 9, 2, 8);
+	swerveDriveSystemright_back_angle_sensor = new AngleSensor(2, 7, 9, 8);
 	lw->AddSensor("SwerveDriveSystem", "right_back_angle_sensor", swerveDriveSystemright_back_angle_sensor);
 	
 	swerveDriveSystemright_back_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemright_back_angle_sensor, swerveDriveSystemright_back_steer_motor, 0.02);
