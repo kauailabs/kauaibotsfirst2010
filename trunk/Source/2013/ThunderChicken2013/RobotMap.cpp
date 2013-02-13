@@ -17,7 +17,6 @@
 Servo* RobotMap::cameraazimuth_servo = NULL;
 Servo* RobotMap::cameraelevation_servo = NULL;
 SpeedController* RobotMap::shootermotor = NULL;
-Encoder* RobotMap::shooterencoder = NULL;
 DoubleSolenoid* RobotMap::magazinetrigger = NULL;
 DoubleSolenoid* RobotMap::magazinelifter = NULL;
 ProximitySensor* RobotMap::magazinefirsbee_counter = NULL;
@@ -66,17 +65,10 @@ void RobotMap::init() {
 	shootermotor = new Jaguar(1, 1);
 	lw->AddActuator("Shooter", "motor", (Jaguar*) shootermotor);
 	
-	shooterencoder = new Encoder(1, 1, 1, 2, false, Encoder::k4X);
-	lw->AddSensor("Shooter", "encoder", shooterencoder);
-	shooterencoder->SetDistancePerPulse(1.0);
-        shooterencoder->SetPIDSourceParameter(Encoder::kRate);
-        shooterencoder->Start();
 	magazinetrigger = new DoubleSolenoid(1, 1, 2);      
 	
-	
 	magazinelifter = new DoubleSolenoid(1, 3, 4);      
-	
-	
+		
 	magazinefirsbee_counter = new ProximitySensor(1, 1, ProximitySensor::kShortRange);
 	lw->AddSensor("Magazine", "firsbee_counter", magazinefirsbee_counter);
 	
