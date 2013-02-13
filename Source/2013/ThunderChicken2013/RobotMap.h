@@ -27,7 +27,6 @@ public:
 	static Servo* cameraazimuth_servo;
 	static Servo* cameraelevation_servo;
 	static SpeedController* shootermotor;
-	static Encoder* shooterencoder;
 	static DoubleSolenoid* magazinetrigger;
 	static DoubleSolenoid* magazinelifter;
 	static ProximitySensor* magazinefirsbee_counter;
