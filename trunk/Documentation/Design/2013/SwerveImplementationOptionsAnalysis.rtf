@@ -1,0 +1,70 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\froman\fcharset0 Times New Roman;}{\f1\fnil\fcharset0 Calibri;}{\f2\fnil\fcharset2 Symbol;}}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sb100\sa100\f0\fs24 I'll take a rough empirical stab, and then let the Ethers of the world codify the Unified Field Theory of Swerves.\line\line First off, some assumptions. Most types of swerves can pull off turn in place/turn while translating by scrubbing wheels ala a tank drive. A "scrub-less" turn is in theory more efficient (though in practice you might find more overshoot makes it harder to control without software help). In many cases (long robots + sticky wheels), scrubby turns turn into hoppy/breaker popping turns. You might need to rotate your wheels to be along the "wide" axis for scrubby turn in place to work well. So there is a very gray line separating maneuvers an arrangement can vs. cannot do.\line\line Here are some common swerve steering arrangements:\line A. All four wheels independently\line B. Front/rear or left/right wheels driven together\line C. Diagonal pairs of wheels steered together\line D. All wheels steered together\line\line Here are some common swerve driving arrangements:\line 1. All four wheels driven independently\line 2. Front/rear or left/right wheels EDIT:steered together\line 3. All wheels driven together\line\line (Note: You could end up driving diagonal pairs of wheels together, but I cannot think of a single arrangement where this has ANY advantages over another arrangement with a similar motor allocation...hence I omit it for readability)\line\line All possible combinations can do strafing in any arbitrary axis (f/b, l/r, or anywhere in between).\line\line Now let's play bingo!\line\line A1: You can pull off any maneuver - you are holonomic (assuming unlimited pod rotation and unlimited rotation speed). The "Unicorn" drive.\line\line A2: You incur more wheel scrub and would need to rapidly rotate individual pods 180 degrees during compound maneuvers (such as translate + rotate). Worst case is forward/backwards + rotate if the front/back pods are driven together, and strafe + rotate if the left/right pods are driven together.\line\line A3: A lot of scrub any time you aren't driving in a straight line or turning in place, but you can still do some low-speed rotation while translating.\line\line B1: You give up car/snake steering during strafes and perfect turn in place. You can still turn differentially while translating if the drive geometry supports it.\line\line B2: If the same pair of wheels is driven and steered: You get a tank drive in one axis (f/b or l/r) and scrubby "snake" steering in the other (since the inside and outside wheels of the car are being driven at the same speed). If opposite pairs of wheels are driven and steered (example, steer f/b, drive l/r): You get great snake steering in one axis, almost no ability to turn while translating in the other, and scrubby turn in place.\line\line B3: You can in theory get differential turn in place with scrub, and some measure of snake steering at shallow wheel angles.\line\line C1: You get perfect turn in place, but can only rotate while translating via differential steering. \line\line C2: You get perfect turn in place (through reversing motors), but no effective rotate while translating.\line\line C3: You can't turn. Period.\line\line D1: You turn just like a wide or long tank drive (and can switch between the two).\line\line D2: You are a wide OR long tank drive that can also strafe (but cannot rotate while doing so).\line\line D3: You can't rotate at all. Time to build a turret. See: 118, 2007-2008. 148, 2008.\line\line In conclusion, arrangements A1, A2, B2, C1, C2, and D3 seem to be the most worthwhile to me...\line A1 is the Unicorn...you get everything at a high motor/sensor cost.\line A2 is still pretty versatile if you want to switch between single axis "car steer", rotationless strafing, and decent turn in place.\line B2 removes 4 motors from A1 (2 from A2) and sacrifices scrubless turn in place.\line C1 preserves quick and easy turn in place while only requiring two turning transmissions/sensors.\line C2 is great if you never want to rotate + translate at all.\line D3 theoretically can be done with only 2 motors...as long as you don't need to rotate.\line\line Feel free to add to the notes! I'm just I've missed plenty of (counter) examples to my above generalizations.\par
+***********\line Mecanum Wheels vs Omniwheels vs Swerve (plaction wheels, wedgetop surface)\par
+Size:\par
+Mecanum:  6" and larger\par
+Omniwheels:\par
+Plaction Wheels:  4" and larger\par
+*Wider Wheels == More Traction.  1.25" s/b good for wedgetop, per CD.\par
+Weight:\par
+\par
+Coefficients of friction:\par
+Roughtop/Wedgetop - ~1.2-1.4\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 6" Mecanum Wheel: 0.7 static forward/reverse, 0.6 sideways \par
+\pard\keepn\sb100\sa100\b\fs28 Wheel Weights\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100\b0\fs24 6" Mecanum Wheel: 1.3 pounds\par
+\pard\sb100\sa100\par
+Force from friction (assume 130lb robot, evenly balanced)\par
+Force of friction = Coef of Friction * Normal Force\par
+Each wheel was tested in 4 ways:\line\line Radial Static Friction\line Radial Dynamic Friction\line Transverse Static Friction\line Transverse Dynamic Friction\line\line Radial friction could also be considered driving friction, as it is the friction involved when the wheel is being driven forward and reverse. Or, it can be applied when the wheel is stationary and it is resisting a force from the front or back.\line\line Transverse Friction is the ability of the wheel to move sideways, or scrub. This is also the friction involved when the wheel is stationary and a force from the side is applied to it.\line\line Static friction is involved when the wheel just begins to move from a stationary position. Dynamic friction is involved when the wheel is already moving.\line\par
+\par
+\par
+8" Plastic Omni Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 1.07 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 0.9 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.20 \par
+{\pntext\f2\'B7\tab}Transverse Dynamic: 0.16\par
+\pard\sb100\sa100 6" Plastic Omni Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 0.9 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 0.8 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.27 \par
+{\pntext\f2\'B7\tab}Transverse Dynamic: 0.20\par
+\pard\sb100\sa100 8" Aluminum Omni Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 1.15 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 0.9 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.31 \par
+{\pntext\f2\'B7\tab}Transverse Dynamic: 0.20\par
+\pard\sb100\sa100 6" Aluminum Omni Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 0.9 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 0.8 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.26 \par
+{\pntext\f2\'B7\tab}Transverse Dynamic: 0.20\par
+\pard\sb100\sa100 8" Coolie Dualie Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 1.05 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 1.0 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.29 \par
+{\pntext\f2\'B7\tab}Transverse Dynamic: 0.20\par
+\pard\sb100\sa100 8" Mecanum Wheel \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\sb100\sa100 Radial Static: 0.7 \par
+{\pntext\f2\'B7\tab}Radial Dynamic: 0.6 \par
+{\pntext\f2\'B7\tab}Transverse Static: 0.7\par
+\pard\sb100\sa100\par
+\par
+\par
+Driveability\par
+\par
+Manueverability\par
+\par
+Pushing Force\par
+\par
+Traction\par
+\par
+Complexity\par
+\par
+Cost\par
+\par
+\pard\sa200\sl276\slmult1\lang9\f1\fs22 Implementation Risk\par
+\par
+Serviceability\par
+}
+ 
