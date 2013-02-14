@@ -5,6 +5,7 @@
 #include "LiveWindow/LiveWindow.h"
 #include <time.h>
 #include <math.h>
+#include "AnalogModule.h"
 
 ProximitySensor::ProximitySensor(UINT8 analog_module,UINT32 analog_channel, SensorRange range) :
 	input(analog_module, analog_channel)
@@ -18,6 +19,16 @@ ProximitySensor::ProximitySensor(UINT8 analog_module,UINT32 analog_channel, Sens
  */
 void ProximitySensor::InitProximitySensor()
 {
+	// Be careful not to set the average bits more than once.
+	UINT32 num_average_bits = 4;
+	if ( input.GetAverageBits() != num_average_bits )
+	{
+		input.SetAverageBits(num_average_bits);	// 2^4 = 16-sample average
+		float sampleRate = 50.0 * 
+			(1 << (num_average_bits));
+		input.GetModule()->SetSampleRate(sampleRate);
+		Wait(0.2);
+	}
 }
 
 /**
@@ -35,14 +46,7 @@ ProximitySensor::~ProximitySensor()
 
 float ProximitySensor::GetDistanceMM( void )
 {
-	// Highest possible analog read valus is 4095
-	// corresponding voltage is 5V
-	
-	UINT16 counts = input.GetValue();
-	
-	// TODO:  Oversample and average
-	
-	float voltage = (5.0/4095) * counts;
+	float voltage = input.GetAverageVoltage();
 	
 	// Transform voltage to distance.  Exponential values
 	// were derived from the datasheets:
