@@ -182,4 +182,5 @@ void RobotMap::init() {
         
     imu_serial_port = new SerialPort(57600);
     front_climber_solenoid = new Solenoid(1,5);
+    lw->AddSensor("Climber", "solenoid", front_climber_solenoid);
 }

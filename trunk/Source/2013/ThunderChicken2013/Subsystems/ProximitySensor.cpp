@@ -29,7 +29,7 @@ void ProximitySensor::InitProximitySensor()
 		input.GetModule()->SetSampleRate(sampleRate);
 		Wait(0.2);
 	}
-	LiveWindow::GetInstance()->AddSensor("Proximity", input.GetModuleNumber(), input.GetChannel(), this);
+	LiveWindow::GetInstance()->AddSensor("Tilter","Ultrasonic", this);
 }
 
 /**
@@ -101,7 +101,7 @@ void ProximitySensor::StopLiveWindowMode() {
 }
 
 std::string ProximitySensor::GetSmartDashboardType() {
-	return "ProximitySensor";
+	return "Ultrasonic";
 }
 
 void ProximitySensor::InitTable(ITable *subTable) {
