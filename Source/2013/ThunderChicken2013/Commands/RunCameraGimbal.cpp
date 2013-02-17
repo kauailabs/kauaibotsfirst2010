@@ -10,6 +10,7 @@
 
 
 #include "RunCameraGimbal.h"
+#include "WPILib.h"
 
 RunCameraGimbal::RunCameraGimbal() {
 	// Use requires() here to declare subsystem dependencies
@@ -26,9 +27,9 @@ void RunCameraGimbal::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void RunCameraGimbal::Execute() {
-	OI::getshooter_joystick();
-	
-	
+	//stick1* OI::getshooter_joystick();
+	//double twist= stick.GetTwist();
+	//double elevation=stick.GetY();
 	
 }
 

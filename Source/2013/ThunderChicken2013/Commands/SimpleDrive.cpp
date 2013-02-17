@@ -1,5 +1,7 @@
 #include "SimpleDrive.h"
-
+#include "WPILib.h"
+#include "../OI.h"
+#include "Joystick.h"
 SimpleDrive::SimpleDrive() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
@@ -10,12 +12,14 @@ SimpleDrive::SimpleDrive() {
 
 // Called just before this Command runs the first time
 void SimpleDrive::Initialize() {
-	
 }
 
 // Called repeatedly when this Command is scheduled to run
-void SimpleDrive::Execute() {
-
+void SimpleDrive::Execute() {  
+	Joystick* pstick = Robot::oi->getshooter_joystick();
+	double twist = pstick->GetTwist();
+	double y = pstick->GetY();
+	Robot::swerveDriveSystem->DoSimpleDrive(y,twist);
 }
 
 // Make this return true when this Command no longer needs to run execute()

@@ -23,7 +23,7 @@ void AngleSensor::InitAngleSensor()
 	chip_select.Set(1);
 	clock.Set(1);
 	nUsageReporting::report(nUsageReporting::kResourceType_DigitalOutput, chip_select.GetChannel(), dsc - 1);
-	LiveWindow::GetInstance()->AddSensor("AngleSensor", dsc, chip_select.GetChannel(), this);
+	LiveWindow::GetInstance()->AddSensor("SwerveDriveSystem","Gyro", this);
 }
 
 /**
@@ -111,7 +111,7 @@ void AngleSensor::StopLiveWindowMode() {
 }
 
 std::string AngleSensor::GetSmartDashboardType() {
-	return "AngleSensor";
+	return "Gyro";
 }
 
 void AngleSensor::InitTable(ITable *subTable) {

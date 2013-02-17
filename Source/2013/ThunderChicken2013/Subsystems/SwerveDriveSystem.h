@@ -55,7 +55,7 @@ public:
 	SwerveDriveSystem();
 	void InitDefaultCommand();
 	virtual void DoSwerve( float vX, float vY, float vRot );
-
+	virtual void DoSimpleDrive( float vY, float vRot);
 };
 
 #endif
