@@ -16,7 +16,7 @@ void SimpleDrive::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void SimpleDrive::Execute() {  
-	Joystick* pstick = Robot::oi->getshooter_joystick();
+	Joystick* pstick = Robot::oi->getdriver_joystick();
 	double twist = pstick->GetTwist();
 	double y = pstick->GetY();
 	Robot::swerveDriveSystem->DoSimpleDrive(y,twist);

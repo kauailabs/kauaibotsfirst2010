@@ -29,7 +29,7 @@ void ProximitySensor::InitProximitySensor()
 		input.GetModule()->SetSampleRate(sampleRate);
 		Wait(0.2);
 	}
-	LiveWindow::GetInstance()->AddSensor("Tilter","Ultrasonic", this);
+	
 }
 
 /**
