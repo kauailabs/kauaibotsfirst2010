@@ -11,6 +11,8 @@
 
 #include "RunCameraGimbal.h"
 #include "WPILib.h"
+#include "../Robot.h"
+#include "../RobotMap.h"
 
 RunCameraGimbal::RunCameraGimbal() {
 	// Use requires() here to declare subsystem dependencies
@@ -28,8 +30,11 @@ void RunCameraGimbal::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void RunCameraGimbal::Execute() {
 	//stick1* OI::getshooter_joystick();
-	//double twist= stick.GetTwist();
-	//double elevation=stick.GetY();
+	Joystick* p1stick = Robot::oi->getshooter_joystick();
+	double azimuth  = p1stick->GetTwist();
+	double elevation = p1stick->GetY();
+	//Robot::camera->DoCameraGimbal(azimuth,elevation);
+	
 	
 }
 
@@ -46,5 +51,8 @@ void RunCameraGimbal::End() {
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void RunCameraGimbal::Interrupted() {
+	float a  = 0;
+	float e = 0;
+	Robot::camera->DoCameraGimbal(a,e);
 
 }

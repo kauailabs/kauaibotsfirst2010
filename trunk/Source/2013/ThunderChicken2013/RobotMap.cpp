@@ -64,29 +64,31 @@ void RobotMap::init() {
 	cameraelevation_servo = new Servo(1, 6);
 	lw->AddActuator("Camera", "elevation_servo", cameraelevation_servo);
 	
-	shootermotor = new Jaguar(1, 1);
+	shootermotor = new Jaguar(2, 1);
 	lw->AddActuator("Shooter", "motor", (Jaguar*) shootermotor);
 	
-	magazinetrigger = new DoubleSolenoid(1, 1, 2);      
+	magazinetrigger = new DoubleSolenoid(1, 1, 2); 
+	lw->AddActuator("Magizine", "trigger", magazinetrigger);
 	
 	magazinelifter = new DoubleSolenoid(1, 3, 4);      
-		
-	magazinefirsbee_counter = new ProximitySensor(1, 1, ProximitySensor::kShortRange);
+	lw->AddActuator("Magizine", "lifter", magazinelifter);
+	
+	magazinefirsbee_counter = new ProximitySensor(2, 2, ProximitySensor::kShortRange);
 	lw->AddSensor("Magazine", "firsbee_counter", magazinefirsbee_counter);
 	
-	pneumaticscompressor = new Compressor(2, 7, 1, 1);
+	pneumaticscompressor = new Compressor(2, 1, 2, 1);
+	pneumaticscompressor->Start();
 	
-	
-	tilterheight_sensor = new ProximitySensor(1, 2, ProximitySensor::kMediumRange);
+	tilterheight_sensor = new ProximitySensor(2, 1, ProximitySensor::kShortRange);
 	lw->AddSensor("Tilter", "height_sensor", tilterheight_sensor);
 	
-	tiltermotor = new Jaguar(1, 2);
+	tiltermotor = new Jaguar(2, 4);
 	lw->AddActuator("Tilter", "motor", (Jaguar*) tiltermotor);
 	
-	climberfront_winch_motor = new Jaguar(1, 3);
+	climberfront_winch_motor = new Jaguar(2, 2);
 	lw->AddActuator("Climber", "front_winch_motor", (Jaguar*) climberfront_winch_motor);
 	
-	climberrear_winch_motor = new Jaguar(1, 4);
+	climberrear_winch_motor = new Jaguar(2, 3);
 	lw->AddActuator("Climber", "rear_winch_motor", (Jaguar*) climberrear_winch_motor);
 	
 	swerveDriveSystemleft_front_steer_motor = new Talon(1, 9);
@@ -111,64 +113,64 @@ void RobotMap::init() {
 	lw->AddActuator("SwerveDriveSystem", "left_front_drive", swerveDriveSystemleft_front_drive);
 	swerveDriveSystemleft_front_drive->SetContinuous(false); swerveDriveSystemleft_front_drive->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemleft_front_drive->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemright_front_steer_motor = new Talon(1, 7);
+	swerveDriveSystemright_front_steer_motor = new Talon(2, 7);
 	lw->AddActuator("SwerveDriveSystem", "right_front_steer_motor", (Talon*) swerveDriveSystemright_front_steer_motor);
 	
-	swerveDriveSystemright_front_angle_sensor = new AngleSensor(1, 7, 9, 8);
+	swerveDriveSystemright_front_angle_sensor = new AngleSensor(2, 7, 9, 8);
 	lw->AddSensor("SwerveDriveSystem", "right_front_angle_sensor", swerveDriveSystemright_front_angle_sensor);
 	
 	swerveDriveSystemright_front_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemright_front_angle_sensor, swerveDriveSystemright_front_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "right_front_steer", swerveDriveSystemright_front_steer);
 	swerveDriveSystemright_front_steer->SetContinuous(false); swerveDriveSystemright_front_steer->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemright_front_steer->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemright_front_rpm_sensor = new Encoder(1, 6, 1, 5, false, Encoder::k4X);
+	swerveDriveSystemright_front_rpm_sensor = new Encoder(2, 6, 2, 5, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "right_front_rpm_sensor", swerveDriveSystemright_front_rpm_sensor);
 	swerveDriveSystemright_front_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemright_front_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
         swerveDriveSystemright_front_rpm_sensor->Start();
-	swerveDriveSystemright_front_drive_motor = new Talon(1, 8);
+	swerveDriveSystemright_front_drive_motor = new Talon(2, 8);
 	lw->AddActuator("SwerveDriveSystem", "right_front_drive_motor", (Talon*) swerveDriveSystemright_front_drive_motor);
 	
 	swerveDriveSystemright_front_drive = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemright_front_rpm_sensor, swerveDriveSystemright_front_drive_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "right_front_drive", swerveDriveSystemright_front_drive);
 	swerveDriveSystemright_front_drive->SetContinuous(false); swerveDriveSystemright_front_drive->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemright_front_drive->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemleft_back_steer_motor = new Talon(2, 9);
+	swerveDriveSystemleft_back_steer_motor = new Talon(1, 7);
 	lw->AddActuator("SwerveDriveSystem", "left_back_steer_motor", (Talon*) swerveDriveSystemleft_back_steer_motor);
 	
-	swerveDriveSystemleft_back_angle_sensor = new AngleSensor(2, 12, 14, 13);
+	swerveDriveSystemleft_back_angle_sensor = new AngleSensor(1, 7, 9, 8);
 	lw->AddSensor("SwerveDriveSystem", "left_back_angle_sensor", swerveDriveSystemleft_back_angle_sensor);
 	
 	swerveDriveSystemleft_back_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemleft_back_angle_sensor, swerveDriveSystemleft_back_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "left_back_steer", swerveDriveSystemleft_back_steer);
 	swerveDriveSystemleft_back_steer->SetContinuous(false); swerveDriveSystemleft_back_steer->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemleft_back_steer->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemleft_back_rpm_sensor = new Encoder(2, 11, 2, 10, false, Encoder::k4X);
+	swerveDriveSystemleft_back_rpm_sensor = new Encoder(1, 6, 1, 5, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "left_back_rpm_sensor", swerveDriveSystemleft_back_rpm_sensor);
 	swerveDriveSystemleft_back_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemleft_back_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
         swerveDriveSystemleft_back_rpm_sensor->Start();
-	swerveDriveSystemleft_back_drive_motor = new Talon(2, 10);
+	swerveDriveSystemleft_back_drive_motor = new Talon(1, 8);
 	lw->AddActuator("SwerveDriveSystem", "left_back_drive_motor", (Talon*) swerveDriveSystemleft_back_drive_motor);
 	
 	swerveDriveSystemleft_back_drive = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemleft_back_rpm_sensor, swerveDriveSystemleft_back_drive_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "left_back_drive", swerveDriveSystemleft_back_drive);
 	swerveDriveSystemleft_back_drive->SetContinuous(false); swerveDriveSystemleft_back_drive->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemleft_back_drive->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemright_back_steer_motor = new Talon(2, 7);
+	swerveDriveSystemright_back_steer_motor = new Talon(2, 9);
 	lw->AddActuator("SwerveDriveSystem", "right_back_steer_motor", (Talon*) swerveDriveSystemright_back_steer_motor);
 	
-	swerveDriveSystemright_back_angle_sensor = new AngleSensor(2, 7, 9, 8);
+	swerveDriveSystemright_back_angle_sensor = new AngleSensor(2, 12, 14, 13);
 	lw->AddSensor("SwerveDriveSystem", "right_back_angle_sensor", swerveDriveSystemright_back_angle_sensor);
 	
 	swerveDriveSystemright_back_steer = new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ swerveDriveSystemright_back_angle_sensor, swerveDriveSystemright_back_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "right_back_steer", swerveDriveSystemright_back_steer);
 	swerveDriveSystemright_back_steer->SetContinuous(false); swerveDriveSystemright_back_steer->SetAbsoluteTolerance(0.2); 
         swerveDriveSystemright_back_steer->SetOutputRange(-1.0, 1.0);
-	swerveDriveSystemright_back_drive_motor = new Talon(2, 8);
+	swerveDriveSystemright_back_drive_motor = new Talon(2, 10);
 	lw->AddActuator("SwerveDriveSystem", "right_back_drive_motor", (Talon*) swerveDriveSystemright_back_drive_motor);
 	
-	swerveDriveSystemright_back_rpm_sensor = new Encoder(2, 6, 2, 5, false, Encoder::k4X);
+	swerveDriveSystemright_back_rpm_sensor = new Encoder(2, 11, 2, 10, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "right_back_rpm_sensor", swerveDriveSystemright_back_rpm_sensor);
 	swerveDriveSystemright_back_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemright_back_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
