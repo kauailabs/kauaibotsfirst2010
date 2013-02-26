@@ -6,9 +6,17 @@
 #include <time.h>
 #include "IMU.h"
 
+// TODO:
+//
+// Create thread to receive data from the serial port.
+// Develop protocol to communicate the yaw, pitch and roll terms.
+// Update semaphore-protected yaw, pitch, and roll terms w/decoded IMU data.
+// Include a "is connected" method.
+
 IMU::IMU( SerialPort *pport )
 {
 	pserial_port = pport;
+	pserial_port->Reset();
 	InitIMU();
 }
 
@@ -17,6 +25,16 @@ IMU::IMU( SerialPort *pport )
  */
 void IMU::InitIMU()
 {
+	// The IMU serial port configuration is 8 data bits, no parity, one stop bit. 
+	// No flow control is used.
+	// Conveniently, these are the defaults used by the WPILib's SerialPort class.
+	//
+	// In addition, the WPILib's SerialPort class also defaults to:
+	//
+	// Timeout period of 5 seconds
+	// Termination ('\n' character)
+	// Transmit immediately
+	
 	LiveWindow::GetInstance()->AddSensor("SwerveDriveSystem","Gyro", this);
 }
 
