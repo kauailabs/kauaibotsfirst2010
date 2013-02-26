@@ -12,6 +12,7 @@
 // Develop protocol to communicate the yaw, pitch and roll terms.
 // Update semaphore-protected yaw, pitch, and roll terms w/decoded IMU data.
 // Include a "is connected" method.
+// Add method to "zero" the yaw component.
 
 IMU::IMU( SerialPort *pport )
 {
@@ -44,6 +45,17 @@ void IMU::InitIMU()
 IMU::~IMU()
 {
 }
+
+bool IMU::IsConnected()
+{
+	return false;
+}
+
+void ZeroYaw()
+{
+	
+}
+
 
 /**
  * Return the yaw angle in degrees.
