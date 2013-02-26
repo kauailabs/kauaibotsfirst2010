@@ -33,6 +33,9 @@ public:
 	virtual float GetRoll();
 	virtual float GetYaw();
 	
+	bool IsConnected();
+	void ZeroYaw();
+	
 	// PIDSource interface, returns yaw component
 	double PIDGet();
 	
