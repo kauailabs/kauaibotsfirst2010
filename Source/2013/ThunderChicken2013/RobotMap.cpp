@@ -200,6 +200,9 @@ void RobotMap::init() {
         
     imu_serial_port = new SerialPort(57600);
     imu = new IMU(imu_serial_port);
+    
+	lw->AddSensor("SwerveDriveSystem", "Gyro", imu);
+    
     front_climber_solenoid = new Solenoid(1,5);
     lw->AddSensor("Climber", "solenoid", front_climber_solenoid);
 }
