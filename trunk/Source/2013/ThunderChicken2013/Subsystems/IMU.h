@@ -46,10 +46,16 @@ public:
 	void InitTable(ITable *subTable);
 	ITable * GetTable();
 
+	SerialPort *GetSerialPort() { return pserial_port; }
+	void SetYawPitchRoll(float yaw, float pitch, float roll);
+	
 private:
 	void InitIMU();
-
-	
+    Task              m_task;
+	float yaw;
+	float pitch; 
+	float roll;
+    
 	ITable *m_table;
 };
 #endif
