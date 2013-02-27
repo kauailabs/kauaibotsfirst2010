@@ -25,7 +25,52 @@ static int update_count = 0;
 
 static char protocol_buffer[256];
 
-#define YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH 27 // e.g., !y 142.23   9.29-142.34AE\r\n
+#define YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH 27 	// e.g., !y[yaw][pitch][roll][checksum][cr][lf]
+												//       where yaw, pitch, roll are floats
+												//		 where checksum is 2 ascii-bytes of HEX checksum (all bytes before checksum)
+#define YAW_PITCH_ROLL_UPDATE 'y'
+#define PACKET_START_CHAR '!'
+
+float parse_float( char *buffer )
+{
+  char temp[8];
+  for ( int i = 0; i < 7; i++ )
+  {
+    temp[i] = buffer[i];
+  }
+  temp[7] = 0;
+  return atof(temp);
+}
+
+bool decode_ypr_update( char *buffer, int length, float* pyaw, float *ppitch, float *proll )
+{
+  bool ok = false;
+  if ( length < YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH ) return false;
+  if ( ( buffer[0] == '!' ) && ( buffer[1] == 'y' ) )
+  {
+    // Calculate Checksum
+    uint8_t checksum = 0;
+    for ( int i = 0; i < 23; i++ )
+    {
+      checksum += buffer[i];
+    }
+
+    // Decode Checksum
+    
+    uint8_t first_digit = buffer[23] <= '9' ? buffer[23] - '0' : ((buffer[23] - 'A') + 10);
+    uint8_t second_digit = buffer[24] <= '9' ? buffer[24] - '0' : ((buffer[24] - 'A') + 10);
+    uint8_t decoded_checksum = (first_digit * 16) + second_digit;
+
+    if ( decoded_checksum != checksum ) return false;
+
+    *pyaw = parse_float( &buffer[2] );
+    *ppitch = parse_float( &buffer[9] );
+    *proll = parse_float( &buffer[16] );
+    
+    ok = true;
+  }
+  return ok;
+}
 
 static void imuTask(IMU *imu) 
 {
@@ -42,7 +87,7 @@ static void imuTask(IMU *imu)
 			// Scan the buffer until the "begin packet" character is found
 			for ( UINT32 i = 0; i < bytes_read; i++ )
 			{
-				if ( protocol_buffer[i] == '!' )
+				if ( protocol_buffer[i] == PACKET_START_CHAR )
 				{
 					char *ppacket = &protocol_buffer[i];
 					int num_bytes_remaining = bytes_read - i;
@@ -50,17 +95,18 @@ static void imuTask(IMU *imu)
 					{
 						switch ( ppacket[1] )
 						{
-						case 'y':	// yaw-pitch-roll update
+						case YAW_PITCH_ROLL_UPDATE:
 							{					
 								if ( num_bytes_remaining >= YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH )
 								{
-									// TODO:  Decode the packet
 									float yaw = 0.0;
 									float pitch = 0.0;
 									float roll = 0.0;
-									
-									update_count++;
-									imu->SetYawPitchRoll(yaw,pitch,roll);
+									if ( decode_ypr_update( ppacket, YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH, &yaw, &pitch, &roll))
+									{
+										update_count++;
+										imu->SetYawPitchRoll(yaw,pitch,roll);
+									}
 									i += YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH;
 								}
 							}
