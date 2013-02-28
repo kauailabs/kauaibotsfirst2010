@@ -7,11 +7,6 @@
 #include "IMU.h"
 #include "IMUProtocol.h"
 
-// TODO:
-//
-// Include a "is connected" method.
-// Add method to "zero" the yaw component.
-
 static SEM_ID cIMUStateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);   
 static int update_count = 0;
 
