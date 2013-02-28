@@ -22,6 +22,7 @@ static int update_count = 0;
  **/ 
 
 static char protocol_buffer[256];
+
 static void imuTask(IMU *imu) 
 {
 	SerialPort *pport = imu->GetSerialPort();
@@ -84,7 +85,8 @@ void IMU::InitIMU()
 	// Timeout period of 5 seconds
 	// Termination ('\n' character)
 	// Transmit immediately
-	
+	InitializeYawHistory();
+	yaw_offset = 0;
 }
 
 /**
@@ -96,12 +98,13 @@ IMU::~IMU()
 
 bool IMU::IsConnected()
 {
-	return false;
+	double time_since_last_update = Timer::GetPPCTimestamp() - this->last_update_time;
+	return time_since_last_update <= 1.0;
 }
 
-void ZeroYaw()
+void IMU::ZeroYaw()
 {
-	
+	yaw_offset = GetAverageFromYawHistory();
 }
 
 
@@ -115,7 +118,11 @@ void ZeroYaw()
 float IMU::GetYaw( void )
 {
 	Synchronized sync(cIMUStateSemaphore);
-	return this->yaw;
+	double yaw = this->yaw;
+	yaw -= yaw_offset;
+	if ( yaw < -180 ) yaw += 360;
+	if ( yaw > 180 ) yaw -= 360;
+	return yaw;
 }
 
 float IMU::GetPitch( void )
@@ -169,8 +176,43 @@ ITable * IMU::GetTable() {
 
 void IMU::SetYawPitchRoll(float yaw, float pitch, float roll)
 {
-	Synchronized sync(cIMUStateSemaphore);
-	this->yaw = yaw;
-	this->pitch = pitch;
-	this->roll = roll;
+	{
+		Synchronized sync(cIMUStateSemaphore);
+		
+		this->yaw = yaw;
+		this->pitch = pitch;
+		this->roll = roll;
+	}
+	UpdateYawHistory(this->yaw);
+}
+
+void IMU::InitializeYawHistory()
+{
+	for ( int i = 0; i < YAW_HISTORY_LENGTH; i++ )
+	{
+		yaw_history[i] = 0;
+	}
+	next_yaw_history_index = 0;
+	last_update_time = 0.0;
+}
+
+void IMU::UpdateYawHistory(float curr_yaw )
+{
+	yaw_history[next_yaw_history_index] = curr_yaw;
+	last_update_time = Timer::GetPPCTimestamp();
+	if ( next_yaw_history_index >= YAW_HISTORY_LENGTH )
+	{
+		next_yaw_history_index = 0;
+	}
+}
+
+double IMU::GetAverageFromYawHistory()
+{
+	double yaw_history_sum = 0.0;
+	for ( int i = 0; i < YAW_HISTORY_LENGTH; i++ )
+	{
+		yaw_history_sum += yaw_history[i];
+	}	
+	double yaw_history_avg = yaw_history_sum / YAW_HISTORY_LENGTH;
+	return yaw_history_avg;
 }

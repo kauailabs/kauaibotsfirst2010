@@ -21,6 +21,8 @@
  * This sensor also requires one DigitalInput pin (Data)
  */
 
+#define YAW_HISTORY_LENGTH 10
+
 class IMU : public SensorBase, public PIDSource, public LiveWindowSendable
 {
 	SerialPort *pserial_port;
@@ -51,10 +53,18 @@ public:
 	
 private:
 	void InitIMU();
+	void InitializeYawHistory();
+	void UpdateYawHistory(float curr_yaw );
+	double GetAverageFromYawHistory();
+
     Task              m_task;
 	float yaw;
 	float pitch; 
 	float roll;
+	float yaw_history[YAW_HISTORY_LENGTH];
+	int next_yaw_history_index;
+	double last_update_time;
+	double yaw_offset;
     
 	ITable *m_table;
 };
