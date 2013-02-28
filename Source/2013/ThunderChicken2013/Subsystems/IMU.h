@@ -31,14 +31,14 @@ public:
 
 	IMU( SerialPort *pport );
 	virtual ~IMU();
-	virtual float GetPitch();
-	virtual float GetRoll();
-	virtual float GetYaw();
+	virtual float GetPitch();	// Pitch, in units of degrees (-180 to 180)
+	virtual float GetRoll();	// Roll, in units of degrees (-180 to 180)
+	virtual float GetYaw();		// Yaw, in units of degrees (-180 to 180)
 	
 	bool IsConnected();
 	void ZeroYaw();
 	
-	// PIDSource interface, returns yaw component
+	// PIDSource interface, returns yaw component in units of degrees (-180 to 180)
 	double PIDGet();
 	
 	void UpdateTable();
@@ -57,14 +57,14 @@ private:
 	void UpdateYawHistory(float curr_yaw );
 	double GetAverageFromYawHistory();
 
-    Task              m_task;
-	float yaw;
-	float pitch; 
-	float roll;
-	float yaw_history[YAW_HISTORY_LENGTH];
-	int next_yaw_history_index;
-	double last_update_time;
-	double yaw_offset;
+    Task 	m_task;
+	float 	yaw;
+	float 	pitch; 
+	float 	roll;
+	float 	yaw_history[YAW_HISTORY_LENGTH];
+	int 	next_yaw_history_index;
+	double 	last_update_time;
+	double 	yaw_offset;
     
 	ITable *m_table;
 };
