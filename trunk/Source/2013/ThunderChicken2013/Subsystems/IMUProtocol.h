@@ -1,19 +1,22 @@
 #ifndef _IMU_PROTOCOL_H_
 #define _IMU_PROTOCOL_H_
 
-#define YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH 27 	// e.g., !y[yaw][pitch][roll][checksum][cr][lf]
-						//       where yaw, pitch, roll are floats
-						//		 where checksum is 2 ascii-bytes of HEX checksum (all bytes before checksum)
-#define YAW_PITCH_ROLL_UPDATE 'y'
 #define PACKET_START_CHAR '!'
-#define YAW_VALUE_INDEX 2
-#define PITCH_VALUE_INDEX 9
-#define ROLL_VALUE_INDEX 16
-#define CHECKSUM_INDEX 23
-#define TERMINATOR_INDEX 25
 #define PROTOCOL_FLOAT_LENGTH 7
 #define CHECKSUM_LENGTH 2
 #define TERMINATOR_LENGTH 2
+
+// Yaw/Pitch/Roll (YPR) Update Packet
+
+#define MSGID_YPR_UPDATE 'y'
+#define YPR_UPDATE_MESSAGE_LENGTH 27 	// e.g., !y[yaw][pitch][roll][checksum][cr][lf]
+						//       where yaw, pitch, roll are floats
+						//		 where checksum is 2 ascii-bytes of HEX checksum (all bytes before checksum)
+#define YPR_UPDATE_YAW_VALUE_INDEX 2
+#define YPR_UPDATE_PITCH_VALUE_INDEX 9
+#define YPR_UPDATE_ROLL_VALUE_INDEX 16
+#define YPR_UPDATE_CHECKSUM_INDEX 23
+#define YPR_UPDATE_TERMINATOR_INDEX 25
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,31 +30,31 @@ static int encodeYPRUpdate( char *protocol_buffer, float yaw, float pitch, float
 {
   // Header
   protocol_buffer[0] = PACKET_START_CHAR;
-  protocol_buffer[1] = YAW_PITCH_ROLL_UPDATE;
+  protocol_buffer[1] = MSGID_YPR_UPDATE;
   
   // Data
-  encodeProtocolFloat( yaw,    &protocol_buffer[YAW_VALUE_INDEX] );
-  encodeProtocolFloat( pitch,  &protocol_buffer[PITCH_VALUE_INDEX] );
-  encodeProtocolFloat( roll,    &protocol_buffer[ROLL_VALUE_INDEX] );
+  encodeProtocolFloat( yaw,    &protocol_buffer[YPR_UPDATE_YAW_VALUE_INDEX] );
+  encodeProtocolFloat( pitch,  &protocol_buffer[YPR_UPDATE_PITCH_VALUE_INDEX] );
+  encodeProtocolFloat( roll,    &protocol_buffer[YPR_UPDATE_ROLL_VALUE_INDEX] );
   
   // Footer
-  encodeTermination( protocol_buffer, YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH, YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH - 4 );
+  encodeTermination( protocol_buffer, YPR_UPDATE_MESSAGE_LENGTH, YPR_UPDATE_MESSAGE_LENGTH - 4 );
 
-  return YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH;
+  return YPR_UPDATE_MESSAGE_LENGTH;
 }
 
 static int decodeYPRUpdate( char *buffer, int length, float& yaw, float& pitch, float& roll )
 {
-  if ( length < YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH ) return 0;
+  if ( length < YPR_UPDATE_MESSAGE_LENGTH ) return 0;
   if ( ( buffer[0] == '!' ) && ( buffer[1] == 'y' ) )
   {
-    if ( !verifyChecksum( buffer, CHECKSUM_INDEX ) ) return 0;
+    if ( !verifyChecksum( buffer, YPR_UPDATE_CHECKSUM_INDEX ) ) return 0;
 
-    yaw   = decodeProtocolFloat( &buffer[YAW_VALUE_INDEX] );
-    pitch = decodeProtocolFloat( &buffer[PITCH_VALUE_INDEX] );
-    roll  = decodeProtocolFloat( &buffer[ROLL_VALUE_INDEX] );
+    yaw   = decodeProtocolFloat( &buffer[YPR_UPDATE_YAW_VALUE_INDEX] );
+    pitch = decodeProtocolFloat( &buffer[YPR_UPDATE_PITCH_VALUE_INDEX] );
+    roll  = decodeProtocolFloat( &buffer[YPR_UPDATE_ROLL_VALUE_INDEX] );
   }
-  return YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH;
+  return YPR_UPDATE_MESSAGE_LENGTH;
 }
 
 protected:
