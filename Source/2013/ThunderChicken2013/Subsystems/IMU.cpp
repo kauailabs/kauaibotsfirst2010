@@ -5,12 +5,10 @@
 #include "LiveWindow/LiveWindow.h"
 #include <time.h>
 #include "IMU.h"
+#include "IMUProtocol.h"
 
 // TODO:
 //
-// Create thread to receive data from the serial port.
-// Develop protocol to communicate the yaw, pitch and roll terms.
-// Update semaphore-protected yaw, pitch, and roll terms w/decoded IMU data.
 // Include a "is connected" method.
 // Add method to "zero" the yaw component.
 
@@ -24,97 +22,37 @@ static int update_count = 0;
  **/ 
 
 static char protocol_buffer[256];
-
-#define YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH 27 	// e.g., !y[yaw][pitch][roll][checksum][cr][lf]
-												//       where yaw, pitch, roll are floats
-												//		 where checksum is 2 ascii-bytes of HEX checksum (all bytes before checksum)
-#define YAW_PITCH_ROLL_UPDATE 'y'
-#define PACKET_START_CHAR '!'
-
-float parse_float( char *buffer )
-{
-  char temp[8];
-  for ( int i = 0; i < 7; i++ )
-  {
-    temp[i] = buffer[i];
-  }
-  temp[7] = 0;
-  return atof(temp);
-}
-
-bool decode_ypr_update( char *buffer, int length, float* pyaw, float *ppitch, float *proll )
-{
-  bool ok = false;
-  if ( length < YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH ) return false;
-  if ( ( buffer[0] == '!' ) && ( buffer[1] == 'y' ) )
-  {
-    // Calculate Checksum
-    uint8_t checksum = 0;
-    for ( int i = 0; i < 23; i++ )
-    {
-      checksum += buffer[i];
-    }
-
-    // Decode Checksum
-    
-    uint8_t first_digit = buffer[23] <= '9' ? buffer[23] - '0' : ((buffer[23] - 'A') + 10);
-    uint8_t second_digit = buffer[24] <= '9' ? buffer[24] - '0' : ((buffer[24] - 'A') + 10);
-    uint8_t decoded_checksum = (first_digit * 16) + second_digit;
-
-    if ( decoded_checksum != checksum ) return false;
-
-    *pyaw = parse_float( &buffer[2] );
-    *ppitch = parse_float( &buffer[9] );
-    *proll = parse_float( &buffer[16] );
-    
-    ok = true;
-  }
-  return ok;
-}
-
 static void imuTask(IMU *imu) 
 {
 	SerialPort *pport = imu->GetSerialPort();
 	pport->SetReadBufferSize(512);
 	pport->SetTimeout(2.0);
 	pport->EnableTermination('\n');
+
+	float yaw = 0.0;
+	float pitch = 0.0;
+	float roll = 0.0;	
 	
 	while (1)
 	{ 
-		UINT32 bytes_read = pport->Read( protocol_buffer, sizeof(protocol_buffer));
+		UINT32 bytes_read = pport->Read( protocol_buffer, sizeof(protocol_buffer) );
 		if ( bytes_read > 0 )
 		{
-			// Scan the buffer until the "begin packet" character is found
-			for ( UINT32 i = 0; i < bytes_read; i++ )
+			UINT32 i = 0;
+			// Scan the buffer looking for valid packets
+			while ( i < bytes_read )
 			{
-				if ( protocol_buffer[i] == PACKET_START_CHAR )
+				int bytes_remaining = bytes_read - i;
+				int packet_length = IMUProtocol::decodeYPRUpdate( &protocol_buffer[i], bytes_remaining, yaw, pitch, roll ); 
+				if ( packet_length > 0 )
 				{
-					char *ppacket = &protocol_buffer[i];
-					int num_bytes_remaining = bytes_read - i;
-					if ( num_bytes_remaining > 1 )
-					{
-						switch ( ppacket[1] )
-						{
-						case YAW_PITCH_ROLL_UPDATE:
-							{					
-								if ( num_bytes_remaining >= YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH )
-								{
-									float yaw = 0.0;
-									float pitch = 0.0;
-									float roll = 0.0;
-									if ( decode_ypr_update( ppacket, YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH, &yaw, &pitch, &roll))
-									{
-										update_count++;
-										imu->SetYawPitchRoll(yaw,pitch,roll);
-									}
-									i += YAW_PITCH_ROLL_UPDATE_PACKET_LENGTH;
-								}
-							}
-							break;
-						default:	// unknown packet
-							break;
-						}
-					}
+					update_count++;
+					imu->SetYawPitchRoll(yaw,pitch,roll);
+					i += packet_length;
+				}
+				else // current index is not the start of a valid packet; increment
+				{
+					i++;
 				}
 			}
 		}
