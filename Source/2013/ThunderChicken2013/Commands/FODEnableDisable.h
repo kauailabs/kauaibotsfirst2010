@@ -9,8 +9,8 @@
 // it from being updated in th future.
 
 
-#ifndef LOWERALLHOOKS_H
-#define LOWERALLHOOKS_H
+#ifndef FODENABLEDISABLE_H
+#define FODENABLEDISABLE_H
 
 
 #include "Commands/Subsystem.h"
@@ -22,9 +22,9 @@
  *
  * @author ExampleAuthor
  */
-class LowerAllHooks: public Command {
+class FODEnableDisable: public Command {
 public:
-	LowerAllHooks();
+	FODEnableDisable();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

@@ -9,8 +9,8 @@
 // it from being updated in th future.
 
 
-#ifndef LOWERALLHOOKS_H
-#define LOWERALLHOOKS_H
+#ifndef ZEROYAW_H
+#define ZEROYAW_H
 
 
 #include "Commands/Subsystem.h"
@@ -22,9 +22,9 @@
  *
  * @author ExampleAuthor
  */
-class LowerAllHooks: public Command {
+class ZeroYaw: public Command {
 public:
-	LowerAllHooks();
+	ZeroYaw();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
