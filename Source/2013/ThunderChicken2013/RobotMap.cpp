@@ -100,9 +100,9 @@ void RobotMap::init() {
 	swerveDriveSystemleft_front_angle_sensor = new AngleSensor(1, 12, 14, 13);
 	lw->AddSensor("SwerveDriveSystem", "left_front_angle_sensor", swerveDriveSystemleft_front_angle_sensor);
 	
-	double tilt_P = prefs->GetDouble("Tilt_P", 1.0);
-	double tilt_I = prefs->GetDouble("Tilt_I", 0.0);
-	double tilt_D = prefs->GetDouble("Tilt_D", 0.0);
+	tilter_p  = prefs->GetDouble("Tilt_P", 1.0);
+	tilter_i = prefs->GetDouble("Tilt_I", 0.0);
+	tilter_d = prefs->GetDouble("Tilt_D", 0.0);
 	
 	double steer_P = prefs->GetDouble("Steer_P", 1.0);
 	double steer_I = prefs->GetDouble("Steer_I", 0.0);

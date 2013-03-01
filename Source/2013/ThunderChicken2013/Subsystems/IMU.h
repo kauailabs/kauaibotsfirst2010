@@ -11,6 +11,7 @@
 #include "PIDSource.h"
 #include "LiveWindow/LiveWindowSendable.h"
 #include "SerialPort.h"
+#include "Task.h"
 /**
  * Use the angle sensor to read an absolute angle measurement.
  * 

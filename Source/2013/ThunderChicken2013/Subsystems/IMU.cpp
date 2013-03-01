@@ -6,6 +6,7 @@
 #include <time.h>
 #include "IMU.h"
 #include "IMUProtocol.h"
+#include "Synchronized.h"
 
 static SEM_ID cIMUStateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);   
 static int update_count = 0;
