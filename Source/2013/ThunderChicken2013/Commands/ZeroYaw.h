@@ -23,6 +23,8 @@
  * @author ExampleAuthor
  */
 class ZeroYaw: public Command {
+private:
+	bool done;
 public:
 	ZeroYaw();
 	virtual void Initialize();
