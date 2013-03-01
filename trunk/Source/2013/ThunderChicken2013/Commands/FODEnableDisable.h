@@ -23,8 +23,11 @@
  * @author ExampleAuthor
  */
 class FODEnableDisable: public Command {
+private:
+	bool enable;
+	bool done;
 public:
-	FODEnableDisable();
+	FODEnableDisable(bool enable);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
