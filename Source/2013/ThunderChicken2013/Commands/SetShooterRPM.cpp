@@ -26,6 +26,10 @@ void SetShooterRPM::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void SetShooterRPM::Execute() {
+	Joystick* pstick = Robot::oi->getdriver_joystick();
+	double throttle = pstick->GetThrottle();
+	Robot::shooter->SetShooterSpeed(throttle);
+	
 	
 }
 
