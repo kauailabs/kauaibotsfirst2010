@@ -38,14 +38,11 @@ void Tilter::UsePIDOutput(double output){
 }
 
 double Tilter::ReturnPIDInput(){
-	double theta,X,X2,Y,mmtoi;
-	X2=5;
-	Y=12;
-	X=RobotMap::tilterheight_sensor->GetDistanceMM();
-	mmtoi=0.0393701;
-	X=X*mmtoi;
-	theta = atan2((X+X2),Y);
-	theta=theta*(180/3.14);
+	double theta,X;
+	X=height_sensor->GetDistanceMM();
+	X=X*0.0393701;//converts mm to inches
+	theta = atan2((TILTER_HEIGHT_INCHES+X),TILTER_BASELINE_INCHES);
+	theta=theta*(180.0/3.1415926);
 	return theta;
 }
 

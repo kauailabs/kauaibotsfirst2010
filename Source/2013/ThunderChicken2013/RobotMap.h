@@ -16,6 +16,12 @@
 #include "Subsystems/ProximitySensor.h"
 #include "Subsystems/IMU.h"
 
+#define TILTER_BASELINE_INCHES 12
+#define TILTER_HEIGHT_INCHES 5
+#define MAX_TILTER_ANGLE 40
+#define MIN_TILTER_ANGLE 10
+
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
