@@ -39,6 +39,9 @@ void Tilter::UsePIDOutput(double output){
 
 double Tilter::ReturnPIDInput(){
 	double theta,X,X2,Y,mmtoi;
+	X2=5;
+	Y=12;
+	X=RobotMap::tilterheight_sensor->GetDistanceMM();
 	mmtoi=0.0393701;
 	X=X*mmtoi;
 	theta = atan2((X+X2),Y);

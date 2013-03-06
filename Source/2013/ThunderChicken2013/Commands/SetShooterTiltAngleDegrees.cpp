@@ -28,6 +28,8 @@ void SetShooterTiltAngleDegrees::Initialize() {
 void SetShooterTiltAngleDegrees::Execute() {
 	Joystick* pstick = Robot::oi->getdriver_joystick();
 	double throttle = pstick->GetZ();
+	throttle=throttle*360;
+	throttle=+180;
 	Robot::tilter->PIDWrite(throttle);
 }
 
