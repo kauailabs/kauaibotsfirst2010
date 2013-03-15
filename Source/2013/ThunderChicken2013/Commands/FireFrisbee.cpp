@@ -10,6 +10,7 @@
 
 
 #include "FireFrisbee.h"
+#include "Timer.h"
 
 FireFrisbee::FireFrisbee() {
 	// Use requires() here to declare subsystem dependencies
@@ -27,15 +28,17 @@ void FireFrisbee::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void FireFrisbee::Execute() {
 	Joystick* pstick = Robot::oi->getshooter_joystick();
-	bool button = pstick->GetTrigger(kRightHand);
+	bool button = pstick->GetTrigger();
 	if(Robot::magazine->CheckFrizbees() && button)
 	{
 		Robot::magazine->SetLoadState(button);
 		Robot::magazine->SetFireState(!button);
-		nanosleep(10);
+		Wait(0.2);
 		Robot::magazine->SetLoadState(!button);
 		Robot::magazine->SetFireState(button);
     }
+	else{}
+}
 
 // Make this return true when this Command no longer needs to run execute()
 bool FireFrisbee::IsFinished() {
