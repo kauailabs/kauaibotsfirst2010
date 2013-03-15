@@ -26,8 +26,16 @@ void FireFrisbee::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void FireFrisbee::Execute() {
-	
-}
+	Joystick* pstick = Robot::oi->getshooter_joystick();
+	bool button = pstick->GetTrigger(kRightHand);
+	if(Robot::magazine->CheckFrizbees() && button)
+	{
+		Robot::magazine->SetLoadState(button);
+		Robot::magazine->SetFireState(!button);
+		nanosleep(10);
+		Robot::magazine->SetLoadState(!button);
+		Robot::magazine->SetFireState(button);
+    }
 
 // Make this return true when this Command no longer needs to run execute()
 bool FireFrisbee::IsFinished() {
