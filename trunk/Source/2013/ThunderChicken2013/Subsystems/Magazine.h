@@ -14,6 +14,7 @@
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
 #include "ProximitySensor.h"
+#include "DoubleSolenoid.h"
 /**
  *
  *
