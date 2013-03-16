@@ -29,7 +29,7 @@ void FireFrisbee::Initialize() {
 void FireFrisbee::Execute() {
 	Joystick* pstick = Robot::oi->getshooter_joystick();
 	bool button = pstick->GetTrigger();
-	if(Robot::magazine->CheckFrizbees() && button)
+	if((Robot::magazine->CheckFrizbees()==0) && button)
 	{
 		Robot::magazine->SetLoadState(button);
 		Robot::magazine->SetFireState(!button);
