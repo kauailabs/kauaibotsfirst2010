@@ -29,11 +29,11 @@ void RunCameraGimbal::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void RunCameraGimbal::Execute() {
-	//stick1* OI::getshooter_joystick();
-	Joystick* p1stick = Robot::oi->getshooter_joystick();
-	double azimuth  = p1stick->GetTwist();
-	double elevation = p1stick->GetY();
-	//Robot::camera->DoCameraGimbal(azimuth,elevation);
+	//pstick* OI::getshooter_joystick();
+	Joystick* pstick = Robot::oi->getshooter_joystick();
+	double azimuth  = pstick->GetTwist();
+	double elevation = pstick->GetY();
+	Robot::camera->DoCameraGimbal(azimuth,elevation);
 	
 	
 }
