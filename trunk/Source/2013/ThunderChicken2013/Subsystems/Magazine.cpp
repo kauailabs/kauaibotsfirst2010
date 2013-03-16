@@ -34,8 +34,8 @@ void Magazine::InitDefaultCommand() {
 // here. Call these from Commands.
 
 //TODO:Get sensor code working
-/*int Magazine::CheckFrizbees() {
-	switch(firsbee_counter)
+int Magazine::CheckFrizbees() {
+	/*switch(firsbee_counter)
 		{
 			default:
 				return(0);
@@ -47,8 +47,9 @@ void Magazine::InitDefaultCommand() {
 				return(3);
 			case 4:
 				return(4);
-		}
-}*/
+		}*/
+	return(0);
+}
 
 bool Magazine::CheckLoadState(){
 	if(lifter->Get()==DoubleSolenoid::kForward) return(TRUE);
