@@ -26,7 +26,7 @@ void LowerRearClimberHook::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void LowerRearClimberHook::Execute() {
-	
+	Robot::climber->LowerRearHooks();
 }
 
 // Make this return true when this Command no longer needs to run execute()
