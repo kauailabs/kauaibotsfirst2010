@@ -32,6 +32,10 @@ public:
 	Climber();
 	void InitDefaultCommand();
 	virtual void LowerHooks();
+	virtual void LowerRearHooks();
+	virtual void LowerFrontHooks();
+	virtual void RaiseRearHooks();
+	virtual void RaiseFrontHooks();
 };
 
 #endif
