@@ -4,15 +4,29 @@
 #include "WPIErrors.h"
 #include "LiveWindow/LiveWindow.h"
 #include <time.h>
+#include "Synchronized.h"
 
 const long AngleSensor::kReadDelayNanoseconds = 500;
+static SEM_ID cSensorSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);   
+
+void AngleSensorNotifyFunc(void* param)
+{
+	AngleSensor *pSensorObj = (AngleSensor *)param;
+	double angle = pSensorObj->GetAngleInternal();
+	{
+		//Synchronized sync(cSensorSemaphore);
+		pSensorObj->cached_angle = angle;
+	}
+}
 
 AngleSensor::AngleSensor(UINT8 dsc,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin) :
 	data(dsc, data_pin),
 	chip_select(dsc, chipselect_pin),
-	clock(dsc, clock_pin)
+	clock(dsc, clock_pin),
+	notifier(AngleSensorNotifyFunc,this)
 {
 	InitAngleSensor();
+	notifier.StartPeriodic(.01);
 }
 
 /**
@@ -31,6 +45,13 @@ void AngleSensor::InitAngleSensor()
  */
 AngleSensor::~AngleSensor()
 {
+	notifier.Stop();
+}
+
+float AngleSensor::GetAngle()
+{
+	//Synchronized sync(cSensorSemaphore);
+	return cached_angle;
 }
 
 /**
@@ -50,13 +71,14 @@ AngleSensor::~AngleSensor()
  * @return the current heading of the robot in degrees. This heading is based on integration
  * of the returned rate from the AngleSensor.
  */
-float AngleSensor::GetAngle( void )
+float AngleSensor::GetAngleInternal( void )
 {
 	struct timespec ts;
 	ts.tv_sec=0;
 	ts.tv_sec=0;
 	ts.tv_nsec=kReadDelayNanoseconds;
 	
+	//Synchronized sync(cSensorSemaphore);
 	chip_select.Set(1);
 	unsigned short angle=0;
 	
