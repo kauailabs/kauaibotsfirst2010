@@ -56,6 +56,7 @@ public:
 	IMU *imu;
 	SwerveDriveSystem();
 	void InitDefaultCommand();
+	void EnablePIDControl(bool enable);
 	virtual void DoSwerve( float vX, float vY, float vRot );
 	virtual void DoSimpleDrive( float vY, float vRot);
 	void EnableFieldOrientedDrive( bool enable );

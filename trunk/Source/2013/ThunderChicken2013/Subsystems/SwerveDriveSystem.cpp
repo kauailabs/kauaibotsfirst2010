@@ -78,6 +78,25 @@ void SwerveDriveSystem::ZeroFieldOrientedDriveYaw()
 	imu->ZeroYaw();
 }
 
+void SwerveDriveSystem::EnablePIDControl(bool enable)
+{
+	if ( enable )
+	{
+		RobotMap::swerveDriveSystemleft_front_steer->Enable();
+		RobotMap::swerveDriveSystemright_front_steer->Enable();
+		RobotMap::swerveDriveSystemleft_back_steer->Enable();
+		RobotMap::swerveDriveSystemright_back_steer->Enable();
+	}
+	else // disable
+	{
+		RobotMap::swerveDriveSystemleft_front_steer->Disable();		
+		RobotMap::swerveDriveSystemright_front_steer->Disable();
+		RobotMap::swerveDriveSystemleft_back_steer->Disable();
+		RobotMap::swerveDriveSystemright_back_steer->Disable();
+	}
+}
+
+
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 

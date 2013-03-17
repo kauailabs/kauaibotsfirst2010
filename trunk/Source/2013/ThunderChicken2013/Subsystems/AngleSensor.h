@@ -36,8 +36,9 @@ public:
 	DigitalOutput clock;	
 	Notifier notifier;
 	double cached_angle;
+	double offset_angle;
 	
-	AngleSensor(UINT8 moduleNumber,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin);
+	AngleSensor(UINT8 moduleNumber,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin, double offset_angle = 0.0);
 	virtual ~AngleSensor();
 	virtual float GetAngle();
 	float GetAngleInternal();

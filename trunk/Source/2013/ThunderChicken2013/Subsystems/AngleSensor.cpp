@@ -19,12 +19,13 @@ void AngleSensorNotifyFunc(void* param)
 	}
 }
 
-AngleSensor::AngleSensor(UINT8 dsc,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin) :
+AngleSensor::AngleSensor(UINT8 dsc,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin, double offset_angle) :
 	data(dsc, data_pin),
 	chip_select(dsc, chipselect_pin),
 	clock(dsc, clock_pin),
 	notifier(AngleSensorNotifyFunc,this)
 {
+	this->offset_angle = offset_angle;
 	InitAngleSensor();
 	notifier.StartPeriodic(.01);
 }
@@ -51,6 +52,7 @@ AngleSensor::~AngleSensor()
 float AngleSensor::GetAngle()
 {
 	//Synchronized sync(cSensorSemaphore);
+	float adjusted_angle = cached_angle - offset_angle;
 	return cached_angle;
 }
 
