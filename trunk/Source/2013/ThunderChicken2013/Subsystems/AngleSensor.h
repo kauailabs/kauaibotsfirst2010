@@ -12,6 +12,7 @@
 #include "LiveWindow/LiveWindowSendable.h"
 #include "DigitalInput.h"
 #include "DigitalOutput.h"
+#include "Notifier.h"
 /**
  * Use the angle sensor to read an absolute angle measurement.
  * 
@@ -33,10 +34,13 @@ public:
 	DigitalInput data;
 	DigitalOutput chip_select;
 	DigitalOutput clock;	
+	Notifier notifier;
+	double cached_angle;
 	
 	AngleSensor(UINT8 moduleNumber,UINT32 data_pin, UINT32 chipselect_pin, UINT32 clock_pin);
 	virtual ~AngleSensor();
 	virtual float GetAngle();
+	float GetAngleInternal();
 
 	// PIDSource interface
 	double PIDGet();

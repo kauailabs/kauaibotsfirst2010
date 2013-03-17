@@ -107,9 +107,9 @@ void RobotMap::init() {
 	tilter_i = prefs->GetDouble("Tilt_I", 0.0);
 	tilter_d = prefs->GetDouble("Tilt_D", 0.0);
 	
-	double steer_P = prefs->GetDouble("Steer_P", 1.0);
-	double steer_I = prefs->GetDouble("Steer_I", 0.0);
-	double steer_D = prefs->GetDouble("Steer_D", 0.0);
+	double steer_P = prefs->GetDouble("Steer_P", .01);/*.02);*/
+	double steer_I = prefs->GetDouble("Steer_I", .002);/*0.002);*/
+	double steer_D = prefs->GetDouble("Steer_D", .001);/*0.001);*/
 	
 	double drive_P = prefs->GetDouble("Drive_P", 1.0);
 	double drive_I = prefs->GetDouble("Drive_I", 0.0);
@@ -118,8 +118,10 @@ void RobotMap::init() {
 	
 	swerveDriveSystemleft_front_steer = new PIDController(steer_P, steer_I, steer_D,/* F: 0.0, */ swerveDriveSystemleft_front_angle_sensor, swerveDriveSystemleft_front_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "left_front_steer", swerveDriveSystemleft_front_steer);
-	swerveDriveSystemleft_front_steer->SetContinuous(false); swerveDriveSystemleft_front_steer->SetAbsoluteTolerance(0.2); 
+	swerveDriveSystemleft_front_steer->SetContinuous(true); swerveDriveSystemleft_front_steer->SetAbsoluteTolerance(0.2); 
+		swerveDriveSystemleft_front_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemleft_front_steer->SetOutputRange(-1.0, 1.0);
+        //swerveDriveSystemleft_front_steer->SetTolerance(1.0/360.0);
 	swerveDriveSystemleft_front_rpm_sensor = new Encoder(1, 11, 1, 10, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "left_front_rpm_sensor", swerveDriveSystemleft_front_rpm_sensor);
 	swerveDriveSystemleft_front_rpm_sensor->SetDistancePerPulse(1.0);
@@ -140,8 +142,10 @@ void RobotMap::init() {
 	
 	swerveDriveSystemright_front_steer = new PIDController(steer_P, steer_I, steer_D,/* F: 0.0, */ swerveDriveSystemright_front_angle_sensor, swerveDriveSystemright_front_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "right_front_steer", swerveDriveSystemright_front_steer);
-	swerveDriveSystemright_front_steer->SetContinuous(false); swerveDriveSystemright_front_steer->SetAbsoluteTolerance(0.2); 
+	swerveDriveSystemright_front_steer->SetContinuous(true); swerveDriveSystemright_front_steer->SetAbsoluteTolerance(0.2); 
+    	swerveDriveSystemright_front_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemright_front_steer->SetOutputRange(-1.0, 1.0);
+        //swerveDriveSystemright_front_steer->SetTolerance(1.0/360.0);
 	swerveDriveSystemright_front_rpm_sensor = new Encoder(2, 6, 2, 5, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "right_front_rpm_sensor", swerveDriveSystemright_front_rpm_sensor);
 	swerveDriveSystemright_front_rpm_sensor->SetDistancePerPulse(1.0);
@@ -162,8 +166,10 @@ void RobotMap::init() {
 	
 	swerveDriveSystemleft_back_steer = new PIDController(steer_P, steer_I, steer_D,/* F: 0.0, */ swerveDriveSystemleft_back_angle_sensor, swerveDriveSystemleft_back_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "left_back_steer", swerveDriveSystemleft_back_steer);
-	swerveDriveSystemleft_back_steer->SetContinuous(false); swerveDriveSystemleft_back_steer->SetAbsoluteTolerance(0.2); 
+	swerveDriveSystemleft_back_steer->SetContinuous(true); swerveDriveSystemleft_back_steer->SetAbsoluteTolerance(0.2); 
+    	swerveDriveSystemleft_back_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemleft_back_steer->SetOutputRange(-1.0, 1.0);
+        //swerveDriveSystemleft_back_steer->SetTolerance(1.0/360.0);
 	swerveDriveSystemleft_back_rpm_sensor = new Encoder(1, 6, 1, 5, false, Encoder::k4X);
 	lw->AddSensor("SwerveDriveSystem", "left_back_rpm_sensor", swerveDriveSystemleft_back_rpm_sensor);
 	swerveDriveSystemleft_back_rpm_sensor->SetDistancePerPulse(1.0);
@@ -184,8 +190,10 @@ void RobotMap::init() {
 	
 	swerveDriveSystemright_back_steer = new PIDController(steer_P, steer_I, steer_D,/* F: 0.0, */ swerveDriveSystemright_back_angle_sensor, swerveDriveSystemright_back_steer_motor, 0.02);
 	lw->AddActuator("SwerveDriveSystem", "right_back_steer", swerveDriveSystemright_back_steer);
-	swerveDriveSystemright_back_steer->SetContinuous(false); swerveDriveSystemright_back_steer->SetAbsoluteTolerance(0.2); 
+	swerveDriveSystemright_back_steer->SetContinuous(true); swerveDriveSystemright_back_steer->SetAbsoluteTolerance(0.2); 
+    	swerveDriveSystemright_back_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemright_back_steer->SetOutputRange(-1.0, 1.0);
+        //swerveDriveSystemright_back_steer->SetTolerance(1.0/360.0);
 	swerveDriveSystemright_back_drive_motor = new Talon(2, 10);
 	lw->AddActuator("SwerveDriveSystem", "right_back_drive_motor", (Talon*) swerveDriveSystemright_back_drive_motor);
 	
