@@ -31,6 +31,7 @@
 #include "Commands/FODEnableDisable.h"
 #include "Commands/ZeroYaw.h"
 #include "Commands/SimpleDrive.h"
+#include "Commands/SwerveDrive.h"
 #include "Commands/RunCameraGimbal.h"
 #include "Commands/DeployChute.h"
 #include "Commands/DisableShooterDriveControl.h"
