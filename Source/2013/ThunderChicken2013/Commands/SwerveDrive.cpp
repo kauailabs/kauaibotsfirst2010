@@ -21,6 +21,51 @@ void SwerveDrive::Execute() {
 	double twist = pstick->GetTwist();
 	double y = pstick->GetY();
 	double x = pstick->GetX();
+	
+	float deadband = 0.05;
+	
+	if ( twist > 0 )
+	{
+		if ( twist < deadband )
+		{
+			twist = 0.0;
+		}
+	}
+	else if ( twist < 0 )
+	{
+		if ( twist > -deadband )
+		{
+			twist = 0.0;
+		}
+	}
+	if ( x > 0 )
+	{
+		if ( x < deadband )
+		{
+			x = 0.0;
+		}
+	}
+	else if ( x < 0 )
+	{
+		if ( x > -deadband )
+		{
+			x = 0.0;
+		}
+	}	
+	if ( y > 0 )
+	{
+		if ( y < deadband )
+		{
+			y = 0.0;
+		}
+	}
+	else if ( y < 0 )
+	{
+		if ( y > -deadband )
+		{
+			y = 0.0;
+		}
+	}	
 	Robot::swerveDriveSystem->DoSwerve(x,y,twist);
 }
 
