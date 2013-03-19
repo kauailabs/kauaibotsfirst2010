@@ -54,8 +54,9 @@ float AngleSensor::GetAngle()
 	//Synchronized sync(cSensorSemaphore);
 	// Subtract the calibrated offset
 	float adjusted_angle = cached_angle - offset_angle;
-	// Invert the sign.  This is because the sensor is mounted "upside-down" relative to the wheel
-	// when looked at from the top down.
+	// Once offset is subtracted, handle wrap-around.
+	if ( adjusted_angle < -180.0 ) adjusted_angle += 360.0;
+	if ( adjusted_angle > 180.0 ) adjusted_angle -= 360.0;
 	return adjusted_angle;
 }
 
