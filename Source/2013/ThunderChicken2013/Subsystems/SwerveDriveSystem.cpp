@@ -149,30 +149,47 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	
 	// Independently-steered Swerve drive inverse kinematics
 	
-	float a = strafe - rcw * (cLength / r);
-	float b = strafe + rcw * (cLength / r);
-	float c = fwd - rcw * (cWidth / r);
-	float d = fwd + rcw * (cWidth / r);
+	// Rcw direction is always perpindicular to R
+	// Strafe/fwd direction is tangent of (strafe,fwd)
+	// Final direction is tangent of these two directions
+	
+	float a = strafe - rcw * (cLength / r); // X-:  X (Strafe) Magnitude - rcw Magnitude * rcw DirectionX (L/R)
+	float b = strafe + rcw * (cLength / r);	// X+:  X (Strafe) Magnitude + rcw Magnitude * rcw DirectionX (L/R)
+	float c = fwd    - rcw * (cWidth  / r); // Y-:  Y (Forward) Magnitude - rcw Magnitude * rcw DirectionY (W/R)
+	float d = fwd    + rcw * (cWidth  / r);	// Y+:  Y (Forward) Magnitude + rcw Magnitude * rcw DirectionY (W/R)
 			
 	float largest_wheel_speed = 0.0;
 	
+	// The wheels are numbered from wheel 1 (right-front), which is equivalent to cartesian quadrant 4,
+	// and increase counter-clockwise.
+	// So, the left-front wheel (2) is equivalent to cartesian quadrant 1.
+
+	// This "rotation" appears to be a shortcut
+	// that enables conversion from cartesian coordinates (0 degrees = "right") to map coordinates 
+	// (0 degrees = "north"); put another way, this is a 90-degree rotation to the left	
+	
 	float wheel1_speed = sqrt( ( b * b ) + ( c * c ) );
-	float wheel1_angle = atan2( c, b ) * 180.0 / pi;
+	float wheel1_angle = atan2( b, c ) * 180.0 / pi;  // X+, Y- (Quadrant 4 in cartesian coordinates)
+	
+	// NOTE:  atan2 expects arguments in order (y, x).  But the parameter order is X (strafe), then Y (Forward).
+	// If length and width were identical, this would make no difference.
+	// Is it possible this is also required to match the 90-degree rotation to the left
+	// mentioned above?
 	
 	if ( wheel1_speed > largest_wheel_speed ) largest_wheel_speed = wheel1_speed;
 	
 	float wheel2_speed = sqrt( ( b * b ) + ( d * d ) );
-	float wheel2_angle = atan2( d, b ) * 180.0 / pi;
+	float wheel2_angle = atan2( b, d ) * 180.0 / pi; // X+, Y+ (Quadrant 1 in cartesian coordinates)
 
 	if ( wheel2_speed > largest_wheel_speed ) largest_wheel_speed = wheel2_speed;
 	
 	float wheel3_speed = sqrt( ( a * a ) + ( d * d ) );
-	float wheel3_angle = atan2( d, a ) * 180.0 / pi;
+	float wheel3_angle = atan2( a, d ) * 180.0 / pi; // X-, Y+ (Quadrant2 in cartesian coordaintes)
 	
 	if ( wheel3_speed > largest_wheel_speed ) largest_wheel_speed = wheel3_speed;
 	
 	float wheel4_speed = sqrt( ( a * a ) + ( c * c ) );
-	float wheel4_angle = atan2( c, a ) * 180.0 / pi;
+	float wheel4_angle = atan2( a, c ) * 180.0 / pi; // X- Y- (Quadrant 3 in cartesian coordinates)
 	
 	if ( wheel4_speed > largest_wheel_speed ) largest_wheel_speed = wheel4_speed;
 	
@@ -187,12 +204,22 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 		wheel4_speed /= largest_wheel_speed;
 	}
 	
+	SmartDashboard::PutNumber("Swerve_A", a);
+	SmartDashboard::PutNumber("Swerve_B", a);
+	SmartDashboard::PutNumber("Swerve_C", a);
+	SmartDashboard::PutNumber("Swerve_D", a);
+	
+	SmartDashboard::PutNumber("Swerve_Left_Front_Angle", wheel2_angle);
+	SmartDashboard::PutNumber("Swerve_Right_Front_Angle", wheel1_angle);
+	SmartDashboard::PutNumber("Swerve_Left_Back_Angle", wheel3_angle);
+	SmartDashboard::PutNumber("Swerve_Right_Back_Angle", wheel4_angle);
+	
 	// Update Steering Motors PID Controllers first (note these are likely higher latency)
 	
-	left_front_steer->SetSetpoint(wheel2_angle * -1);
-	right_front_steer->SetSetpoint(wheel1_angle * -1);
-	left_back_steer->SetSetpoint( wheel3_angle * -1);
-	right_back_steer->SetSetpoint( wheel4_angle * -1);	
+	left_front_steer->SetSetpoint(wheel2_angle);
+	right_front_steer->SetSetpoint(wheel1_angle);
+	left_back_steer->SetSetpoint( wheel3_angle);
+	right_back_steer->SetSetpoint( wheel4_angle);	
 	
 	// Update Speed Motor PID Controllers
 	
