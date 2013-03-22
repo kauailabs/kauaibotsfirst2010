@@ -36,6 +36,8 @@ public:
 	virtual void LowerFrontHooks();
 	virtual void RaiseRearHooks();
 	virtual void RaiseFrontHooks();
+	virtual void StopRearHooks();
+	virtual void StopFrontHooks();
 };
 
 #endif
