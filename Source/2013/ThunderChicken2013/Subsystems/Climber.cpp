@@ -44,7 +44,7 @@ void Climber::LowerFrontHooks(){
 }
 
 void Climber::LowerRearHooks(){
-	RobotMap::climberrear_winch_motor->Set(0);
+	RobotMap::climberrear_winch_motor->Set(-1);
 }
 
 void Climber::RaiseRearHooks(){
