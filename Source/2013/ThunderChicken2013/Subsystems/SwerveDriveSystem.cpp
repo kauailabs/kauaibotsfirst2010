@@ -170,6 +170,7 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	
 	float wheel1_speed = sqrt( ( b * b ) + ( c * c ) );
 	float wheel1_angle = atan2( b, c ) * 180.0 / pi;  // X+, Y- (Quadrant 4 in cartesian coordinates)
+	if ( ( b == 0) && ( c == 0) ) wheel1_angle = 0;
 	
 	// NOTE:  atan2 expects arguments in order (y, x).  But the parameter order is X (strafe), then Y (Forward).
 	// If length and width were identical, this would make no difference.
@@ -180,16 +181,19 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	
 	float wheel2_speed = sqrt( ( b * b ) + ( d * d ) );
 	float wheel2_angle = atan2( b, d ) * 180.0 / pi; // X+, Y+ (Quadrant 1 in cartesian coordinates)
+	if ( ( b == 0) && ( d == 0) ) wheel2_angle = 0;
 
 	if ( wheel2_speed > largest_wheel_speed ) largest_wheel_speed = wheel2_speed;
 	
 	float wheel3_speed = sqrt( ( a * a ) + ( d * d ) );
 	float wheel3_angle = atan2( a, d ) * 180.0 / pi; // X-, Y+ (Quadrant2 in cartesian coordaintes)
+	if ( ( a == 0) && ( d == 0) ) wheel3_angle = 0;
 	
 	if ( wheel3_speed > largest_wheel_speed ) largest_wheel_speed = wheel3_speed;
 	
 	float wheel4_speed = sqrt( ( a * a ) + ( c * c ) );
 	float wheel4_angle = atan2( a, c ) * 180.0 / pi; // X- Y- (Quadrant 3 in cartesian coordinates)
+	if ( ( a == 0) && ( c == 0) ) wheel4_angle = 0;
 	
 	if ( wheel4_speed > largest_wheel_speed ) largest_wheel_speed = wheel4_speed;
 	
@@ -204,10 +208,14 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 		wheel4_speed /= largest_wheel_speed;
 	}
 	
+	SmartDashboard::PutNumber("Swerve_Strafe", strafe);
+	SmartDashboard::PutNumber("Swerve_Forward", fwd);
+	SmartDashboard::PutNumber("Swerve_RCW", rcw);
+	
 	SmartDashboard::PutNumber("Swerve_A", a);
-	SmartDashboard::PutNumber("Swerve_B", a);
-	SmartDashboard::PutNumber("Swerve_C", a);
-	SmartDashboard::PutNumber("Swerve_D", a);
+	SmartDashboard::PutNumber("Swerve_B", b);
+	SmartDashboard::PutNumber("Swerve_C", c);
+	SmartDashboard::PutNumber("Swerve_D", d);
 	
 	SmartDashboard::PutNumber("Swerve_Left_Front_Angle", wheel2_angle);
 	SmartDashboard::PutNumber("Swerve_Right_Front_Angle", wheel1_angle);
@@ -216,10 +224,10 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	
 	// Update Steering Motors PID Controllers first (note these are likely higher latency)
 	
-	left_front_steer->SetSetpoint(wheel2_angle);
-	right_front_steer->SetSetpoint(wheel1_angle);
-	left_back_steer->SetSetpoint( wheel3_angle);
-	right_back_steer->SetSetpoint( wheel4_angle);	
+	left_front_steer->SetSetpoint(-wheel2_angle);
+	right_front_steer->SetSetpoint(-wheel1_angle);
+	left_back_steer->SetSetpoint( -wheel3_angle);
+	right_back_steer->SetSetpoint( -wheel4_angle);	
 	
 	// Update Speed Motor PID Controllers
 	

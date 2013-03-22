@@ -66,7 +66,7 @@ void SwerveDrive::Execute() {
 			y = 0.0;
 		}
 	}	
-	Robot::swerveDriveSystem->DoSwerve(x,y,twist);
+	Robot::swerveDriveSystem->DoSwerve(x,-y,twist);
 }
 
 // Make this return true when this Command no longer needs to run execute()
