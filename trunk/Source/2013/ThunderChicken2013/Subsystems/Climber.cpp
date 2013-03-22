@@ -34,12 +34,12 @@ void Climber::InitDefaultCommand() {
 }
 
 void Climber::LowerHooks(){
-	RobotMap::climberfront_winch_motor->Set(0);
-	RobotMap::climberrear_winch_motor->Set(0);
+	RobotMap::climberfront_winch_motor->Set(-1);
+	RobotMap::climberrear_winch_motor->Set(-1);
 }
 
 void Climber::LowerFrontHooks(){
-	RobotMap::climberfront_winch_motor->Set(0);
+	RobotMap::climberfront_winch_motor->Set(-1);
 	RobotMap::front_climber_solenoid->Set(FALSE);
 }
 
@@ -56,6 +56,13 @@ void Climber::RaiseFrontHooks(){
 	RobotMap::front_climber_solenoid->Set(TRUE);
 }
 
+void Climber::StopRearHooks(){
+	RobotMap::climberfront_winch_motor->Set(0);
+}
+
+void Climber::StopFrontHooks(){
+	RobotMap::climberfront_winch_motor->Set(0);
+}
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 
