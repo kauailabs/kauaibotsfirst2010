@@ -28,9 +28,8 @@ void SetShooterRPM::Initialize() {
 void SetShooterRPM::Execute() {
 	Joystick* pstick = Robot::oi->getshooter_joystick();
 	double throttle = pstick->GetThrottle();
+	throttle=((throttle+1)/2);
 	Robot::shooter->SetShooterSpeed(throttle);
-	
-	
 }
 
 // Make this return true when this Command no longer needs to run execute()
