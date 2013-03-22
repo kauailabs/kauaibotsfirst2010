@@ -18,6 +18,8 @@ public:
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
+protected:         
+	double AdjustJoystickResponse( double dJoystickIn, double dAdjustment, double dExponent, double dMultiplier , double dDead);  
 };
 
 #endif
