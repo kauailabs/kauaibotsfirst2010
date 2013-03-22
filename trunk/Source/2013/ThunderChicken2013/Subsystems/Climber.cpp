@@ -34,8 +34,8 @@ void Climber::InitDefaultCommand() {
 }
 
 void Climber::LowerHooks(){
-	RobotMap::climberfront_winch_motor->Set(-1);
-	RobotMap::climberrear_winch_motor->Set(-1);
+	RobotMap::climberfront_winch_motor->Set(0);
+	RobotMap::climberrear_winch_motor->Set(0);
 }
 
 void Climber::LowerFrontHooks(){
