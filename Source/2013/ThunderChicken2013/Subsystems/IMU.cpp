@@ -25,6 +25,7 @@ static void imuTask(IMU *imu)
 	pport->SetReadBufferSize(512);
 	pport->SetTimeout(2.0);
 	pport->EnableTermination('\n');
+	pport->Reset();
 
 	float yaw = 0.0;
 	float pitch = 0.0;
@@ -32,6 +33,7 @@ static void imuTask(IMU *imu)
 	
 	while (1)
 	{ 
+		INT32 bytes_received = pport->GetBytesReceived();
 		UINT32 bytes_read = pport->Read( protocol_buffer, sizeof(protocol_buffer) );
 		if ( bytes_read > 0 )
 		{
@@ -53,6 +55,9 @@ static void imuTask(IMU *imu)
 				}
 			}
 		}
+		else
+		{
+		}
 	}
 }
 
@@ -65,6 +70,7 @@ IMU::IMU( SerialPort *pport ) :
 	pserial_port = pport;
 	pserial_port->Reset();
 	InitIMU();
+	m_task.Start((UINT32)this);
 }
 
 /**
@@ -90,6 +96,7 @@ void IMU::InitIMU()
  */
 IMU::~IMU()
 {
+	m_task.Stop();
 }
 
 bool IMU::IsConnected()

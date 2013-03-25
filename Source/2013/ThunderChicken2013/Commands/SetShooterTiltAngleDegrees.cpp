@@ -21,15 +21,18 @@ SetShooterTiltAngleDegrees::SetShooterTiltAngleDegrees() {
 
 // Called just before this Command runs the first time
 void SetShooterTiltAngleDegrees::Initialize() {
-	
+	Robot::tilter->Enable();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void SetShooterTiltAngleDegrees::Execute() {
 	Joystick* pstick = Robot::oi->getdriver_joystick();
 	double throttle=pstick->GetZ();
-	throttle=(throttle+1)*((MAX_TILTER_ANGLE-MIN_TILTER_ANGLE)/2);
+	throttle=MIN_TILTER_ANGLE + ((throttle+1)*((MAX_TILTER_ANGLE-MIN_TILTER_ANGLE)/2));
 	Robot::tilter->SetSetpoint(throttle);
+	SmartDashboard::PutNumber("TilterAngle",Robot::tilter->ReturnPIDInput());
+	SmartDashboard::PutNumber("DesiredTilterAngle",throttle);
+	SmartDashboard::PutNumber("TilterHeightMM", RobotMap::tilterheight_sensor->GetDistanceMM());
 }
 
 // Make this return true when this Command no longer needs to run execute()

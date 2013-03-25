@@ -34,7 +34,7 @@ void Tilter::InitDefaultCommand() {
 }
 
 void Tilter::UsePIDOutput(double output){
-	motor->Set(output);
+	motor->Set(-output);
 }
 
 double Tilter::ReturnPIDInput(){

@@ -30,6 +30,7 @@ void SetShooterRPM::Execute() {
 	double throttle = -pstick->GetThrottle();
 	throttle=((throttle+1)/2);
 	Robot::shooter->SetShooterSpeed(throttle);
+	SmartDashboard::PutNumber("ShooterSpeed",throttle);
 }
 
 // Make this return true when this Command no longer needs to run execute()

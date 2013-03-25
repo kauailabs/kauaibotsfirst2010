@@ -72,3 +72,11 @@ void Magazine::SetFireState(bool x){
 	if(x) trigger->Set(DoubleSolenoid::kForward);
 	else if(!x) trigger->Set(DoubleSolenoid::kReverse);
 }
+
+void Magazine::SetFireOff(){
+	trigger->Set(DoubleSolenoid::kOff);
+}
+
+void Magazine::SetLoadOff(){
+	lifter->Set(DoubleSolenoid::kOff);
+}
