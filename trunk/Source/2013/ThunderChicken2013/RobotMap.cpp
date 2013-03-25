@@ -62,7 +62,7 @@ void RobotMap::init() {
 
 	Preferences *prefs = Preferences::GetInstance();
 	
-	tilter_p  = prefs->GetDouble("Tilt_P", 1.0);
+	tilter_p  = prefs->GetDouble("Tilt_P", .5);
 	tilter_i = prefs->GetDouble("Tilt_I", 0.0);
 	tilter_d = prefs->GetDouble("Tilt_D", 0.0);
 	

@@ -16,10 +16,10 @@
 #include "Subsystems/ProximitySensor.h"
 #include "Subsystems/IMU.h"
 
-#define TILTER_BASELINE_INCHES 12
-#define TILTER_HEIGHT_INCHES 5
+#define TILTER_BASELINE_INCHES 20
+#define TILTER_HEIGHT_INCHES 0
 #define MAX_TILTER_ANGLE 40
-#define MIN_TILTER_ANGLE 10
+#define MIN_TILTER_ANGLE 15
 
 
 /**

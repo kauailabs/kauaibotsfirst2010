@@ -31,13 +31,18 @@ void FireFrisbee::Execute() {
 	bool button = pstick->GetTrigger();
 	if((Robot::magazine->CheckFrizbees()==0) && button)
 	{
-		Robot::magazine->SetLoadState(button);
-		Robot::magazine->SetFireState(!button);
-		Wait(0.2);
-		Robot::magazine->SetLoadState(!button);
-		Robot::magazine->SetFireState(button);
+		Robot::magazine->SetLoadState(true);
+		Robot::magazine->SetFireState(false);
+		Wait(1.0);
+		Robot::magazine->SetLoadState(false);
+		Robot::magazine->SetFireState(true);
+		Wait(1.0);
     }
-	else{}
+	else
+	{
+		Robot::magazine->SetLoadState(false);
+		Robot::magazine->SetFireState(true);
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()

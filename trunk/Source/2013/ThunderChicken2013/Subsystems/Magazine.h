@@ -35,6 +35,8 @@ public:
     int CheckFrizbees();
 	bool CheckLoadState();
 	bool CheckFireState();
+	void SetLoadOff();
+	void SetFireOff();
 	void SetLoadState(bool x);
 	void SetFireState(bool x);
 };
