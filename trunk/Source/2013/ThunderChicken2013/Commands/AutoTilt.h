@@ -9,26 +9,28 @@
 // it from being updated in th future.
 
 
-#ifndef AUTONOMOUSCOMMAND_H
-#define AUTONOMOUSCOMMAND_H
+#ifndef AUTOTILT_H
+#define AUTOTILT_H
 
 
 #include "Commands/Subsystem.h"
 #include "../Robot.h"
+
 
 /**
  *
  *
  * @author ExampleAuthor
  */
-class AutonomousCommand: public CommandGroup{
+class AutoTilt: public Command{
 public:
-	AutonomousCommand();
+	AutoTilt(double angle);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
+	double tilt;
 };
 
 #endif
