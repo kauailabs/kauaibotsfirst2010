@@ -23,7 +23,7 @@ const double JoystickStrafe_Deadband = DEADBAND;
 // Rotation 
 const double JoystickRotate_Adjust = .40; 
 const double JoystickRotate_Power = 3; 
-const double JoystickRotate_Multiplier = .35; 
+const double JoystickRotate_Multiplier = .60; 
 const double JoystickRotate_Deadband = DEADBAND; 
 /////////////////////////////////////////////////////////////////////////////////////  
 #endif  

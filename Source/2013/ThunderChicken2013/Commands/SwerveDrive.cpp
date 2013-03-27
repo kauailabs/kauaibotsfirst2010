@@ -42,6 +42,26 @@ void SwerveDrive::Execute() {
 	y = AdjustJoystickResponse( y, JoystickForward_Adjust, JoystickForward_Power, JoystickForward_Multiplier, JoystickForward_Deadband );
 	rotate = AdjustJoystickResponse( rotate, JoystickRotate_Adjust, JoystickRotate_Power, JoystickRotate_Multiplier, JoystickRotate_Deadband );
 	
+	if ( pstick->GetRawButton(9))
+	{
+		Robot::swerveDriveSystem->ZeroFieldOrientedDriveYaw();
+	}
+	
+	if ( pstick->GetRawButton(11))
+	{
+		if ( !Robot::swerveDriveSystem->IsFieldOrientedDriveEnabled())
+		{
+			Robot::swerveDriveSystem->EnableFieldOrientedDrive(true);
+		}
+	}
+	else if ( pstick->GetRawButton(10))
+	{
+		if ( Robot::swerveDriveSystem->IsFieldOrientedDriveEnabled())
+		{
+			Robot::swerveDriveSystem->EnableFieldOrientedDrive(false);
+		}
+	}
+	
 	Robot::swerveDriveSystem->DoSwerve(x,y,rotate);
 }
 
