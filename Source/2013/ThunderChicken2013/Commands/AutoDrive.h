@@ -23,12 +23,15 @@
  */
 class AutoDrive: public Command{
 public:
-	AutoDrive();
+	AutoDrive(double xaxis, double yaxis, double twistvalue);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
+	double x;
+	double y;
+	double twist;
 };
 
 #endif

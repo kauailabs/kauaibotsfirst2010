@@ -34,7 +34,7 @@ void AutonomousCommand::Execute() {
 		AddSequential(new AutoTilt(20.0));
 		AddSequential(new AutoFire());
 	}
-	AddSequential(new AutoDrive());
+	AddSequential(new AutoDrive(0.0,-0.5,0.0));
 }
 
 // Make this return true when this Command no longer needs to run execute()
