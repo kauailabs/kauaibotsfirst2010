@@ -139,7 +139,7 @@ void AngleSensor::StopLiveWindowMode() {
 }
 
 std::string AngleSensor::GetSmartDashboardType() {
-	return "Gyro";
+	return "Ultrasonic";
 }
 
 void AngleSensor::InitTable(ITable *subTable) {
