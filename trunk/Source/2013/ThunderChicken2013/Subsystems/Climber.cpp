@@ -63,6 +63,12 @@ void Climber::StopRearHooks(){
 void Climber::StopFrontHooks(){
 	RobotMap::climberfront_winch_motor->Set(0);
 }
+
+double Climber::GetFrontHookHeightInches()
+{
+	// TODO:  Read value from proximity sensor, convert to inches of height.
+	return 0.0;
+}
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 

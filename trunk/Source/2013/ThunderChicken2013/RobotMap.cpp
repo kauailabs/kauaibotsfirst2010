@@ -19,7 +19,7 @@ Servo* RobotMap::cameraelevation_servo = NULL;
 SpeedController* RobotMap::shootermotor = NULL;
 DoubleSolenoid* RobotMap::magazinetrigger = NULL;
 DoubleSolenoid* RobotMap::magazinelifter = NULL;
-ProximitySensor* RobotMap::magazinefirsbee_counter = NULL;
+ProximitySensor* RobotMap::fronthookheight_sensor = NULL;
 Compressor* RobotMap::pneumaticscompressor = NULL;
 ProximitySensor* RobotMap::tilterheight_sensor = NULL;
 SpeedController* RobotMap::tiltermotor = NULL;
@@ -105,13 +105,13 @@ void RobotMap::init() {
 	magazinelifter = new DoubleSolenoid(1, 3, 4);      
 	lw->AddActuator("Magizine", "lifter", magazinelifter);
 	
-	magazinefirsbee_counter = new ProximitySensor(2, 2, ProximitySensor::kShortRange);
-	lw->AddSensor("Magazine", "firsbee_counter", magazinefirsbee_counter);
+	fronthookheight_sensor = new ProximitySensor(1, 2, ProximitySensor::kShortRange);
+	lw->AddSensor("Climber", "fronthook_height_sensor", fronthookheight_sensor);
 	
 	pneumaticscompressor = new Compressor(2, 1, 2, 1);
 	pneumaticscompressor->Start();
 	
-	tilterheight_sensor = new ProximitySensor(2, 1, ProximitySensor::kShortRange);
+	tilterheight_sensor = new ProximitySensor(1, 1, ProximitySensor::kShortRange);
 	lw->AddSensor("Tilter", "height_sensor", tilterheight_sensor);
 	
 	tiltermotor = new Jaguar(2, 4);

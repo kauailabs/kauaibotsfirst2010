@@ -36,7 +36,7 @@ public:
 	static SpeedController* shootermotor;
 	static DoubleSolenoid* magazinetrigger;
 	static DoubleSolenoid* magazinelifter;
-	static ProximitySensor* magazinefirsbee_counter;
+	static ProximitySensor* fronthookheight_sensor;
 	static Compressor* pneumaticscompressor;
 	static ProximitySensor* tilterheight_sensor;
 	static SpeedController* tiltermotor;

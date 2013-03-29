@@ -38,6 +38,7 @@ public:
 	virtual void RaiseFrontHooks();
 	virtual void StopRearHooks();
 	virtual void StopFrontHooks();
+	double GetFrontHookHeightInches();
 };
 
 #endif
