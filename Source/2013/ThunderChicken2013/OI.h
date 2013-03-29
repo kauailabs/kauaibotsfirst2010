@@ -23,6 +23,9 @@ private:
 	JoystickButton* front_climber_hook_up;
 	JoystickButton* front_climber_hook_down;
 	JoystickButton* rear_climber_hook_down;
+	Button* pyramid_prep;
+	Button* mid_prep;
+	Button* long_prep;
 	Joystick* driver_joystick;
 	JoystickButton* disable_shooter_drive_control;
 	JoystickButton* enable_shooter_drive_control;

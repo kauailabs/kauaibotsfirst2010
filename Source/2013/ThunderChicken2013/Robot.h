@@ -47,6 +47,9 @@
 #include "Commands/RaiseRearClimberHook.h"
 #include "Commands/SetShooterRPM.h"
 #include "Commands/SetShooterTiltAngleDegrees.h"
+#include "Commands/FireAtWill.h"
+#include "Commands/AutoRev.h"
+
 class Robot : public IterativeRobot {
 public:
 	Command *autonomousCommand;
