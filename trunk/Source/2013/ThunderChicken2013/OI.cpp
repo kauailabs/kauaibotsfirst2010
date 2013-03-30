@@ -24,9 +24,7 @@
 #include "Commands/DisableShooterDriveControl.h"
 #include "Commands/EnableShooterDriveControl.h"
 #include "Commands/FireFrisbee.h"
-#include "Commands/LowerFrontClimberHook.h"
 #include "Commands/LowerRearClimberHook.h"
-#include "Commands/RaiseFrontClimberHook.h"
 #include "Commands/RaiseRearClimberHook.h"
 #include "Commands/SetShooterRPM.h"
 #include "Commands/SetShooterTiltAngleDegrees.h"
@@ -44,15 +42,11 @@ OI::OI() {
 	
 	fire_frisbee = new JoystickButton(shooter_joystick, 1);
 	fire_frisbee->WhenPressed(new FireFrisbee());
-	front_climber_hook_up = new JoystickButton(shooter_joystick, 5);
-	front_climber_hook_up->WhileHeld(new RaiseFrontClimberHook());
-	front_climber_hook_down = new JoystickButton(shooter_joystick, 3);
-	front_climber_hook_down->WhileHeld(new LowerFrontClimberHook());
 	rear_climber_hook_up = new JoystickButton(shooter_joystick, 4);
-	rear_climber_hook_up->WhileHeld(new RaiseRearClimberHook());
+	rear_climber_hook_up->WhenPressed(new RaiseRearClimberHook());
 	rear_climber_hook_down = new JoystickButton(shooter_joystick, 2);
-	rear_climber_hook_down->WhileHeld(new LowerRearClimberHook());
-	pyramid_prep = new JoystickButton(shooter_joystick, 7);;
+	rear_climber_hook_down->WhenPressed(new LowerRearClimberHook());
+	pyramid_prep = new JoystickButton(shooter_joystick, 7);
 	pyramid_prep->WhileHeld(new FireAtWill(1));
 	mid_prep = new JoystickButton(shooter_joystick, 8);
 	mid_prep->WhileHeld(new FireAtWill(2));
@@ -78,11 +72,7 @@ OI::OI() {
 
 	SmartDashboard::PutData("SetShooterTiltAngleDegrees", new SetShooterTiltAngleDegrees());
 
-	SmartDashboard::PutData("RaiseFrontClimberHook", new RaiseFrontClimberHook());
-
 	SmartDashboard::PutData("RaiseRearClimberHook", new RaiseRearClimberHook());
-
-	SmartDashboard::PutData("LowerFrontClimberHook", new LowerFrontClimberHook());
 
 	SmartDashboard::PutData("LowerRearClimberHook", new LowerRearClimberHook());
 

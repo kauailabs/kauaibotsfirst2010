@@ -37,10 +37,8 @@ void Climber::InitDefaultCommand() {
 void Climber::LowerHooks(){
 	RobotMap::climberfront_winch_motor->Set(0);
 	RobotMap::climberrear_winch_motor->Set(0);
-	double sensor_distance_mm = RobotMap::fronthookheight_sensor->GetDistanceMM();
-	double hook_height_inches = GetRearHookHeightInches();
-	SmartDashboard::PutNumber("FrontHookHeightInches",hook_height_inches);
-	SmartDashboard::PutNumber("FrontHookDistanceMM",sensor_distance_mm);
+	double sensor_distance_mm = RobotMap::rearhookheight_sensor->GetDistanceMM();
+	SmartDashboard::PutNumber("RearHookDistanceMM",sensor_distance_mm);
 	
 	// TODO:  Instead of controlling rear winch motor directly,
 	// change to "SetFrontHookLevel(Lowered);"
@@ -48,22 +46,22 @@ void Climber::LowerHooks(){
 }
 
 void Climber::LowerFrontHooks(){
-	RobotMap::climberfront_winch_motor->Set(-1);
+	RobotMap::climberfront_winch_motor->Set(1);
 	RobotMap::front_climber_solenoid->Set(FALSE);
 }
 
 void Climber::LowerRearHooks(){
-	RobotMap::climberrear_winch_motor->Set(-1);
+	RobotMap::climberrear_winch_motor->Set(1);
 	// TODO:  Instead of controlling rear winch motor directly,
 	// change to "SetFrontHookLevel(Lowered);"
 }
 
 void Climber::RaiseRearHooks(){
-	RobotMap::climberrear_winch_motor->Set(1);
+	RobotMap::climberrear_winch_motor->Set(-1);
 }
 
 void Climber::RaiseFrontHooks(){
-	RobotMap::climberfront_winch_motor->Set(1);
+	RobotMap::climberfront_winch_motor->Set(-1);
 	RobotMap::front_climber_solenoid->Set(TRUE);
 }
 
@@ -77,62 +75,15 @@ void Climber::StopFrontHooks(){
 	RobotMap::climberfront_winch_motor->Set(0);
 }
 
-// Climber hook height is measured by a proximity sensor.
-//
-// The sensor measures the distance from the "outside lower
-// right point" of the "scissors" (X).
-//
-// The model for measurement is 
-//
-// |
-// X_
-//
-// Where the vertical line represents the "FRONT_HOOK_HEIGHT_OFFSET_INCHES"
-//
-// The "FRONT_HOOK_BASELINE_INCHES" represents the distance (as measured
-// at the baseline of the x) from the center of the X to the sensor.
-//
-// Therefore, the distance from the bottom center of the X to 
-// the bottom right of the x (the opposite side to X's angle) is:
-//
-// opp_side_length = FRONT_HOOK_BASELINE_INCHES - (sensor_reading_mm * mm_to_inches)
-//
-// the hypotenuse (one half of the length of one leg of the x) is known as
-// FRONT_HOOK_LEG_INCHES / 2.
-//
-// Thus, half_hook_height = sqrt( hypotenuse^2 + opp_side_length^2 )
-//
-// And the overall hook height is:
-//
-// overall_hook_height = (2 * half_hook_height) + FRONT_HOOK_HEIGHT_OFFSET_INCHES
-
-double Climber::GetRearHookHeightInches()
+bool Climber::RearHookAtLowerLimit()
 {
-	double sensor_distance_mm = RobotMap::fronthookheight_sensor->GetDistanceMM();
-	double opp_side_length = REAR_HOOK_BASELINE_INCHES - (sensor_distance_mm * 25.4);
-	double hypotenuse = REAR_HOOK_LEG_LENGTH_INCHES / 2;
-	double half_hook_height = sqrt( ( hypotenuse * hypotenuse ) + ( opp_side_length * opp_side_length ) );
-	double full_hook_height = (2 * half_hook_height) + REAR_HOOK_HEIGHT_OFFSET_INCHES + REAR_HOOK_BASELINE_OFFSET_INCHES;
-	return full_hook_height;
+	double sensor_distance_mm = RobotMap::rearhookheight_sensor->GetDistanceMM();
+	return ( sensor_distance_mm <= REAR_HOOK_LOWER_LIMIT_MM );
 }
-
-void Climber::SetRearHookLevel(Climber::RearHookLevel level)
+bool Climber::RearHookAtUpperLimit()
 {
-	double hook_height_inches = HOOK_LEVEL_LOWERED_INCHES;
-	switch( level )
-	{
-	case Align:
-		hook_height_inches = HOOK_LEVEL_ALIGN_INCHES;
-		break;
-	case Climb:
-		hook_height_inches = HOOK_LEVEL_CLIMB_INCHES;
-		break;
-	case Lowered:
-	default:
-		hook_height_inches = HOOK_LEVEL_LOWERED_INCHES;
-		break;
-	}
-	//SetSetpoint(hook_height_inches);
+	double sensor_distance_mm = RobotMap::rearhookheight_sensor->GetDistanceMM();
+	return ( sensor_distance_mm >= REAR_HOOK_UPPER_LIMIT_MM );	
 }
 
 // Put methods for controlling this subsystem
