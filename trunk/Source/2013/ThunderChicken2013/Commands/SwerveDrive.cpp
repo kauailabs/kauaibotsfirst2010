@@ -20,6 +20,12 @@ void SwerveDrive::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void SwerveDrive::Execute() {  
 	Joystick* pstick = Robot::oi->getdriver_joystick();
+	if ( pstick->GetRawButton(1))
+	{
+		// yield driver control to the shooter stick
+		pstick = Robot::oi->getshooter_joystick();
+	}
+	
 	double rotate = pstick->GetTwist();
 	double y = pstick->GetY();
 	double x = pstick->GetX();
@@ -41,6 +47,14 @@ void SwerveDrive::Execute() {
 	x = AdjustJoystickResponse( x, JoystickStrafe_Adjust, JoystickStrafe_Power, JoystickStrafe_Multiplier, JoystickStrafe_Deadband );
 	y = AdjustJoystickResponse( y, JoystickForward_Adjust, JoystickForward_Power, JoystickForward_Multiplier, JoystickForward_Deadband );
 	rotate = AdjustJoystickResponse( rotate, JoystickRotate_Adjust, JoystickRotate_Power, JoystickRotate_Multiplier, JoystickRotate_Deadband );
+	
+	if ( pstick->GetRawButton(6))
+	{
+		// "Creep mode" - scale all joystick amounts by JoystickCreepMode_Multiplier
+		x = x * JoystickCreepMode_Multiplier;
+		y = y * JoystickCreepMode_Multiplier;
+		rotate = rotate * JoystickCreepMode_Multiplier;
+	}
 	
 	if ( pstick->GetRawButton(9))
 	{

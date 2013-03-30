@@ -26,6 +26,9 @@
 #define REAR_HOOK_LOWER_LIMIT_MM  87
 #define REAR_HOOK_UPPER_LIMIT_MM 186
 
+#define MIN_BATTERY_VOLTAGE 9.0
+#define MAX_BATTERY_VOLTAGE 13.4
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
