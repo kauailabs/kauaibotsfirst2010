@@ -41,8 +41,8 @@ public:
 	virtual void RaiseFrontHooks();
 	virtual void StopRearHooks();
 	virtual void StopFrontHooks();
-	double GetRearHookHeightInches();
-	void SetRearHookLevel(RearHookLevel level);
+	bool RearHookAtLowerLimit();
+	bool RearHookAtUpperLimit();
 };
 
 #endif

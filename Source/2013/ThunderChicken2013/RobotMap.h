@@ -23,16 +23,8 @@
 
 // TODO:  These values need calibration
 
-#define REAR_HOOK_BASELINE_INCHES 7.875
-#define REAR_HOOK_HEIGHT_OFFSET_INCHES 9.859375
-#define REAR_HOOK_LEG_LENGTH_INCHES 13
-#define MAX_REAR_HOOK_HEIGHT 35
-#define MIN_REAR_HOOK_HEIGHT 25
-#define REAR_HOOK_BASELINE_OFFSET_INCHES 9.8125
-
-#define HOOK_LEVEL_LOWERED_INCHES MIN_REAR_HOOK_HEIGHT
-#define HOOK_LEVEL_ALIGN_INCHES   MAX_REAR_HOOK_HEIGHT
-#define HOOK_LEVEL_CLIMB_INCHES   HOOK_LEVEL_ALIGN_INCHES - 3
+#define REAR_HOOK_LOWER_LIMIT_MM  87
+#define REAR_HOOK_UPPER_LIMIT_MM 186
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -48,7 +40,7 @@ public:
 	static SpeedController* shootermotor;
 	static DoubleSolenoid* magazinetrigger;
 	static DoubleSolenoid* magazinelifter;
-	static ProximitySensor* fronthookheight_sensor;
+	static ProximitySensor* rearhookheight_sensor;
 	static Compressor* pneumaticscompressor;
 	static ProximitySensor* tilterheight_sensor;
 	static SpeedController* tiltermotor;

@@ -42,8 +42,6 @@
 #include "Commands/FireFrisbee.h"
 #include "Commands/LowerAllHooks.h"
 #include "Commands/LowerRearClimberHook.h"
-#include "Commands/LowerFrontClimberHook.h"
-#include "Commands/RaiseFrontCLimberHook.h"
 #include "Commands/RaiseRearClimberHook.h"
 #include "Commands/SetShooterRPM.h"
 #include "Commands/SetShooterTiltAngleDegrees.h"

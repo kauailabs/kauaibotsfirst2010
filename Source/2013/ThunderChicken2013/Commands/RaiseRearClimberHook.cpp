@@ -26,12 +26,15 @@ void RaiseRearClimberHook::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void RaiseRearClimberHook::Execute() {
-	Robot::climber->RaiseRearHooks();
+	while ( !Robot::climber->RearHookAtUpperLimit())
+	{
+		Robot::climber->RaiseRearHooks();
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool RaiseRearClimberHook::IsFinished() {
-	return false;
+	return Robot::climber->RearHookAtUpperLimit();
 }
 
 // Called once after isFinished returns true
