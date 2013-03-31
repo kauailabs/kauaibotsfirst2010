@@ -26,6 +26,6 @@ const double JoystickRotate_Power = 3;
 const double JoystickRotate_Multiplier = .60; 
 const double JoystickRotate_Deadband = DEADBAND; 
 // Creep Mode
-const double JoystickCreepMode_Multiplier = .40;
+const double JoystickCreepMode_Multiplier = .25;
 /////////////////////////////////////////////////////////////////////////////////////  
 #endif  
