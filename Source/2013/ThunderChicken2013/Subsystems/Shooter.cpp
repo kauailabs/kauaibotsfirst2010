@@ -49,7 +49,7 @@ void Shooter::SetShooterSpeed(double speed){
 		battery_voltage = MAX_BATTERY_VOLTAGE;
 	}
 	
-	speed = speed * (battery_voltage / MIN_BATTERY_VOLTAGE );
+	speed = speed * (MIN_BATTERY_VOLTAGE / battery_voltage);
 	
 	motor->Set(speed);
 }

@@ -201,12 +201,13 @@ void IMU::InitializeYawHistory()
 
 void IMU::UpdateYawHistory(float curr_yaw )
 {
-	yaw_history[next_yaw_history_index] = curr_yaw;
-	last_update_time = Timer::GetPPCTimestamp();
 	if ( next_yaw_history_index >= YAW_HISTORY_LENGTH )
 	{
 		next_yaw_history_index = 0;
 	}
+	yaw_history[next_yaw_history_index] = curr_yaw;
+	last_update_time = Timer::GetPPCTimestamp();
+	next_yaw_history_index++;
 }
 
 double IMU::GetAverageFromYawHistory()

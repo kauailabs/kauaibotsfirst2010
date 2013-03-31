@@ -19,7 +19,7 @@
 #define TILTER_BASELINE_INCHES 20
 #define TILTER_HEIGHT_INCHES 0
 #define MAX_TILTER_ANGLE 40
-#define MIN_TILTER_ANGLE 15
+#define MIN_TILTER_ANGLE 10
 
 // TODO:  These values need calibration
 

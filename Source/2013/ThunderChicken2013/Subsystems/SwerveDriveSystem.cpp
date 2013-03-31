@@ -93,7 +93,7 @@ SwerveDriveSystem::SwerveDriveSystem() : Subsystem("SwerveDriveSystem") {
 	left_back_drive->SetSetpoint(0.0);
 	right_back_drive->SetSetpoint(0.0);
 	
-	double peak_wheel_rpm = cPeakMotorRPM / cEncoderToDriveWheelRatio;
+/*	double peak_wheel_rpm = cPeakMotorRPM / cEncoderToDriveWheelRatio;
 	double peak_wheel_rps = peak_wheel_rpm / cSecondsPerMinute;
 	double wheel_distance_inches_per_revolution = cWheelDiameterInches * cPi;
 	
@@ -126,6 +126,7 @@ SwerveDriveSystem::SwerveDriveSystem() : Subsystem("SwerveDriveSystem") {
 	// Translation from -1 to 1 (user-specified speed) to encoder rate,
 	
 	peak_encoder_tick_rate = peak_wheel_rps * encoder_tick_rate_per_second;
+*/
 }
     
 void SwerveDriveSystem::InitDefaultCommand() {
@@ -204,6 +205,7 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	SmartDashboard::PutBoolean( "IMU_Connected", imu_connected);
 	SmartDashboard::PutNumber(  "IMU_Yaw",       imu_angle_degrees);
 	SmartDashboard::PutBoolean( "FOD_Enabled",   fod_enable);
+	SmartDashboard::PutNumber( "IMU Yaw Offset", imu->GetYawOffset());
 		
 	// Field-oriented drive - Adjust input angle for gyro offset angle
 	

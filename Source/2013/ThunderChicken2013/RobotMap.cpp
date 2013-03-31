@@ -75,7 +75,7 @@ void RobotMap::init() {
 	double drive_D = prefs->GetDouble("Drive_D", 0.0);
 	double drive_F = prefs->GetDouble("Drive_F", 0.0);
 	
-	double steer_L_F_offset_angle = prefs->GetDouble("L_F_Steer_Offset_Angle", -120.);
+	double steer_L_F_offset_angle = prefs->GetDouble("L_F_Steer_Offset_Angle", 125.0);
 	double steer_L_B_offset_angle = prefs->GetDouble("L_B_Steer_Offset_Angle", -70.0);
 	double steer_R_F_offset_angle = prefs->GetDouble("R_F_Steer_Offset_Angle", 170.0);
 	double steer_R_B_offset_angle = prefs->GetDouble("R_B_Steer_Offset_Angle", -140.0);	
@@ -137,7 +137,7 @@ void RobotMap::init() {
 		swerveDriveSystemleft_front_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemleft_front_steer->SetOutputRange(-1.0, 1.0);
         //swerveDriveSystemleft_front_steer->SetTolerance(1.0/360.0);
-	swerveDriveSystemleft_front_rpm_sensor = new Encoder(1, 11, 1, 10, false, Encoder::k4X);
+	swerveDriveSystemleft_front_rpm_sensor = new Encoder(1, 11, 1, 10, false, Encoder::k1X);
 	lw->AddSensor("SwerveDriveSystem_L_F", "rpm_sensor", swerveDriveSystemleft_front_rpm_sensor);
 	swerveDriveSystemleft_front_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemleft_front_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
@@ -164,7 +164,7 @@ void RobotMap::init() {
     	swerveDriveSystemright_front_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemright_front_steer->SetOutputRange(-1.0, 1.0);
         //swerveDriveSystemright_front_steer->SetTolerance(1.0/360.0);
-	swerveDriveSystemright_front_rpm_sensor = new Encoder(2, 6, 2, 5, false, Encoder::k4X);
+	swerveDriveSystemright_front_rpm_sensor = new Encoder(2, 6, 2, 5, false, Encoder::k1X);
 	lw->AddSensor("SwerveDriveSystem_R_F", "rpm_sensor", swerveDriveSystemright_front_rpm_sensor);
 	swerveDriveSystemright_front_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemright_front_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
@@ -191,7 +191,7 @@ void RobotMap::init() {
     	swerveDriveSystemleft_back_steer->SetInputRange(-180.0, 180.0);
         swerveDriveSystemleft_back_steer->SetOutputRange(-1.0, 1.0);
         //swerveDriveSystemleft_back_steer->SetTolerance(1.0/360.0);
-	swerveDriveSystemleft_back_rpm_sensor = new Encoder(1, 6, 1, 5, false, Encoder::k4X);
+	swerveDriveSystemleft_back_rpm_sensor = new Encoder(1, 6, 1, 5, false, Encoder::k1X);
 	lw->AddSensor("SwerveDriveSystem_L_B", "rpm_sensor", swerveDriveSystemleft_back_rpm_sensor);
 	swerveDriveSystemleft_back_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemleft_back_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
@@ -221,7 +221,7 @@ void RobotMap::init() {
 	swerveDriveSystemright_back_drive_motor = new Talon(2, 10);
 	lw->AddActuator("SwerveDriveSystem_R_B", "drive_motor", (Talon*) swerveDriveSystemright_back_drive_motor);
 	
-	swerveDriveSystemright_back_rpm_sensor = new Encoder(2, 11, 2, 10, false, Encoder::k4X);
+	swerveDriveSystemright_back_rpm_sensor = new Encoder(2, 11, 2, 10, false, Encoder::k1X);
 	lw->AddSensor("SwerveDriveSystem_R_B", "rpm_sensor", swerveDriveSystemright_back_rpm_sensor);
 	swerveDriveSystemright_back_rpm_sensor->SetDistancePerPulse(1.0);
         swerveDriveSystemright_back_rpm_sensor->SetPIDSourceParameter(Encoder::kRate);
