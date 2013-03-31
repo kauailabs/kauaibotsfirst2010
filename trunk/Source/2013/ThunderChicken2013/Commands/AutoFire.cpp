@@ -24,26 +24,23 @@ AutoFire::AutoFire() {
 
 // Called just before this Command runs the first time
 void AutoFire::Initialize() {
-	
+	fin=false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutoFire::Execute() {
-	if((Robot::magazine->CheckFrizbees()==0))
-		{
-			Robot::magazine->SetLoadState(true);
-			Robot::magazine->SetFireState(false);
-			Wait(1.0);
-			Robot::magazine->SetLoadState(false);
-			Robot::magazine->SetFireState(true);
-			Wait(1.0);
-	    }
-	else{}
+	Robot::magazine->SetLoadState(true);
+	Robot::magazine->SetFireState(false);
+	Wait(1.0);
+	Robot::magazine->SetLoadState(false);
+	Robot::magazine->SetFireState(true);
+	Wait(1.0);
+	fin=true;
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool AutoFire::IsFinished() {
-	return false;
+	return fin;
 }
 
 // Called once after isFinished returns true

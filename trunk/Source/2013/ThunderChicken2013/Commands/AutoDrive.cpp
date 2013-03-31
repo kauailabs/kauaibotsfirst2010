@@ -28,6 +28,7 @@ AutoDrive::AutoDrive(double xaxis, double yaxis, double twistvalue) {
 // Called just before this Command runs the first time
 void AutoDrive::Initialize() {
 	Robot::swerveDriveSystem->EnablePIDControl(true);
+	Robot::swerveDriveSystem->EnableFieldOrientedDrive(true);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -37,12 +38,12 @@ void AutoDrive::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool AutoDrive::IsFinished() {
-	return false;
+	return IsTimedOut();
 }
 
 // Called once after isFinished returns true
 void AutoDrive::End() {
-	
+	Robot::swerveDriveSystem->DoSwerve(0.0,0.0,0.0);
 }
 
 // Called when another command which requires one or more of the same

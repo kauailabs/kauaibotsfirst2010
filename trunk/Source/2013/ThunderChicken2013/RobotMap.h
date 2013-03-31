@@ -21,6 +21,10 @@
 #define MAX_TILTER_ANGLE 40
 #define MIN_TILTER_ANGLE 10
 
+#define PYRAMID_SHOT_ANGLE 24.0
+#define MID_COURT_ANGLE 18.0
+#define LONG_SHOT_ANGLE 16.0
+
 // TODO:  These values need calibration
 
 #define REAR_HOOK_LOWER_LIMIT_MM  87
