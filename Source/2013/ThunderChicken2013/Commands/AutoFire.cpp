@@ -33,9 +33,10 @@ void AutoFire::Execute() {
 		{
 			Robot::magazine->SetLoadState(true);
 			Robot::magazine->SetFireState(false);
-			Wait(0.2);
+			Wait(1.0);
 			Robot::magazine->SetLoadState(false);
 			Robot::magazine->SetFireState(true);
+			Wait(1.0);
 	    }
 	else{}
 }
