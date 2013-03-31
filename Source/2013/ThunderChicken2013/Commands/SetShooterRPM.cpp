@@ -27,8 +27,18 @@ void SetShooterRPM::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void SetShooterRPM::Execute() {
 	Joystick* pstick = Robot::oi->getshooter_joystick();
-	double throttle = -pstick->GetRawAxis(3);
-	throttle=((throttle+1)/2);
+	
+	// NOTE:  Replaced the throttle axis control with two buttons.
+	// This is a hack, since we couldn't get the throttle axis
+	// to work correctly.
+	
+	double throttle = 0;
+	if ( pstick->GetRawButton(5) ) throttle = 1.0;
+	else if ( pstick->GetRawButton(3) ) throttle = .75;
+	
+	//double throttle = -pstick->GetRawAxis(5);
+	//throttle=((throttle+1)/2);
+	
 	Robot::shooter->SetShooterSpeed(throttle);
 	SmartDashboard::PutNumber("ShooterSpeed",throttle);
 }
