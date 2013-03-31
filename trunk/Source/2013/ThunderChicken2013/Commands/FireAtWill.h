@@ -15,6 +15,9 @@
 
 #include "Commands/Subsystem.h"
 #include "../Robot.h"
+#include "../RobotMap.h"
+#include "../OI.h"
+
 
 /**
  *
@@ -23,13 +26,13 @@
  */
 class FireAtWill: public CommandGroup{
 public:
-	FireAtWill(int set);
+	FireAtWill(Aim_setting teleopSetting);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
-	int prep;
+	Aim_setting teleopPreperation;
 };
 
 #endif
