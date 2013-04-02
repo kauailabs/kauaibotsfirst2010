@@ -18,6 +18,7 @@ AutonomousCommand::AutonomousCommand() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
 	AddSequential(new AutoRev(1.0));
+	AddSequential(new WaitCommand(1.0));
 	AddSequential(new AutoTilt(PYRAMID_SHOT_ANGLE));
 	AddSequential(new AutoFire());
 	AddSequential(new AutoFire());

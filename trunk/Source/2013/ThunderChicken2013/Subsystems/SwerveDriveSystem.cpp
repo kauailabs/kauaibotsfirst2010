@@ -199,10 +199,9 @@ void SwerveDriveSystem::DoSwerve( float vX, float vY, float vRot ){
 	float r = sqrt( (cLength * cLength) + (cWidth * cWidth) );  // Todo:  make a constant
 	float pi = 3.1415926;
 	
-	bool imu_connected = imu->IsConnected();
 	double imu_angle_degrees = imu->GetYaw();
 	
-	SmartDashboard::PutBoolean( "IMU_Connected", imu_connected);
+	bool imu_connected = imu->IsConnected();
 	SmartDashboard::PutNumber(  "IMU_Yaw",       imu_angle_degrees);
 	SmartDashboard::PutBoolean( "FOD_Enabled",   fod_enable);
 	SmartDashboard::PutNumber( "IMU Yaw Offset", imu->GetYawOffset());

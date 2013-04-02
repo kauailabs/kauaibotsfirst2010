@@ -49,6 +49,11 @@ AngleSensor::~AngleSensor()
 	notifier.Stop();
 }
 
+float AngleSensor::GetRawAngle()
+{
+	return cached_angle;
+}
+
 float AngleSensor::GetAngle()
 {
 	//Synchronized sync(cSensorSemaphore);

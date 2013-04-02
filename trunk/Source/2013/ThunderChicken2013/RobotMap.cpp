@@ -75,7 +75,7 @@ void RobotMap::init() {
 	double drive_D = prefs->GetDouble("Drive_D", 0.0);
 	double drive_F = prefs->GetDouble("Drive_F", 0.0);
 	
-	double steer_L_F_offset_angle = prefs->GetDouble("L_F_Steer_Offset_Angle", 125.0);
+	double steer_L_F_offset_angle = prefs->GetDouble("L_F_Steer_Offset_Angle", -126.0);
 	double steer_L_B_offset_angle = prefs->GetDouble("L_B_Steer_Offset_Angle", -70.0);
 	double steer_R_F_offset_angle = prefs->GetDouble("R_F_Steer_Offset_Angle", 170.0);
 	double steer_R_B_offset_angle = prefs->GetDouble("R_B_Steer_Offset_Angle", -140.0);	

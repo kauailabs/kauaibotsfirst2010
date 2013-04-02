@@ -42,6 +42,7 @@ public:
 	virtual ~AngleSensor();
 	virtual float GetAngle();
 	float GetAngleInternal();
+	float GetRawAngle();
 
 	// PIDSource interface
 	double PIDGet();
