@@ -33,8 +33,8 @@ void SetShooterRPM::Execute() {
 	// to work correctly.
 	
 	double throttle = 0;
-	if ( pstick->GetRawButton(5) ) throttle = 1.0;
-	else if ( pstick->GetRawButton(3) ) throttle = .75;
+	/*if ( pstick->GetRawButton(5) ) throttle = 1.0;
+	else if ( pstick->GetRawButton(3) ) throttle = .75;*/
 	
 	//double throttle = -pstick->GetRawAxis(5);
 	//throttle=((throttle+1)/2);

@@ -78,5 +78,20 @@ void Robot::TestPeriodic() {
 	lw->Run();
 }
 
+void Robot::UpdateDashboard()
+{
+	SmartDashboard::PutNumber("L_F_AngleSensorRaw", RobotMap::swerveDriveSystemleft_front_angle_sensor->GetRawAngle() );
+	SmartDashboard::PutNumber("R_F_AngleSensorRaw",  RobotMap::swerveDriveSystemright_front_angle_sensor->GetRawAngle() );
+	SmartDashboard::PutNumber("L_B_AngleSensorRaw", RobotMap::swerveDriveSystemleft_back_angle_sensor->GetRawAngle() );
+	SmartDashboard::PutNumber("R_B_AngleSensorRaw", RobotMap::swerveDriveSystemright_back_angle_sensor->GetRawAngle() );	
+	bool imu_connected = RobotMap::imu->IsConnected();
+	SmartDashboard::PutBoolean( "IMU_Connected", imu_connected);
+}
+
+void Robot::DisabledPeriodic()
+{
+	UpdateDashboard();
+}
+
 START_ROBOT_CLASS(Robot);
 
