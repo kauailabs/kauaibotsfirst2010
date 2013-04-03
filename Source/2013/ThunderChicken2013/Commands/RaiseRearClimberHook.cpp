@@ -21,25 +21,30 @@ RaiseRearClimberHook::RaiseRearClimberHook() {
 
 // Called just before this Command runs the first time
 void RaiseRearClimberHook::Initialize() {
-	
+	done = false;	
 }
 
 // Called repeatedly when this Command is scheduled to run
 void RaiseRearClimberHook::Execute() {
-	while ( !Robot::climber->RearHookAtUpperLimit())
+	done = Robot::oi->getdriver_joystick()->GetRawButton(5);
+	if ( !Robot::climber->RearHookAtUpperLimit() && !done)
 	{
 		Robot::climber->RaiseRearHooks();
+	}
+	else
+	{
+		Robot::climber->StopRearHooks();
 	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool RaiseRearClimberHook::IsFinished() {
-	return Robot::climber->RearHookAtUpperLimit();
+	return (done || Robot::climber->RearHookAtUpperLimit());
 }
 
 // Called once after isFinished returns true
 void RaiseRearClimberHook::End() {
-	
+	Robot::climber->StopRearHooks();		
 }
 
 // Called when another command which requires one or more of the same

@@ -10,6 +10,9 @@
 
 static SEM_ID cIMUStateSemaphore = semBCreate (SEM_Q_PRIORITY, SEM_FULL);   
 static int update_count = 0;
+static int byte_count = 0;
+
+static bool stop = false;
 
 /*** Internal task.
  * 
@@ -21,42 +24,45 @@ static char protocol_buffer[256];
 
 static void imuTask(IMU *imu) 
 {
+	stop = false;
 	SerialPort *pport = imu->GetSerialPort();
 	pport->SetReadBufferSize(512);
-	pport->SetTimeout(2.0);
+	pport->SetTimeout(1.0);
 	pport->EnableTermination('\n');
+	pport->Flush();
 	pport->Reset();
 
 	float yaw = 0.0;
 	float pitch = 0.0;
 	float roll = 0.0;	
 	
-	while (1)
+	while (!stop)
 	{ 
-		INT32 bytes_received = pport->GetBytesReceived();
-		UINT32 bytes_read = pport->Read( protocol_buffer, sizeof(protocol_buffer) );
-		if ( bytes_read > 0 )
+//		INT32 bytes_received = pport->GetBytesReceived();
+//		if ( bytes_received > 0 )
 		{
-			UINT32 i = 0;
-			// Scan the buffer looking for valid packets
-			while ( i < bytes_read )
+			UINT32 bytes_read = pport->Read( protocol_buffer, sizeof(protocol_buffer) );
+			if ( bytes_read > 0 )
 			{
-				int bytes_remaining = bytes_read - i;
-				int packet_length = IMUProtocol::decodeYPRUpdate( &protocol_buffer[i], bytes_remaining, yaw, pitch, roll ); 
-				if ( packet_length > 0 )
+				byte_count += bytes_read;
+				UINT32 i = 0;
+				// Scan the buffer looking for valid packets
+				while ( i < bytes_read )
 				{
-					update_count++;
-					imu->SetYawPitchRoll(yaw,pitch,roll);
-					i += packet_length;
-				}
-				else // current index is not the start of a valid packet; increment
-				{
-					i++;
+					int bytes_remaining = bytes_read - i;
+					int packet_length = IMUProtocol::decodeYPRUpdate( &protocol_buffer[i], bytes_remaining, yaw, pitch, roll ); 
+					if ( packet_length > 0 )
+					{
+						update_count++;
+						imu->SetYawPitchRoll(yaw,pitch,roll);
+						i += packet_length;
+					}
+					else // current index is not the start of a valid packet; increment
+					{
+						i++;
+					}
 				}
 			}
-		}
-		else
-		{
 		}
 	}
 }
@@ -99,11 +105,34 @@ IMU::~IMU()
 	m_task.Stop();
 }
 
+void IMU::Restart()
+{
+	stop = true;
+	pserial_port->Reset();
+	m_task.Stop();
+	
+	pserial_port->Reset();
+	InitializeYawHistory();
+	update_count = 0;
+	byte_count = 0;
+	m_task.Restart();
+}
+
 bool IMU::IsConnected()
 {
 	double time_since_last_update = Timer::GetPPCTimestamp() - this->last_update_time;
 	return time_since_last_update <= 1.0;
 }
+
+double IMU::GetByteCount()
+{
+	return byte_count;
+}
+double IMU::GetUpdateCount()
+{
+	return update_count;
+}
+
 
 void IMU::ZeroYaw()
 {

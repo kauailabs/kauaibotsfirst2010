@@ -53,8 +53,9 @@ static int decodeYPRUpdate( char *buffer, int length, float& yaw, float& pitch, 
     yaw   = decodeProtocolFloat( &buffer[YPR_UPDATE_YAW_VALUE_INDEX] );
     pitch = decodeProtocolFloat( &buffer[YPR_UPDATE_PITCH_VALUE_INDEX] );
     roll  = decodeProtocolFloat( &buffer[YPR_UPDATE_ROLL_VALUE_INDEX] );
+    return YPR_UPDATE_MESSAGE_LENGTH;
   }
-  return YPR_UPDATE_MESSAGE_LENGTH;
+  return 0;
 }
 
 protected:

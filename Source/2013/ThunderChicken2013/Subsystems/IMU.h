@@ -52,6 +52,9 @@ public:
 	SerialPort *GetSerialPort() { return pserial_port; }
 	void SetYawPitchRoll(float yaw, float pitch, float roll);
 	double GetYawOffset() { return yaw_offset; }
+	double GetByteCount();
+	double GetUpdateCount();
+	void Restart();
 	
 private:
 	void InitIMU();

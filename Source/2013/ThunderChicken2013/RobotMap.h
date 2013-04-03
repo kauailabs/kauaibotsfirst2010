@@ -27,8 +27,8 @@
 
 // TODO:  These values need calibration
 
-#define REAR_HOOK_LOWER_LIMIT_MM  87
-#define REAR_HOOK_UPPER_LIMIT_MM 186
+#define REAR_HOOK_LOWER_LIMIT_MM  90
+#define REAR_HOOK_UPPER_LIMIT_MM 187
 
 #define MIN_BATTERY_VOLTAGE 9.0
 #define MAX_BATTERY_VOLTAGE 13.4

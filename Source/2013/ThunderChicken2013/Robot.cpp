@@ -59,6 +59,7 @@ void Robot::AutonomousInit() {
 	
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
+	UpdateDashboard();
 }
 	
 void Robot::TeleopInit() {
@@ -67,11 +68,15 @@ void Robot::TeleopInit() {
 	// continue until interrupted by another command, remove
 	// this line or comment it out.
 	autonomousCommand->Cancel();
+	//RobotMap::imu->Restart();
 }
 	
 void Robot::TeleopPeriodic() {
 	if (autonomousCommand != NULL)
 		Scheduler::GetInstance()->Run();
+	Robot::swerveDriveSystem->EnableFieldOrientedDrive(true);
+	Robot::swerveDriveSystem->EnablePIDControl(true);
+	UpdateDashboard();
 }
 
 void Robot::TestPeriodic() {
@@ -86,6 +91,10 @@ void Robot::UpdateDashboard()
 	SmartDashboard::PutNumber("R_B_AngleSensorRaw", RobotMap::swerveDriveSystemright_back_angle_sensor->GetRawAngle() );	
 	bool imu_connected = RobotMap::imu->IsConnected();
 	SmartDashboard::PutBoolean( "IMU_Connected", imu_connected);
+	double sensor_distance_mm = RobotMap::rearhookheight_sensor->GetDistanceMM();
+	SmartDashboard::PutNumber("RearHookDistanceMM",sensor_distance_mm);		
+	SmartDashboard::PutNumber("IMU_Update_Count", RobotMap::imu->GetUpdateCount());
+	SmartDashboard::PutNumber("IMU_Byte_Count", RobotMap::imu->GetByteCount());
 }
 
 void Robot::DisabledPeriodic()
