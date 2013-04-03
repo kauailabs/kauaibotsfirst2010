@@ -25,6 +25,7 @@
 class AutonomousCommand: public CommandGroup{
 public:
 	AutonomousCommand();
+	virtual void Execute();
 };
 
 #endif

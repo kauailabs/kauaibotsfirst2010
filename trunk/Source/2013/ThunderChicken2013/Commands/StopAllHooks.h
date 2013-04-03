@@ -9,27 +9,27 @@
 // it from being updated in th future.
 
 
-#ifndef LOWERREARCLIMBERHOOK_H
-#define LOWERREARCLIMBERHOOK_H
+#ifndef STOPALLHOOKS_H
+#define STOPALLHOOKS_H
 
 
 #include "Commands/Subsystem.h"
 #include "../Robot.h"
+#include "../OI.h"
 
 /**
  *
  *
  * @author ExampleAuthor
  */
-class LowerRearClimberHook: public Command {
+class StopAllHooks: public Command {
 public:
-	LowerRearClimberHook();
+	StopAllHooks();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
-	bool done;
 };
 
 #endif

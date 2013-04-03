@@ -10,7 +10,7 @@
 
 
 #include "LowerRearClimberHook.h"
-
+#include "..\OI.h"
 LowerRearClimberHook::LowerRearClimberHook() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
@@ -21,25 +21,31 @@ LowerRearClimberHook::LowerRearClimberHook() {
 
 // Called just before this Command runs the first time
 void LowerRearClimberHook::Initialize() {
-	
+	done = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
-void LowerRearClimberHook::Execute() {
-	while (!Robot::climber->RearHookAtLowerLimit())
+void LowerRearClimberHook::Execute() 
+{
+	done = Robot::oi->getdriver_joystick()->GetRawButton(5);
+	if (!Robot::climber->RearHookAtLowerLimit() && !done)
 	{
 		Robot::climber->LowerRearHooks();
+	}
+	else
+	{
+		Robot::climber->StopRearHooks();
 	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool LowerRearClimberHook::IsFinished() {
-	return Robot::climber->RearHookAtLowerLimit();
+	return (done || Robot::climber->RearHookAtLowerLimit());
 }
 
 // Called once after isFinished returns true
 void LowerRearClimberHook::End() {
-	
+	Robot::climber->StopRearHooks();	
 }
 
 // Called when another command which requires one or more of the same

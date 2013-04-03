@@ -47,6 +47,7 @@
 #include "Commands/SetShooterTiltAngleDegrees.h"
 #include "Commands/FireAtWill.h"
 #include "Commands/AutoRev.h"
+#include "Commands/StopAllHooks.h"
 
 class Robot : public IterativeRobot {
 public:
