@@ -34,6 +34,7 @@ public:
 	virtual void DoMecanum( float vX, float vY, float vRot );
 	
 	void SetMode( CANJaguar::ControlMode controlMode );
+	CANJaguar::ControlMode GetMode();
 
 	CANJaguar& 	FrontLeftMotor() { return m_frontLeftMotor; }
 	CANJaguar& 	FrontRightMotor() { return m_frontRightMotor; }

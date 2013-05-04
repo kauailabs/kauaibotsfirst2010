@@ -23,7 +23,7 @@ public:
 	{
 		// Configure MotorSafety to require motors are updated at least every 100ms.
 		myRobot.SetExpiration(0.1);
-		SmartDashboard::GetInstance()->init();
+		SmartDashboard::init();
 	}
 
 	/**
@@ -32,7 +32,7 @@ public:
 	
 	void Autonomous(void)
 	{
-		SmartDashboard::Log("Entering Autonomous Mode...",Dashboard_Status); 
+		//SmartDashboard::Log("Entering Autonomous Mode...",Dashboard_Status); 
 
 		myRobot.SetSafetyEnabled(false);
 		while ( IsAutonomous()) 
@@ -42,7 +42,7 @@ public:
 		}
 		myRobot.SetSafetyEnabled(false);
 		
-		SmartDashboard::Log("Exiting Autonomous Mode...",Dashboard_Status);
+		//SmartDashboard::Log("Exiting Autonomous Mode...",Dashboard_Status);
 	}
 
 	/**
@@ -51,9 +51,9 @@ public:
 	
 	void OperatorControl(void)
 	{
-		SmartDashboard *pDashboard = SmartDashboard::GetInstance();
+		//SmartDashboard *pDashboard = SmartDashboard::GetInstance();
 		
-		pDashboard->Log("Entering Teleop Mode...",Dashboard_Status); 
+		//pDashboard->Log("Entering Teleop Mode...",Dashboard_Status); 
 	
 		bool bUsePercentVbusMode = DriverStation::GetInstance()->GetDigitalIn(1);
 		myRobot.SetMode( bUsePercentVbusMode ? CANJaguar::kPercentVbus : CANJaguar::kSpeed );		
@@ -87,9 +87,9 @@ public:
 			
 			//myRobot.DoMecanum(stick1.GetX(),stick1.GetY(),stick1.GetTwist() * -1);
 			
-			pDashboard->Log(stick1.GetX(), Dashboard_Joystick1_X);
-			pDashboard->Log(stick1.GetY(), Dashboard_Joystick1_Y);
-			pDashboard->Log(stick1.GetTwist(), Dashboard_Joystick1_Twist);
+			//pDashboard->Log(stick1.GetX(), Dashboard_Joystick1_X);
+			//pDashboard->Log(stick1.GetY(), Dashboard_Joystick1_Y);
+			//pDashboard->Log(stick1.GetTwist(), Dashboard_Joystick1_Twist);
 			/*pDashboard->Log(myRobot.FrontLeftMotor().GetSpeed(), FrontLeftEncoderSpeed);
 			pDashboard->Log(myRobot.FrontRightMotor().GetSpeed(), FrontRightEncoderSpeed);
 			pDashboard->Log(myRobot.RearLeftMotor().GetSpeed(), RearLeftEncoderSpeed);
@@ -105,7 +105,7 @@ public:
 			Wait(0.05); // Wait 50 ms 
 		}
 
-		pDashboard->Log("Exiting Teleop Mode...",Dashboard_Status); 
+		//pDashboard->Log("Exiting Teleop Mode...",Dashboard_Status); 
 	}
 };
 
