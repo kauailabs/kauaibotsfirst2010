@@ -37,19 +37,19 @@ public class Arms extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
-    public void openShoulder() {
+    public void open() {
         shoulderSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-    public void closeShoulder() {
+    public void close() {
         shoulderSolenoid.set(DoubleSolenoid.Value.kForward);
     }
-    public void raiseToTop() {
+    public void moveToTop() {
         
     }
-    public void goToMiddle() {
+    public void moveToMiddle() {
         
     }
-    public void lowerToBottom() {
+    public void moveToBottom() {
     
 }
 }
