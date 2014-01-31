@@ -36,7 +36,7 @@ public class  ArmHigh extends Command {
     protected void initialize() {
        controller = new PIDController (0.1, 0.001, 0.0, Robot.arms, Robot.arms.sC);
        controller.setSetpoint(high_angle);
-       controller.setInputRange (Arms.min_theta, Arms.max_theta);
+       controller.setInputRange (Robot.arms.min_theta, Robot.arms.max_theta);
        controller.setOutputRange(-1, 1);
        controller.setAbsoluteTolerance(3);
        controller.enable();
