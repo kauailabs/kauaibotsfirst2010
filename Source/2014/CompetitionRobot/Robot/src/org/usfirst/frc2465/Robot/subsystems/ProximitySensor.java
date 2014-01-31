@@ -82,7 +82,7 @@ public class ProximitySensor extends SensorBase implements PIDSource, LiveWindow
                 break;
                 
         case kLongRange:
-                distance_mm = 0.0;      // TODO
+                distance_mm = 61.681 * MathUtils.pow(voltage, -1.133);
                 break;
         }
         
