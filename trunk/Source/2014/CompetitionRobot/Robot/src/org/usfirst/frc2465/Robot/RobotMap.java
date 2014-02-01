@@ -47,9 +47,6 @@ public class RobotMap {
     public static DigitalInput tensionerLeftMax;
     public static ProximitySensor tensionerLeftDistance;
     public static SpeedController tensionerRightSC;
-    public static DigitalInput tensionerRightMin;
-    public static DigitalInput tensionerRightMax;
-    public static ProximitySensor tensionerRightDistance;
     public static Relay tensionerLock;
     public static SpeedController armsSC;
     public static DigitalInput armsMin;
@@ -134,15 +131,6 @@ public class RobotMap {
         
         tensionerRightSC = new Talon(1, 2);
 	LiveWindow.addActuator("Tensioner", "RightSC", (Talon) tensionerRightSC);
-        
-        tensionerRightMin = new DigitalInput(1, 5);
-	LiveWindow.addSensor("Tensioner", "RightMin", tensionerRightMin);
-        
-        tensionerRightMax = new DigitalInput(1, 6);
-	LiveWindow.addSensor("Tensioner", "RightMax", tensionerRightMax);
-        
-        tensionerRightDistance = new ProximitySensor(1, 3, ProximitySensor.kMediumRange);
-	LiveWindow.addSensor("Tensioner", "RightDistance", tensionerRightDistance);
         
         tensionerLock = new Relay(1, 3);
 	LiveWindow.addActuator("Tensioner", "Lock", tensionerLock);
