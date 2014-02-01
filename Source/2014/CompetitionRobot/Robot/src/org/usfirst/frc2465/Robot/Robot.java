@@ -11,7 +11,10 @@
 
 package org.usfirst.frc2465.Robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -108,6 +111,7 @@ public class Robot extends IterativeRobot {
     }
     
     
+    int count = 0;
     public void updateDashboard() {
         SmartDashboard.putBoolean("IMU_Connected", RobotMap.imu.isConnected());
         SmartDashboard.putNumber("IMU_Yaw", RobotMap.imu.getYaw());
@@ -120,6 +124,9 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("ArmUp",true);
         SmartDashboard.putBoolean("AnkleAngle", true);
         SmartDashboard.putBoolean("AimReady",true);
-    }
+        //DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1,0,"Updating");
+        //DriverStationLCD.getInstance().updateLCD();
+        //Timer.delay(0.1);
+     }
     
 }
