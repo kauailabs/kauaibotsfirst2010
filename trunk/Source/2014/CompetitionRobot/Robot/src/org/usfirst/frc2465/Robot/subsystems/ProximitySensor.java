@@ -21,9 +21,9 @@ import com.sun.squawk.util.MathUtils;
 
 public class ProximitySensor extends SensorBase implements PIDSource, LiveWindowSendable {
 
-    public final int kShortRange    = 0; 
-    public final int kMediumRange   = 1; 
-    public final int kLongRange     = 2; 
+    public static final int kShortRange    = 0; 
+    public static final int kMediumRange   = 1; 
+    public static final int kLongRange     = 2; 
 
     int sensor_range;
     AnalogChannel   analog_channel;
@@ -120,3 +120,4 @@ public class ProximitySensor extends SensorBase implements PIDSource, LiveWindow
     }
     
 }
+
