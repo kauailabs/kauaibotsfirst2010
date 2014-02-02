@@ -13,6 +13,7 @@ package org.usfirst.frc2465.Robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotMap;
 
 /**
  *
@@ -29,6 +30,7 @@ public class  ZeroYaw extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        RobotMap.imu.zeroYaw();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -37,7 +39,7 @@ public class  ZeroYaw extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
