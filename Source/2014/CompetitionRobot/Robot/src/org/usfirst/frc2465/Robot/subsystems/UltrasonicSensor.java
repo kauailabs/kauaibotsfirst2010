@@ -25,9 +25,18 @@ public class UltrasonicSensor extends SensorBase implements PIDSource, LiveWindo
     AnalogChannel   analog_channel;
     ITable table;
     
+    double volts_to_cm;
+    double cm_to_inches;
+    
     public UltrasonicSensor(final int slot, final int channel) {
         analog_channel = new AnalogChannel(slot, channel);
         initUltrasonicSensor();
+        
+        // See getDistanceInches() for location of datasheet,
+        // from which the following scale factors were calculated.
+        
+        volts_to_cm  = 5.0/1024.0;
+        cm_to_inches = 1.0/2.54;
     }
     
     /**
@@ -55,17 +64,13 @@ public class UltrasonicSensor extends SensorBase implements PIDSource, LiveWindo
 
     public double getDistanceInches()
     {
-        double voltage = analog_channel.getAverageVoltage();
-        
-        // Transform voltage to distance.  Values
+        // Transform voltage to distance.  Scale Factor Values
         // were derived from the datasheet
         //
         // http://maxbotix.com/documents/XL-MaxSonar-EZ_Datasheet.pdf
 
-        double x = analog_channel.getAverageVoltage();
-        double volts_to_cm = (1024/5.0);
-        double cm_to_inches = 1/2.54;
-        double inches = (x / volts_to_cm) * cm_to_inches;
+        double voltage = analog_channel.getAverageVoltage();
+        double inches = (voltage * volts_to_cm) * cm_to_inches;
         return inches;
     }
     

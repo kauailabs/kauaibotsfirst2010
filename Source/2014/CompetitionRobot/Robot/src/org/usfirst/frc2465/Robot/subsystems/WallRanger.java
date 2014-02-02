@@ -41,5 +41,6 @@ public class WallRanger extends Subsystem {
     public double getDistanceInches() {
         return sensor.getDistanceInches();
     }
+    
 }
 
