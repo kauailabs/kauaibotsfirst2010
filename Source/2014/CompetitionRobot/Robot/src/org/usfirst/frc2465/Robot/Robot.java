@@ -121,15 +121,17 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("IMU_Pitch", RobotMap.imu.getPitch());
         SmartDashboard.putNumber("IMU_Roll", RobotMap.imu.getRoll());
         SmartDashboard.putNumber("IMU_CompassHeading", RobotMap.imu.getCompassHeading());
-        SmartDashboard.putBoolean("ArmLow", true);
-        SmartDashboard.putBoolean("ArmMid", true);
-        SmartDashboard.putBoolean("ArmHigh", true);
-        SmartDashboard.putBoolean("ArmUp",true);
-        SmartDashboard.putBoolean("AnkleAngle", true);
-        SmartDashboard.putBoolean("AimReady",true);
-        //DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1,0,"Updating");
-        //DriverStationLCD.getInstance().updateLCD();
-        //Timer.delay(0.1);
+        SmartDashboard.putBoolean("ArmsLow", Robot.arms.getState() == Arms.kStateLow);
+        SmartDashboard.putBoolean("ArmsMid", Robot.arms.getState() == Arms.kStateMid);
+        SmartDashboard.putBoolean("ArmsHigh", Robot.arms.getState() == Arms.kStateHigh);
+        SmartDashboard.putBoolean("ArmsUp", Robot.arms.getState() == Arms.kStateUp);
+        SmartDashboard.putBoolean("AnkleReady", Robot.ankle.onTarget());
+        boolean leg_ready = 
+                Robot.leg.getState() == Leg.kStateLatched &&
+                Robot.tensioner.getState() == Tensioner.kStateHighTension;
+        SmartDashboard.putBoolean("LegReady", leg_ready);
+        SmartDashboard.putBoolean("AimReady",true /*TODO:  Get value from drive subystem */);
+        SmartDashboard.putBoolean("FOD_Enabled", true /*TODO:  Get value from drive subsystem*/);
      }
     
 }

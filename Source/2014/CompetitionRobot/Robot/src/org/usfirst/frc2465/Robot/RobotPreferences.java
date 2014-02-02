@@ -16,6 +16,8 @@ public class RobotPreferences {
     
     /* Arm Preferences */
     
+    // Physical Limits
+    
     static public double getArmsMaxAngle() { 
         return Preferences.getInstance().getDouble("ArmsMaxAngle",110.0);
     }
@@ -28,6 +30,24 @@ public class RobotPreferences {
     static public double getArmsMinSensorVolts() {
         return Preferences.getInstance().getDouble("ArmsMinSensorVolts",3.1);        
     }
+    
+    // PID Controller Settings
+    
+    static public double getArmsP() {
+        return Preferences.getInstance().getDouble("ArmsP", 0.1);
+    }
+    static public double getArmsI() {
+        return Preferences.getInstance().getDouble("ArmsI", 0.01);
+    }
+    static public double getArmsD() {
+        return Preferences.getInstance().getDouble("ArmsD", 0.0);
+    }
+    static public double getArmsToleranceDegrees() {
+        return Preferences.getInstance().getDouble("ArmsOnTargetToleranceDegrees", 2.0);
+    }
+    
+    // States
+    
     static public double getArmsAngleLow() {
         return Preferences.getInstance().getDouble("ArmsAngleLow",0.0);        
     }
@@ -40,17 +60,28 @@ public class RobotPreferences {
     static public double getArmsAngleUp() {
         return Preferences.getInstance().getDouble("ArmsAngleUp",110.0);        
     }
-    static public double getArmsP() {
-        return Preferences.getInstance().getDouble("ArmsP", 0.1);
+    
+    /* Ankle Preferences */
+    
+    // Physical Limits
+    
+    static public double getAnkleHeightInches() {
+        return Preferences.getInstance().getDouble("AnkleHeightInches",0.0);
     }
-    static public double getArmsI() {
-        return Preferences.getInstance().getDouble("ArmsI", 0.01);
+    static public double getAnkleBaselineInches() {
+        return Preferences.getInstance().getDouble("AnkleBaselineInches",6.0);
     }
-    static public double getArmsD() {
-        return Preferences.getInstance().getDouble("ArmsD", 0.0);
+    static public double getAnkleMinAngle() {
+        return Preferences.getInstance().getDouble("AnkleMinAngle", 0.0);
+    }
+    static public double getAnkleMaxAngle() {
+        return Preferences.getInstance().getDouble("AnkleMaxAngle", 90.0);
+    }
+    static public double getAnkleDefaultAngle() {
+        return Preferences.getInstance().getDouble("AnkleDefaultAngle",45.0);        
     }
 
-    /* Ankle Preferences */
+    // PID Controller Settings
     
     static public double getAnkleP() {
         return Preferences.getInstance().getDouble("AnkleP", 0.1);
@@ -61,16 +92,22 @@ public class RobotPreferences {
     static public double getAnkleD() {
         return Preferences.getInstance().getDouble("AnkleD", 0.0);
     }
-    static public double getAnkleHeightInches() {
-        return Preferences.getInstance().getDouble("AnkleHeightInches",0.0);
+    static public double getAnkleOnTargetToleranceDegrees() {
+        return Preferences.getInstance().getDouble("AnkleOnTargetToleranceDegrees", 3.0);
     }
-    static public double getAnkleBaselineInches() {
-        return Preferences.getInstance().getDouble("AnkleBaselineInches",6.0);
-    }
-    static public double getAnkleDefaultAngle() {
-        return Preferences.getInstance().getDouble("AnkleDefaultAngle",45.0);        
-    }
+    
     /* Tensioner Preferences */
+    
+    // Physical Limits
+    
+    static public double getTensionerMinDistanceInches() {
+        return Preferences.getInstance().getDouble("TensionerMinDistanceInches",6.0);
+    }
+    static public double getTensionerMaxDistanceInches() {
+        return Preferences.getInstance().getDouble("TensionerMaxDistanceInches",12.0);
+    }
+
+    // PID Controller Settings
     
     static public double getTensionerP() {
         return Preferences.getInstance().getDouble("TensionerP", 0.1);
@@ -81,14 +118,23 @@ public class RobotPreferences {
     static public double getTensionerD() {
         return Preferences.getInstance().getDouble("TensionerD", 0.0);
     }    
+    static public double getTensionerOnTargetToleranceInches() {
+        return Preferences.getInstance().getDouble("TensionerOnTargetToleranceInches", 0.25);
+    }
+    
+    // States
+    
+    static public double getTensionerLowDistanceInches() {
+        return Preferences.getInstance().getDouble("TensionerLowDistanceInches", 6.0);
+    }
+    static public double getTensionerHighDistanceInches() {
+        return Preferences.getInstance().getDouble("TensionerHighDistanceInches", 12.0);
+    }
+    static public double getTensionerSlackDistanceInches() {
+        return Preferences.getInstance().getDouble("TensionerSlackDistanceInches", 8.0);
+    }
     static public double getTensionerDefaultDistanceInches() {
         return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",6.0);
     }
-    static public double getTensionerMinDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerMinDistanceInches",0.0);
-    }
-    static public double getTensionerMaxDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerMaxDistanceInches",12.0);
-    }
-    
+
 }
