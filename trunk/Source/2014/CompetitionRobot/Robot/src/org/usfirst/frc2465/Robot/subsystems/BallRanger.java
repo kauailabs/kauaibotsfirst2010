@@ -38,7 +38,7 @@ public class BallRanger extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
     
-    final static double mm_to_inches = 1/254;
+    final static double mm_to_inches = 1.0/254.0;
     
     public double getDistanceInches() {
         return sensor.getDistanceMM() * mm_to_inches;
