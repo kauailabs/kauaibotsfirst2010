@@ -126,10 +126,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("ArmsHigh", Robot.arms.getState() == Arms.kStateHigh);
         SmartDashboard.putBoolean("ArmsUp", Robot.arms.getState() == Arms.kStateUp);
         SmartDashboard.putBoolean("AnkleReady", Robot.ankle.onTarget());
-        boolean leg_ready = 
-                Robot.leg.getState() == Leg.kStateLatched &&
-                Robot.tensioner.getState() == Tensioner.kStateHighTension;
-        SmartDashboard.putBoolean("LegReady", leg_ready);
+        SmartDashboard.putBoolean("LegReady", Fire.isLegReady());
         SmartDashboard.putBoolean("AimReady",true /*TODO:  Get value from drive subystem */);
         SmartDashboard.putBoolean("FOD_Enabled", true /*TODO:  Get value from drive subsystem*/);
      }
