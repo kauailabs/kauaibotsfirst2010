@@ -137,4 +137,31 @@ public class RobotPreferences {
         return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",6.0);
     }
 
+    /* Drive Preferences */
+    
+    // Physical Limits
+    
+    
+    
+    // PID Controller Settings
+    
+    static public double getAutoRotateP() {
+        return Preferences.getInstance().getDouble("AutoRotateP", 1.0);
+    }
+    static public double getAutoRotateI() {
+        return Preferences.getInstance().getDouble("AutoRotateI", 1.0);
+    }
+    static public double getAutoRotateD() {
+        return Preferences.getInstance().getDouble("AutoRotateD", 1.0);
+    }
+    static public double getAutoRotateOnTargetToleranceDegrees() {
+        return Preferences.getInstance().getDouble("AutoRotateOnTargetToleranceDegrees",1.0);
+    }
+    
+    //States
+    
+    static public double getAutoRotateDefaultTaretDegrees() {
+        return Preferences.getInstance().getDouble("AutoRotateDefaultTaretDegrees",6.0);
+    }
+    
 }
