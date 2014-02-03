@@ -48,7 +48,8 @@ public class  StickDrive extends Command {
         if (Math.abs(vX) < DEADZONE) vX = 0;
         if (Math.abs(vY) < DEADZONE) vY = 0;
         if (Math.abs(vRot) < DEADZONE) vRot = 0;
-                                                                                                        
+                         
+        System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);
         Robot.drive.doMecanum(vX,vY,vRot);
     }
 
