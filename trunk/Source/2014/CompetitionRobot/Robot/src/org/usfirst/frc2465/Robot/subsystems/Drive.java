@@ -252,10 +252,10 @@ public class Drive extends PIDSubsystem {
             checkForRestartedMotor( leftRearSC, "Rear Left" );
             checkForRestartedMotor( rightRearSC, "Rear Right" );
             
-            leftFrontSC.setX(maxOutputSpeed * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
-            rightFrontSC.setX(maxOutputSpeed * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
-            leftRearSC.setX(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
-            rightRearSC.setX(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+            leftFrontSC.set(maxOutputSpeed * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
+            rightFrontSC.set(maxOutputSpeed * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
+            leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
+            rightRearSC.set(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
             
             CANJaguar.updateSyncGroup(syncGroup);
         } catch (CANTimeoutException ex) {
