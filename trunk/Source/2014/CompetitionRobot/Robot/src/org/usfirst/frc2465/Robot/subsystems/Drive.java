@@ -101,7 +101,7 @@ public class Drive extends PIDSubsystem {
             maxSpeedModeRPMs = 500;
             
             
-            setMode( CANJaguar.ControlMode.kPercentVbus );
+            setMode( CANJaguar.ControlMode.kSpeed );
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
