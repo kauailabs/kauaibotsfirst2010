@@ -247,12 +247,12 @@ public class Drive extends PIDSubsystem {
             mecanumDriveInvKinematics( velocities, wheelSpeeds );
             
             byte syncGroup = (byte)0x80;
-            
+            /*
             checkForRestartedMotor( leftFrontSC, "Front Left" );
             checkForRestartedMotor( rightFrontSC, "Front Right" );
             checkForRestartedMotor( leftRearSC, "Rear Left" );
             checkForRestartedMotor( rightRearSC, "Rear Right" );
-            
+            */
             leftFrontSC.set(maxOutputSpeed * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
             rightFrontSC.set(maxOutputSpeed * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
             leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
