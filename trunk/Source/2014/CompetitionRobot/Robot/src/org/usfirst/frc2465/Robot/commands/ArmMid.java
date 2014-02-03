@@ -13,6 +13,7 @@ package org.usfirst.frc2465.Robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotPreferences;
 
 /**
  *
@@ -29,6 +30,7 @@ public class  ArmMid extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        Robot.arms.setSetpoint(RobotPreferences.getArmsAngleMid());
     }
 
     // Called repeatedly when this Command is scheduled to run
