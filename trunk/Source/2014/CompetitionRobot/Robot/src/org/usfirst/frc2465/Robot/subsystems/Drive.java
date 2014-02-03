@@ -258,6 +258,8 @@ public class Drive extends PIDSubsystem {
             leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
             rightRearSC.set(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
             
+            System.out.println("LeftFront Speed:  " + leftFrontSC.get());
+            
             CANJaguar.updateSyncGroup(syncGroup);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
