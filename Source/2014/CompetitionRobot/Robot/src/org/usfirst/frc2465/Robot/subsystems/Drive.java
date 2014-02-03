@@ -82,16 +82,29 @@ public class Drive extends PIDSubsystem {
                 RobotPreferences.getAutoRotateP(),
                 RobotPreferences.getAutoRotateI(),
                 RobotPreferences.getAutoRotateD());
-
-        getPIDController().setContinuous(false);
-        getPIDController().setInputRange(0,360);
-        getPIDController().setOutputRange(-1, 1);
-        tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
-        getPIDController().setAbsoluteTolerance(tolerance_degrees);
-        setSetpoint(RobotPreferences.getAutoRotateDefaultTaretDegrees());
-        disable();
-        
-        robotDrive.setSafetyEnabled(false);
+        try {
+            getPIDController().setContinuous(false);
+            getPIDController().setInputRange(0,360);
+            getPIDController().setOutputRange(-1, 1);
+            tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
+            getPIDController().setAbsoluteTolerance(tolerance_degrees);
+            setSetpoint(RobotPreferences.getAutoRotateDefaultTaretDegrees());
+            disable();
+            
+            robotDrive.setSafetyEnabled(false);
+            
+            leftFrontSC.getPowerCycled();
+            rightFrontSC.getPowerCycled();
+            leftRearSC.getPowerCycled();
+            rightRearSC.getPowerCycled();
+            
+            maxSpeedModeRPMs = 500;
+            
+            setMode( CANJaguar.ControlMode.kSpeed );
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
+      
     }
     
     // Put methods for controlling this subsystem
