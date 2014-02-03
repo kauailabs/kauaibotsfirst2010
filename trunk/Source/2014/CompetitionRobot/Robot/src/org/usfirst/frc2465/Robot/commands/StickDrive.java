@@ -49,7 +49,7 @@ public class  StickDrive extends Command {
         if (Math.abs(vY) < DEADZONE) vY = 0;
         if (Math.abs(vRot) < DEADZONE) vRot = 0;
                                                                                                         
-        // Robot.drive.doMecanum(vX,vY,vRot);
+        Robot.drive.doMecanum(vX,vY,vRot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
