@@ -38,11 +38,11 @@ public class  StickDrive extends Command {
     protected void execute() {
         Joystick driver = Robot.oi.driverJoystick;
         double vX = driver.getX();
-        vX = vX * -1;   // invert
+        //vX = vX * -1;   // invert
         double vY = driver.getY();
         vY = vY * -1;   // invert
-        double vRot = driver.getTwist();
-        vRot = vRot * -1;   // invert
+        double vRot = driver.getRawAxis(4);
+        //vRot = vRot * -1;   // invert
         
         // If in deadzone, set values to 0
         if (Math.abs(vX) < DEADZONE) vX = 0;
@@ -50,7 +50,7 @@ public class  StickDrive extends Command {
         if (Math.abs(vRot) < DEADZONE) vRot = 0;
                          
         System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);
-        Robot.drive.doMecanum(vX,vY,vRot);
+        Robot.drive.doMecanum(vY,vX,vRot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
