@@ -125,16 +125,16 @@ public class RobotPreferences {
     // States
     
     static public double getTensionerLowDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerLowDistanceInches", 6.0);
+        return Preferences.getInstance().getDouble("TensionerLowDistanceInches", 10.0);
     }
     static public double getTensionerHighDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerHighDistanceInches", 12.0);
+        return Preferences.getInstance().getDouble("TensionerHighDistanceInches", 6.0);
     }
     static public double getTensionerSlackDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerSlackDistanceInches", 8.0);
+        return Preferences.getInstance().getDouble("TensionerSlackDistanceInches", 12.0);
     }
     static public double getTensionerDefaultDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",6.0);
+        return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",10.0);
     }
 
     /* Drive Preferences */
