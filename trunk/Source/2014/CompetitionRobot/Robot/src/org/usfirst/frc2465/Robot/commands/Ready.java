@@ -13,13 +13,21 @@ package org.usfirst.frc2465.Robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotPreferences;
+import org.usfirst.frc2465.Robot.subsystems.Leg;
+import org.usfirst.frc2465.Robot.subsystems.Tensioner;
 
 /**
  *
  */
 public class  Ready extends Command {
 
+    boolean leg_ready;
+    boolean tensioner_ready;
     public Ready() {
+        requires(Robot.tensioner);
+        requires(Robot.leg);
+        
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 	
@@ -29,16 +37,47 @@ public class  Ready extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        leg_ready = false;
+        tensioner_ready = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        
+        if ( leg_ready = false ) {
+            int leg_state = Robot.leg.getState();
+            if ( leg_state == Leg.kStateUnlatched ) {
+                Robot.leg.requestState(Leg.kStateLatched);
+            }
+            else if  ( leg_state == Leg.kStateMoving ) {
+                // Wait for leg to be latched
+            }
+            else if ( leg_state == Leg.kStateLatched ) {
+                leg_ready = true;
+            }
+        }
+        else if ( tensioner_ready = false) {
+            int tensioner_state = Robot.tensioner.getState();
+            if ( tensioner_state != Tensioner.kStateHighTension ) {
+                Robot.tensioner.setSetpoint(RobotPreferences.getTensionerHighDistanceInches());
+            }
+        }
+        else {
+            tensioner_ready = true;
+        }
     }
+    
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+        if ( (leg_ready == true)&&(tensioner_ready == true) ) {
+            return true;
+        }
+        else {
         return false;
+        }
     }
+    
 
     // Called once after isFinished returns true
     protected void end() {
