@@ -100,7 +100,7 @@ public class Drive extends PIDSubsystem {
             
             maxSpeedModeRPMs = (int)(2650.0/12.75);
             
-            setMode( CANJaguar.ControlMode.kSpeed );
+            setMode( CANJaguar.ControlMode.kPercentVbus );
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -127,7 +127,7 @@ public class Drive extends PIDSubsystem {
                 motor.configEncoderCodesPerRev(250);
                 motor.configMaxOutputVoltage(12.0);
                 motor.configNeutralMode(CANJaguar.NeutralMode.kBrake);
-                motor.setPID(.7,.004,0);
+                motor.setPID(.2,.004,0);
                 motor.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             }
             motor.enableControl();
@@ -152,7 +152,7 @@ public class Drive extends PIDSubsystem {
         initMotor(leftFrontSC);
         initMotor(rightFrontSC);
         initMotor(leftRearSC);
-        initMotor(leftFrontSC);    
+        initMotor(rightRearSC);    
     }    
     
     void checkForRestartedMotor( CANJaguar motor, String strDescription )
@@ -257,7 +257,7 @@ public class Drive extends PIDSubsystem {
             leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
             rightRearSC.set(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
             
-            System.out.println("LeftFront Speed:  " + leftFrontSC.get());
+            System.out.println("LF: " + leftFrontSC.get() + "LR: " + leftRearSC.get() + "RF: " + rightFrontSC.get() + "RR: " + rightRearSC.get());
             
             CANJaguar.updateSyncGroup(syncGroup);
         } catch (CANTimeoutException ex) {
