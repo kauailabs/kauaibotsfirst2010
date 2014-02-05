@@ -75,6 +75,8 @@ public class Robot extends IterativeRobot {
         LiveWindow.addActuator("Arms", "PIDController", arms.getPIDController());
         LiveWindow.addActuator("Tensioner", "PIDController", tensioner.getPIDController());
         LiveWindow.addActuator("Ankle", "PIDController", ankle.getPIDController());
+          LiveWindow.addActuator("Drive", "PIDController", drive.getPIDController());
+
     }
 
     public void autonomousInit() {
