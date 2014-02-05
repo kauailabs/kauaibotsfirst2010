@@ -11,6 +11,7 @@
 
 package org.usfirst.frc2465.Robot.commands;
 
+import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
@@ -20,6 +21,66 @@ import org.usfirst.frc2465.Robot.Robot;
  */
 public class  StickDrive extends Command {
 
+    static final double DEADZONE = .025;
+    
+    public class JoystickResponseCurve {
+        double adjust;
+        double power;
+        double multiplier;
+        double deadzone;
+        
+        public JoystickResponseCurve( double adj, double pow, double mult, double dead ) {
+            adjust = adj;
+            power = pow;
+            multiplier = mult;
+            deadzone = dead;
+        }
+        
+        // f(x) = multiplier * (adjust * x^power+(1-adjust)*x)
+        
+        public double transform( double input ) {
+            double output = 0.0;
+            if ( ( input > deadzone ) || ( input < (-1 * deadzone ) ) ) {
+                output = multiplier * ( adjust * MathUtils.pow(input, power) + (1-adjust) * input );
+            }
+            return output;
+        }
+    }
+    
+    public class JoystickResponseCurveSet {
+        JoystickResponseCurve fwd;
+        JoystickResponseCurve strafe;
+        JoystickResponseCurve rotate;
+        
+        public JoystickResponseCurveSet(
+            JoystickResponseCurve fwd,
+            JoystickResponseCurve strafe,
+            JoystickResponseCurve rotate ) {
+            this.fwd = fwd;
+            this.strafe = strafe;
+            this.rotate = rotate;
+        }
+        
+        public double transformForward( double input )  { return fwd.transform(input); }
+        public double transformStrafe( double input )   { return strafe.transform(input); }
+        public double transformRotate( double input )   { return rotate.transform(input); }
+    }
+        
+    JoystickResponseCurveSet linear = new JoystickResponseCurveSet(
+            new JoystickResponseCurve( .00, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .00, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .00, 3, 1.0, DEADZONE ) );
+    
+    JoystickResponseCurveSet conservative = new JoystickResponseCurveSet(
+            new JoystickResponseCurve( .40, 3, .50, 0 ),
+            new JoystickResponseCurve( .40, 3, .50, 0 ),
+            new JoystickResponseCurve( .40, 3, .35, 0 ) );
+
+    JoystickResponseCurveSet aggressive = new JoystickResponseCurveSet(
+            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
+            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
+            new JoystickResponseCurve( .40, 3, 1.0, 0 ) );
+    
     public StickDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -32,23 +93,21 @@ public class  StickDrive extends Command {
     protected void initialize() {
     }
 
-    static final double DEADZONE = .025;
-    
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        
+        JoystickResponseCurveSet current = linear;
+        
         Joystick driver = Robot.oi.driverJoystick;
         double vX = driver.getX();
-        //vX = vX * -1;   // invert
         double vY = driver.getY();
         vY = vY * -1;   // invert
         double vRot = driver.getRawAxis(4);
-        //vRot = vRot * -1;   // invert
-        
-        // If in deadzone, set values to 0
-        if (Math.abs(vX) < DEADZONE) vX = 0;
-        if (Math.abs(vY) < DEADZONE) vY = 0;
-        if (Math.abs(vRot) < DEADZONE) vRot = 0;
                          
+        vX = current.transformStrafe(vX);
+        vY = current.transformForward(vY);
+        vRot = current.transformRotate(vRot);
+        
         System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);
         Robot.drive.doMecanum(vY,vX,vRot);
     }
