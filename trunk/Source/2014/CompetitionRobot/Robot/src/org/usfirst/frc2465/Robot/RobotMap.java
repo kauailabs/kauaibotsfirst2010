@@ -176,6 +176,5 @@ public class RobotMap {
         }
 
         //camera = AxisCamera.getInstance();
-       
     }
 }
