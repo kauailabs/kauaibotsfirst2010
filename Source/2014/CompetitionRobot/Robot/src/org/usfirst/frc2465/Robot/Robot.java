@@ -112,6 +112,18 @@ public class Robot extends IterativeRobot {
         updateDashboard();
     }
 
+    public void disabledPeriodic() {
+        
+    }
+    
+    public void testInit() {
+        
+    }
+    
+    public void disabledInit() {
+        
+    }
+    
     /**
      * This function called periodically during test mode
      */

@@ -19,6 +19,39 @@ import org.usfirst.frc2465.Robot.Robot;
  */
 public class  Aim extends Command {
 
+    static int distanceToAngleMap[] = new int[] {
+        90,
+        88,
+        86,
+        84,
+        82,
+        80,
+        78,
+        76,
+        74,
+        72,
+        70,
+        68,
+        66,
+        64,
+        62,
+        60,
+        58,
+        56,
+        54,
+        52,
+        50,
+        48,
+        46,
+        44,
+        42,
+        40,
+        38,
+        36,
+        34,
+        32
+    };    
+    
     public Aim() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -33,8 +66,27 @@ public class  Aim extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        
+        // Get distance to wall from wall ranger
+        double distance = Robot.wallRanger.getDistanceInches();
+        // Calculate ankle angle
+        double ankle_angle = (double)getAngleFromDistance((int) distance/12);
+        // Set the ankle to the specified angle
+        Robot.ankle.setSetpoint(ankle_angle);
     }
 
+    public int getAngleFromDistance(int distance_feet) {
+        if ( distance_feet < 0 ) {
+            return distanceToAngleMap[0];
+        }
+        else if ( distance_feet >= distanceToAngleMap.length ) {
+            return distanceToAngleMap[distanceToAngleMap.length-1];
+        }
+        else {
+            return distanceToAngleMap[distance_feet];
+        }
+    }
+    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;
