@@ -51,7 +51,7 @@ public class Ankle extends PIDSubsystem {
                 RobotPreferences.getAnkleOnTargetToleranceDegrees());
         setSetpoint(
                 RobotPreferences.getAnkleDefaultAngle());
-        enable();
+        //enable();
     }
     
     // Put methods for controlling this subsystem
