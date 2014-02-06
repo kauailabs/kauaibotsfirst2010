@@ -39,7 +39,9 @@ public class  Fire extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        Robot.leg.requestState(Leg.kStateReleased);
+        if ( Fire.isLegReady() ) {
+            Robot.leg.requestState(Leg.kStateReleased);
+        }
     }
 
     // Called repeatedly when this Command is scheduled to run
