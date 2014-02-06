@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.can.*;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.visa.VisaException;
 import java.util.Vector;
 import org.usfirst.frc2465.Robot.subsystems.ProximitySensor;
@@ -38,7 +39,7 @@ public class RobotMap {
     public static RobotDrive driveRobotDrive;
     public static DigitalInput legLatched;
     public static DigitalInput legReady;
-    public static Talon legSC;
+    public static SpeedController legSC;
     public static ProximitySensor ankleAngleSensor;
     public static DigitalInput ankleAngleMin;
     public static DigitalInput ankleAngleMax;
@@ -66,13 +67,20 @@ public class RobotMap {
         try { 
             driveLeftFrontSC = new CANJaguar(3);
         } catch (CANTimeoutException ex) {
+            // This exception occurs if the Jaguar cannot be 
+            // reached on the CAN Bus
+            ex.printStackTrace();
+        } catch (UncleanStatusException ex) {
+            // This exception occurs in case of 
+            // communication error with the CAN Bridge
             ex.printStackTrace();
         }
-	
         
         try { 
             driveLeftRearSC = new CANJaguar(4);
         } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        } catch (UncleanStatusException ex) {
             ex.printStackTrace();
         }
 	
@@ -81,6 +89,8 @@ public class RobotMap {
             driveRightFrontSC = new CANJaguar(2);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
+        } catch (UncleanStatusException ex) {
+            ex.printStackTrace();
         }
 	
         
@@ -88,17 +98,20 @@ public class RobotMap {
             driveRightRearSC = new CANJaguar(5);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
+        } catch (UncleanStatusException ex) {
+            ex.printStackTrace();
         }
-	
-        
+
+        try {
         driveRobotDrive = new RobotDrive(driveLeftFrontSC, driveLeftRearSC,
               driveRightFrontSC, driveRightRearSC);
-	
-        driveRobotDrive.setSafetyEnabled(true);
-        driveRobotDrive.setExpiration(0.1);
-        driveRobotDrive.setSensitivity(0.5);
-        driveRobotDrive.setMaxOutput(1.0);
-        
+            driveRobotDrive.setSafetyEnabled(false);
+            driveRobotDrive.setExpiration(0.1);
+            driveRobotDrive.setSensitivity(0.5);
+            driveRobotDrive.setMaxOutput(1.0);        
+        } catch(NullPointerException ex) {
+            System.out.println("WARNING:  COuld not initialize drive system!");
+        }
         
         legLatched = new DigitalInput(1, 11);
 	LiveWindow.addSensor("Leg", "Latched", legLatched);
@@ -107,7 +120,7 @@ public class RobotMap {
 	LiveWindow.addSensor("Leg", "Ready", legReady);
         
         legSC = new Talon(1, 4);
-	LiveWindow.addActuator("Leg", "Motor", legSC);
+	LiveWindow.addActuator("Leg", "Motor", (Talon)legSC);
         
         ankleAngleSensor = new ProximitySensor(1, 1,ProximitySensor.kShortRange);
 	LiveWindow.addSensor("Ankle", "AngleSensor", ankleAngleSensor);
@@ -137,7 +150,7 @@ public class RobotMap {
 	LiveWindow.addActuator("Tensioner", "RightSC", (Talon) tensionerRightSC);
         
         tensionerLock = new Relay(1, 3);
-	LiveWindow.addActuator("Tensioner", "Lock", tensionerLock);
+	LiveWindow.addActuator("Leg", "Lock", tensionerLock);
         
         armsSC = new Talon(1, 3);
 	LiveWindow.addActuator("Arms", "SC", (Talon) armsSC);
