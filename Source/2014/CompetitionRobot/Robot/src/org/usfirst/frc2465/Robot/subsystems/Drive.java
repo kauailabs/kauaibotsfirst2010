@@ -88,7 +88,7 @@ public class Drive extends PIDSubsystem {
             getPIDController().setOutputRange(-1, 1);
             tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
             getPIDController().setAbsoluteTolerance(tolerance_degrees);
-            setSetpoint(RobotPreferences.getAutoRotateDefaultTaretDegrees());
+            setSetpoint(RobotPreferences.getAutoRotateDefaultTargetDegrees());
             disable();
             
             robotDrive.setSafetyEnabled(false);

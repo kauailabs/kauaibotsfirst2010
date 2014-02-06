@@ -137,6 +137,18 @@ public class RobotPreferences {
         return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",10.0);
     }
 
+    /* LegPreferences */
+    
+    static public double getLegReadyMotorSpeed() {
+        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", -.5);
+    }
+    static public double getLegLatchedMotorSpeed() {
+        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", 0.5);
+    }
+    static public double getLegUpdatePeriodSeconds() {
+        return Preferences.getInstance().getDouble("LegUpdatePeriodSeconds", 0.05);
+    }
+    
     /* Drive Preferences */
     
     // Physical Limits
@@ -160,8 +172,8 @@ public class RobotPreferences {
     
     //States
     
-    static public double getAutoRotateDefaultTaretDegrees() {
-        return Preferences.getInstance().getDouble("AutoRotateDefaultTaretDegrees",6.0);
+    static public double getAutoRotateDefaultTargetDegrees() {
+        return Preferences.getInstance().getDouble("AutoRotateDefaultTargetDegrees",6.0);
     }
     
 }

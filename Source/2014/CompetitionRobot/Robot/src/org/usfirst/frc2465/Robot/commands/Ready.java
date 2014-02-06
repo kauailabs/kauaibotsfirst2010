@@ -44,19 +44,16 @@ public class  Ready extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         
-        if ( leg_ready = false ) {
+        if ( leg_ready == false ) {
             int leg_state = Robot.leg.getState();
-            if ( leg_state == Leg.kStateUnlatched ) {
-                Robot.leg.requestState(Leg.kStateLatched);
+            if ( leg_state == Leg.kStateReleased ) {
+                Robot.leg.requestState(Leg.kStateReady);
             }
-            else if  ( leg_state == Leg.kStateMoving ) {
-                // Wait for leg to be latched
-            }
-            else if ( leg_state == Leg.kStateLatched ) {
+            else if ( leg_state == Leg.kStateReady ) {
                 leg_ready = true;
             }
         }
-        else if ( tensioner_ready = false) {
+        else if ( tensioner_ready == false) {
             int tensioner_state = Robot.tensioner.getState();
             if ( tensioner_state != Tensioner.kStateHighTension ) {
                 Robot.tensioner.setSetpoint(RobotPreferences.getTensionerHighDistanceInches());
