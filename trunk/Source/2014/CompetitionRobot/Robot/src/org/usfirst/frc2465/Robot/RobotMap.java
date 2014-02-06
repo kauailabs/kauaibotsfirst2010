@@ -36,8 +36,9 @@ public class RobotMap {
     public static CANJaguar driveRightFrontSC;
     public static CANJaguar driveRightRearSC;
     public static RobotDrive driveRobotDrive;
-    public static DigitalInput legStop;
-    public static Relay legMotor;
+    public static DigitalInput legLatched;
+    public static DigitalInput legReady;
+    public static Talon legSC;
     public static ProximitySensor ankleAngleSensor;
     public static DigitalInput ankleAngleMin;
     public static DigitalInput ankleAngleMax;
@@ -99,11 +100,14 @@ public class RobotMap {
         driveRobotDrive.setMaxOutput(1.0);
         
         
-        legStop = new DigitalInput(1, 11);
-	LiveWindow.addSensor("Leg", "Stop", legStop);
+        legLatched = new DigitalInput(1, 11);
+	LiveWindow.addSensor("Leg", "Latched", legLatched);
         
-        legMotor = new Relay(1, 1);
-	LiveWindow.addActuator("Leg", "Motor", legMotor);
+        legReady = new DigitalInput(1, 5);
+	LiveWindow.addSensor("Leg", "Ready", legReady);
+        
+        legSC = new Talon(1, 4);
+	LiveWindow.addActuator("Leg", "Motor", legSC);
         
         ankleAngleSensor = new ProximitySensor(1, 1,ProximitySensor.kShortRange);
 	LiveWindow.addSensor("Ankle", "AngleSensor", ankleAngleSensor);

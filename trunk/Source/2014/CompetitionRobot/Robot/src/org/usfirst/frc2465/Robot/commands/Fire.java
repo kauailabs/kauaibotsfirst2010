@@ -23,7 +23,7 @@ public class  Fire extends Command {
 
     static public boolean isLegReady() {
         boolean leg_ready = 
-                Robot.leg.getState() == Leg.kStateLatched &&
+                Robot.leg.getState() == Leg.kStateReady &&
                 Robot.tensioner.getState() == Tensioner.kStateHighTension;
         return leg_ready;
     }
@@ -39,7 +39,7 @@ public class  Fire extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        Robot.leg.requestState(Leg.kStateUnlatched);
+        Robot.leg.requestState(Leg.kStateReleased);
     }
 
     // Called repeatedly when this Command is scheduled to run
