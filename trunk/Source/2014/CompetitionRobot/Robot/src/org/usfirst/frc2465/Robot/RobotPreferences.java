@@ -11,6 +11,12 @@ import edu.wpi.first.wpilibj.Preferences;
 /**
  *
  * @author Scott
+ * 
+ * Defines Robot Preferences, which can be edited on the dashboard and stored
+ * in robot flash memory for use every time the robot starts.
+ * 
+ * See http://wpilib.screenstepslive.com/s/3120/m/7932/l/81114-setting-robot-preferences-from-smartdashboard
+ * for details on how to edit the preferences from the dashboard.
  */
 public class RobotPreferences {
     
@@ -33,13 +39,22 @@ public class RobotPreferences {
     
     // PID Controller Settings
     
-    static public double getArmsP() {
+    static public double getArmsPForward() {
         return Preferences.getInstance().getDouble("ArmsP", 0.1);
     }
-    static public double getArmsI() {
+    static public double getArmsIForward() {
         return Preferences.getInstance().getDouble("ArmsI", 0.01);
     }
-    static public double getArmsD() {
+    static public double getArmsDForward() {
+        return Preferences.getInstance().getDouble("ArmsD", 0.0);
+    }
+    static public double getArmsPReverse() {
+        return Preferences.getInstance().getDouble("ArmsP", 0.1);
+    }
+    static public double getArmsIReverse() {
+        return Preferences.getInstance().getDouble("ArmsI", 0.01);
+    }
+    static public double getArmsDReverse() {
         return Preferences.getInstance().getDouble("ArmsD", 0.0);
     }
     static public double getArmsToleranceDegrees() {
@@ -139,11 +154,8 @@ public class RobotPreferences {
 
     /* LegPreferences */
     
-    static public double getLegReadyMotorSpeed() {
-        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", -.5);
-    }
     static public double getLegLatchedMotorSpeed() {
-        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", 0.5);
+        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", 1.0);
     }
     static public double getLegUpdatePeriodSeconds() {
         return Preferences.getInstance().getDouble("LegUpdatePeriodSeconds", 0.05);
