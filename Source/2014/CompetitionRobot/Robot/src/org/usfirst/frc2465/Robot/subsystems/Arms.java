@@ -46,9 +46,9 @@ public class Arms extends PIDSubsystem {
     public Arms() {
         
         super(  "Arms",
-                RobotPreferences.getArmsP(),
-                RobotPreferences.getArmsI(),
-                RobotPreferences.getArmsD());
+                RobotPreferences.getArmsPForward(),
+                RobotPreferences.getArmsIForward(),
+                RobotPreferences.getArmsDForward());
         
         max_theta   = RobotPreferences.getArmsMaxAngle();
         min_theta   = RobotPreferences.getArmsMinAngle();
@@ -73,7 +73,9 @@ public class Arms extends PIDSubsystem {
         
         // Start the PID Controller
         
-        enable();
+        // TODO:  Enable this after PID tuning is complete.
+        
+        //enable();
     }
     
     // Put methods for controlling this subsystem
@@ -106,6 +108,37 @@ public class Arms extends PIDSubsystem {
     }
     
     public void goToAngle( double angle ) {
+        
+        // Disable PID Controller while modifying 
+        // PID Coefficients.
+        
+        disable();
+        
+        /* TODO:  Determine, based upon
+        * current angle, and requested angle,
+        * if moving forward
+        * or reverse, and apply different
+        * PID coefficients, depending upon 
+        * direction
+        */
+        
+        boolean down = false;
+        if ( down ) {
+            this.getPIDController().setPID(
+                    RobotPreferences.getArmsPForward(),
+                    RobotPreferences.getArmsIForward(),
+                    RobotPreferences.getArmsDForward());
+        }
+        else {
+            this.getPIDController().setPID(
+                    RobotPreferences.getArmsPReverse(),
+                    RobotPreferences.getArmsIReverse(),
+                    RobotPreferences.getArmsDReverse());
+        }
+        
+        // Set Target Angle, and enable the
+        // PID Controller.
+        
         setSetpoint(angle);
         enable();
     }
@@ -116,10 +149,19 @@ public class Arms extends PIDSubsystem {
     double max_volt;
     double min_volt;
 
+    /* Indicates current arm angle, 
+    *  this method invoked by the 
+    *  PID Controller.
+    */
+    
     protected double returnPIDInput() {
         return getAngle();
     }
 
+    /* Controls the arm motor, driven
+    *  by the PID controller.
+    */
+    
     protected void usePIDOutput(double d) {
         
         if ( min.get() || max.get() ) {
@@ -129,6 +171,13 @@ public class Arms extends PIDSubsystem {
         this.sC.set(d);
     }
 
+    /* 
+    *  Determines current Arm State, relative to 
+    *  predefined locations along the arm's travel,
+    *  and based upon input from the arm's angle
+    *  sensor.
+    */
+    
     public int getState() {
         double set_point = getPIDController().getSetpoint();
         boolean on_target = getPIDController().onTarget();

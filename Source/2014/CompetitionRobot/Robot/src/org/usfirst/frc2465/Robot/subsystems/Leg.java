@@ -83,6 +83,11 @@ public class Leg extends Subsystem implements Runnable {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
         thread = new Thread(this);
+        
+        // TODO:  Start the Leg state machine
+        // thread once correct mechanism behavior
+        // is verified.
+        
         //thread.start();
     }
     
