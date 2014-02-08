@@ -35,7 +35,7 @@ public class UltrasonicSensor extends SensorBase implements PIDSource, LiveWindo
         // See getDistanceInches() for location of datasheet,
         // from which the following scale factors were calculated.
         
-        volts_to_cm  = 5.0/1024.0;
+        volts_to_cm  = 1024.0/5.0;
         cm_to_inches = 1.0/2.54;
     }
     

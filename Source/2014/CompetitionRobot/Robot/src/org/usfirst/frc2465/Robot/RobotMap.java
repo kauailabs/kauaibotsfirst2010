@@ -39,6 +39,7 @@ public class RobotMap {
     public static RobotDrive driveRobotDrive;
     public static DigitalInput legLatched;
     public static DigitalInput legReady;
+    public static DigitalInput triggerReady;
     public static SpeedController legSC;
     public static ProximitySensor ankleAngleSensor;
     public static DigitalInput ankleAngleMin;
@@ -48,8 +49,8 @@ public class RobotMap {
     public static DigitalInput tensionerLeftMin;
     public static DigitalInput tensionerLeftMax;
     public static ProximitySensor tensionerLeftDistance;
-    public static SpeedController tensionerRightSC;
     public static Relay tensionerLock;
+    public static Relay legTriggerMotorRelay;
     public static SpeedController armsSC;
     public static DigitalInput armsMin;
     public static DigitalInput armsMax;
@@ -119,8 +120,11 @@ public class RobotMap {
         legReady = new DigitalInput(1, 5);
 	LiveWindow.addSensor("Leg", "Ready", legReady);
         
+        triggerReady = new DigitalInput(1, 6);
+	LiveWindow.addSensor("Leg", "TriggerReady", triggerReady);        
+        
         legSC = new Talon(1, 4);
-	LiveWindow.addActuator("Leg", "Motor", (Talon)legSC);
+	LiveWindow.addActuator("Leg", "LegMotor", (Talon)legSC);
         
         ankleAngleSensor = new ProximitySensor(1, 1,ProximitySensor.kShortRange);
 	LiveWindow.addSensor("Ankle", "AngleSensor", ankleAngleSensor);
@@ -146,11 +150,11 @@ public class RobotMap {
         tensionerLeftDistance = new ProximitySensor(1, 2, ProximitySensor.kMediumRange);
 	LiveWindow.addSensor("Tensioner", "LeftDistance", tensionerLeftDistance);
         
-        tensionerRightSC = new Talon(1, 2);
-	LiveWindow.addActuator("Tensioner", "RightSC", (Talon) tensionerRightSC);
+        legTriggerMotorRelay = new Relay(1, 3);
+	LiveWindow.addActuator("Leg", "TriggerMotorRelay", legTriggerMotorRelay);
         
-        tensionerLock = new Relay(1, 3);
-	LiveWindow.addActuator("Leg", "Lock", tensionerLock);
+        tensionerLock = new Relay(1, 2);
+	LiveWindow.addActuator("Tensioner", "Lock", tensionerLock);
         
         armsSC = new Talon(1, 3);
 	LiveWindow.addActuator("Arms", "SC", (Talon) armsSC);
