@@ -85,7 +85,11 @@ public class Tensioner extends PIDSubsystem {
                 RobotPreferences.getTensionerOnTargetToleranceInches());
         setSetpoint(
                 RobotPreferences.getTensionerDefaultDistanceInches());
-        enable();
+        
+        // TODO:  Enable this once the PID Controllers are 
+        // tuned.
+        
+        //enable();
         
     }
     
