@@ -24,141 +24,123 @@ public class RobotPreferences {
     
     // Physical Limits
     
-    static public double getArmsMaxAngle() { 
-        return Preferences.getInstance().getDouble("ArmsMaxAngle",110.0);
-    }
-    static public double getArmsMinAngle() {
-        return Preferences.getInstance().getDouble("ArmsMinAngle",0);
-    }
     static public double getArmsMaxSensorVolts() {
-        return Preferences.getInstance().getDouble("ArmsMaxSensorVolts",1.6);
+        return Preferences.getInstance().getDouble("ArmsMaxSensorVolts",1.8);
     }
     static public double getArmsMinSensorVolts() {
-        return Preferences.getInstance().getDouble("ArmsMinSensorVolts",3.1);        
+        return Preferences.getInstance().getDouble("ArmsMinSensorVolts",0.27);        
     }
     
     // PID Controller Settings
     
-    static public double getArmsPForward() {
-        return Preferences.getInstance().getDouble("ArmsP", 0.1);
+    static public double getArmsOnTargetToleranceVolts() {
+        return Preferences.getInstance().getDouble("AnkleOnTargetToleranceVolts", 0.1 );
     }
-    static public double getArmsIForward() {
-        return Preferences.getInstance().getDouble("ArmsI", 0.01);
+    static public double getArmsPGrab() {
+        return Preferences.getInstance().getDouble("ArmsGrabP", 0.7);
     }
-    static public double getArmsDForward() {
-        return Preferences.getInstance().getDouble("ArmsD", 0.0);
+    static public double getArmsIGrab() {
+        return Preferences.getInstance().getDouble("ArmsGrabI", 0.0);
     }
-    static public double getArmsPReverse() {
-        return Preferences.getInstance().getDouble("ArmsP", 0.1);
+    static public double getArmsDGrab() {
+        return Preferences.getInstance().getDouble("ArmsGrabD", 0.0);
     }
-    static public double getArmsIReverse() {
-        return Preferences.getInstance().getDouble("ArmsI", 0.01);
+    static public double getArmsPLift() {
+        return Preferences.getInstance().getDouble("ArmsLiftP", 0.7);
     }
-    static public double getArmsDReverse() {
-        return Preferences.getInstance().getDouble("ArmsD", 0.0);
+    static public double getArmsILift() {
+        return Preferences.getInstance().getDouble("ArmsLiftI", 0.01);
     }
-    static public double getArmsToleranceDegrees() {
-        return Preferences.getInstance().getDouble("ArmsOnTargetToleranceDegrees", 2.0);
+    static public double getArmsDLift() {
+        return Preferences.getInstance().getDouble("ArmsLiftD", 0.0);
+    }
+    static public double getArmsPRetract() {
+        return Preferences.getInstance().getDouble("ArmsRetractP", 0.7);
+    }
+    static public double getArmsIRetract() {
+        return Preferences.getInstance().getDouble("ArmsRetractI", 0.01);
+    }
+    static public double getArmsDRetract() {
+        return Preferences.getInstance().getDouble("ArmsRetractD", 0.0);
+    }
+    static public double getArmsPHandoff() {
+        return Preferences.getInstance().getDouble("ArmsHandoffP", 0.7);
+    }
+    static public double getArmsIHandoff() {
+        return Preferences.getInstance().getDouble("ArmsHandoffI", 0.01);
+    }
+    static public double getArmsDHandoff() {
+        return Preferences.getInstance().getDouble("ArmsHandoffD", 0.0);
     }
     
     // States
     
-    static public double getArmsAngleLow() {
-        return Preferences.getInstance().getDouble("ArmsAngleLow",0.0);        
+    static public double getArmsDefaultVolts() {
+        return Preferences.getInstance().getDouble("AnkleVoltsDefault",
+                                                    getArmsVoltsUp());
     }
-    static public double getArmsAngleMid() {
-        return Preferences.getInstance().getDouble("ArmsAngleMid",45.0);        
+    static public double getArmsVoltsDown() {
+        return Preferences.getInstance().getDouble("ArmsVoltsDown",getArmsMinSensorVolts());        
     }
-    static public double getArmsAngleHigh() {
-        return Preferences.getInstance().getDouble("ArmsAngleHigh",90.0);        
+    static public double getArmsVoltsTeeup() {
+        return Preferences.getInstance().getDouble("ArmsVoltsTeeup",0.8);        
     }
-    static public double getArmsAngleUp() {
-        return Preferences.getInstance().getDouble("ArmsAngleUp",110.0);        
+    static public double getArmsVoltsHandoff() {
+        return Preferences.getInstance().getDouble("ArmsVoltsHandoff",0.7);        
+    }
+    static public double getArmsVoltsUp() {
+        return Preferences.getInstance().getDouble("ArmsVoltsUp",1.8);        
     }
     
-    /* Ankle Preferences */
+    //
+    // The jog amount is to move the arms just a little, and is used primarily for diagnostics
+    // and development purposes
+    //
     
-    // Physical Limits
-    
-    static public double getAnkleHeightInches() {
-        return Preferences.getInstance().getDouble("AnkleHeightInches",0.0);
-    }
-    static public double getAnkleBaselineInches() {
-        return Preferences.getInstance().getDouble("AnkleBaselineInches",6.0);
-    }
-    static public double getAnkleMinAngle() {
-        return Preferences.getInstance().getDouble("AnkleMinAngle", 0.0);
-    }
-    static public double getAnkleMaxAngle() {
-        return Preferences.getInstance().getDouble("AnkleMaxAngle", 90.0);
-    }
-    static public double getAnkleDefaultAngle() {
-        return Preferences.getInstance().getDouble("AnkleDefaultAngle",45.0);        
+    static public double getArmsJogAmount() {
+        return Preferences.getInstance().getDouble ("ArmsJogAmount", 0.1);
     }
 
-    // PID Controller Settings
-    
-    static public double getAnkleP() {
-        return Preferences.getInstance().getDouble("AnkleP", 0.1);
-    }
-    static public double getAnkleI() {
-        return Preferences.getInstance().getDouble("AnkleI", 0.01);
-    }
-    static public double getAnkleD() {
-        return Preferences.getInstance().getDouble("AnkleD", 0.0);
-    }
-    static public double getAnkleOnTargetToleranceDegrees() {
-        return Preferences.getInstance().getDouble("AnkleOnTargetToleranceDegrees", 3.0);
-    }
     
     /* Tensioner Preferences */
     
     // Physical Limits
     
-    static public double getTensionerMinDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerMinDistanceInches",6.0);
+    static public double getTensionerMinVolts() {
+        return Preferences.getInstance().getDouble("TensionerMinVolts",1.02);
     }
-    static public double getTensionerMaxDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerMaxDistanceInches",12.0);
+    static public double getTensionerMaxVolts() {
+        return Preferences.getInstance().getDouble("TensionerMaxVolts",3.8);
     }
 
     // PID Controller Settings
     
     static public double getTensionerP() {
-        return Preferences.getInstance().getDouble("TensionerP", 0.1);
+        return Preferences.getInstance().getDouble("TensionerP", 1.0);
     }
     static public double getTensionerI() {
-        return Preferences.getInstance().getDouble("TensionerI", 0.01);
+        return Preferences.getInstance().getDouble("TensionerI", 0.03);
     }
     static public double getTensionerD() {
         return Preferences.getInstance().getDouble("TensionerD", 0.0);
     }    
-    static public double getTensionerOnTargetToleranceInches() {
-        return Preferences.getInstance().getDouble("TensionerOnTargetToleranceInches", 0.25);
+    static public double getTensionerOnTargetToleranceVolts() {
+        return Preferences.getInstance().getDouble("TensionerOnTargetToleranceVolts", 0.02);
     }
     
     // States
     
-    static public double getTensionerLowDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerLowDistanceInches", 10.0);
+     static public double getTensionerSlackVolts() {
+        return Preferences.getInstance().getDouble("TensionerSlackVolts", getTensionerMinVolts());
     }
-    static public double getTensionerHighDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerHighDistanceInches", 6.0);
-    }
-    static public double getTensionerSlackDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerSlackDistanceInches", 12.0);
-    }
-    static public double getTensionerDefaultDistanceInches() {
-        return Preferences.getInstance().getDouble("TensionerDefaultDistanceInches",10.0);
+    static public double getTensionerDefaultVolts() {
+        return Preferences.getInstance().getDouble("TensionerDefaultVolts", getTensionerSlackVolts());
     }
 
     /* LegPreferences */
     
-    static public double getLegLatchedMotorSpeed() {
-        return Preferences.getInstance().getDouble("LegReadyMotorSpeed", 1.0);
-    }
-    static public double getLegUpdatePeriodSeconds() {
-        return Preferences.getInstance().getDouble("LegUpdatePeriodSeconds", 0.05);
+    static public double getLegMotorSpeed() {
+        return Preferences.getInstance().getDouble("LegMotorSpeed", 1.0);
     }
     
     /* Drive Preferences */
@@ -187,5 +169,23 @@ public class RobotPreferences {
     static public double getAutoRotateDefaultTargetDegrees() {
         return Preferences.getInstance().getDouble("AutoRotateDefaultTargetDegrees",6.0);
     }
+   
+    /* Ball Present Proximity Sensor */
+    
+    //
+    // If the ball present proximity sensor returns a value within these ranges, then the
+    // ball is present on the tee
+    //
+    
+    static public double ballPresentProximityMin()
+    {
+        return Preferences.getInstance().getDouble ("BallPresentProximityMin", 40.0);
+    }
+    
+    static public double ballPresentProximityMax()
+    {
+        return Preferences.getInstance().getDouble ("BallPresentProximityMax", 150.0);
+    }
+    
     
 }

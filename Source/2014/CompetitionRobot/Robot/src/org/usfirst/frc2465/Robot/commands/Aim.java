@@ -19,37 +19,9 @@ import org.usfirst.frc2465.Robot.Robot;
  */
 public class  Aim extends Command {
 
-    static int distanceToAngleMap[] = new int[] {
-        90,
-        88,
-        86,
-        84,
-        82,
-        80,
-        78,
-        76,
-        74,
-        72,
-        70,
-        68,
-        66,
-        64,
-        62,
-        60,
-        58,
-        56,
-        54,
-        52,
-        50,
-        48,
-        46,
-        44,
-        42,
-        40,
-        38,
-        36,
-        34,
-        32
+    static int distanceToTensionMap[] = new int[] {
+        // TODO:  Calibrate tension based on distance values (in feet)
+        100 // NOTE:  This is a bogus, uncalibrated value
     };    
     
     public Aim() {
@@ -70,20 +42,20 @@ public class  Aim extends Command {
         // Get distance to wall from wall ranger
         double distance = Robot.wallRanger.getDistanceInches();
         // Calculate ankle angle
-        double ankle_angle = (double)getAngleFromDistance((int) distance/12);
+        double tension_value = (double)getTensionFromDistance((int) distance/12);
         // Set the ankle to the specified angle
-        Robot.ankle.setSetpoint(ankle_angle);
+        // TODO: Request tension value change
     }
 
-    public int getAngleFromDistance(int distance_feet) {
+    public int getTensionFromDistance(int distance_feet) {
         if ( distance_feet < 0 ) {
-            return distanceToAngleMap[0];
+            return distanceToTensionMap[0];
         }
-        else if ( distance_feet >= distanceToAngleMap.length ) {
-            return distanceToAngleMap[distanceToAngleMap.length-1];
+        else if ( distance_feet >= distanceToTensionMap.length ) {
+            return distanceToTensionMap[distanceToTensionMap.length-1];
         }
         else {
-            return distanceToAngleMap[distance_feet];
+            return distanceToTensionMap[distance_feet];
         }
     }
     
