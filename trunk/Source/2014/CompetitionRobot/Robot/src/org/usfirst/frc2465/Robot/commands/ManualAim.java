@@ -39,19 +39,10 @@ public class  ManualAim extends Command {
         // Read angle in degrees from the joystick
         Joystick shooter = Robot.oi.getShooterJoystick();
         double throttle = shooter.getThrottle();
-        double min_angle = RobotPreferences.getAnkleMinAngle();
-        double max_angle = RobotPreferences.getAnkleMaxAngle();
-        
-        double angle_range = max_angle - min_angle;
-        
-        double angle_scale_factor = angle_range / 2.0;
-        
         // convert throttle value from -1 to 1 range to 0 to 2
-        throttle += 1;
-        
-        double ankle_angle = min_angle + (throttle * angle_scale_factor);
-        
-        Robot.ankle.setSetpoint(ankle_angle);
+        throttle += 1;        
+
+        // TODO:  Modify the tensioner tension level
     }
 
     // Make this return true when this Command no longer needs to run execute()

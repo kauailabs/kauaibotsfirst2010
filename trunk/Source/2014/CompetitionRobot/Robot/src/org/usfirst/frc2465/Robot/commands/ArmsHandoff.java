@@ -11,16 +11,19 @@
 
 package org.usfirst.frc2465.Robot.commands;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
 import org.usfirst.frc2465.Robot.RobotPreferences;
+import org.usfirst.frc2465.Robot.subsystems.Arms;
 
 /**
  *
  */
-public class  ArmLow extends Command {
+public class  ArmsHandoff extends Command {
 
-    public ArmLow() {
+    
+    public ArmsHandoff() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 	
@@ -29,8 +32,10 @@ public class  ArmLow extends Command {
     }
 
     // Called just before this Command runs the first time
+    
     protected void initialize() {
-        Robot.arms.setSetpoint(RobotPreferences.getArmsAngleLow());
+        Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsHandoff());
+        Robot.arms.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -39,7 +44,7 @@ public class  ArmLow extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.arms.onTarget();
     }
 
     // Called once after isFinished returns true

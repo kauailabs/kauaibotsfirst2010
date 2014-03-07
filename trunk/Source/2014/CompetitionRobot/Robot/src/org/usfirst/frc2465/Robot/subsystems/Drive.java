@@ -218,13 +218,13 @@ public class Drive extends PIDSubsystem {
         double curr_gyro_angle_degrees = 0;
         if ( fod_enable && imu_connected ) 
         {
-                curr_gyro_angle_degrees = imu.getYaw();
+            curr_gyro_angle_degrees = imu.getYaw();
         }
         double curr_gyro_angle_radians = curr_gyro_angle_degrees * Math.PI/180;       
         
-        double temp = vY * Math.cos( curr_gyro_angle_radians ) + vX * Math.sin( curr_gyro_angle_radians);
-        vX = -vY * Math.sin( curr_gyro_angle_radians ) + vX * Math.cos( curr_gyro_angle_radians );
-        vY = temp;     
+        double temp = vX * Math.cos( curr_gyro_angle_radians ) + vY * Math.sin( curr_gyro_angle_radians );
+        vY = -vX * Math.sin( curr_gyro_angle_radians ) + vY * Math.cos( curr_gyro_angle_radians );
+        vX = temp;
         
         try {
             double excessRatio = (double)1.0 / ( Math.abs(vX) + Math.abs(vY) + Math.abs(vRot) );

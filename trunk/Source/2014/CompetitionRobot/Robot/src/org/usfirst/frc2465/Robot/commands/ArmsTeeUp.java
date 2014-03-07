@@ -18,9 +18,9 @@ import org.usfirst.frc2465.Robot.RobotPreferences;
 /**
  *
  */
-public class  ArmMid extends Command {
+public class  ArmsTeeUp extends Command {
 
-    public ArmMid() {
+    public ArmsTeeUp() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 	
@@ -30,7 +30,8 @@ public class  ArmMid extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        Robot.arms.setSetpoint(RobotPreferences.getArmsAngleMid());
+        Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsTeeup());
+        Robot.arms.enable();        
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -39,7 +40,7 @@ public class  ArmMid extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.arms.onTarget();        
     }
 
     // Called once after isFinished returns true
