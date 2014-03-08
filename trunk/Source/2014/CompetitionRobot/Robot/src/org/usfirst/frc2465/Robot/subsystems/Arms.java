@@ -20,7 +20,10 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc2465.Robot.RobotPreferences;
 
-
+/*****************************************************************/
+/* IMPORTANT:  Positive Motor voltage -> lower position (volts)  */
+/*             Negative Motor voltage -> higher position (volts) */
+/*****************************************************************/
 /**
  *
  */
@@ -76,7 +79,8 @@ public class Arms extends PIDSubsystem {
         
         // Start the PID Controller
         
-        // TODO:  Enable this after PID tuning is complete.
+        // NOTE:  The PID Controller for the arms should *always*
+        // be enabled.
         
         enable();
     }
@@ -167,6 +171,11 @@ public class Arms extends PIDSubsystem {
     */
     
     protected void usePIDOutput(double output) {
+        
+        //
+        // Important:  invert the motor polarity!
+        //             (Positive Motor Voltage -> Lower Position)
+        //
         
         output = -output;
         

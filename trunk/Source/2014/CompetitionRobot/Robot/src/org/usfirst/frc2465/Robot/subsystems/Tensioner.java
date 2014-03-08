@@ -8,6 +8,10 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
+/*****************************************************************/
+/* IMPORTANT:  Positive Motor voltage -> lower tension (volts)  */
+/*             Negative Motor voltage -> higher tension (volts) */
+/*****************************************************************/
 
 package org.usfirst.frc2465.Robot.subsystems;
 
@@ -129,6 +133,11 @@ public class Tensioner extends PIDSubsystem {
     // not be used.
     
     protected void usePIDOutput(double output) {
+        
+        //
+        // Important:  invert the motor polarity!
+        //             (Positive Motor Voltage -> Lower Tension)
+        //
         
         output = -output;
         
