@@ -15,6 +15,7 @@ import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotMap;
 
 /**
  *
@@ -96,17 +97,47 @@ public class  StickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         
-        JoystickResponseCurveSet current = linear;
+        JoystickResponseCurveSet current = conservative;
         
         Joystick driver = Robot.oi.driverJoystick;
+        Joystick shooter = Robot.oi.shooterJoystick;
         double vX = driver.getX();
         double vY = driver.getY();
         vY = vY * -1;   // invert
         double vRot = driver.getRawAxis(4);
                          
+        boolean rotate_to_target = shooter.getRawButton(11);
+        
         vX = current.transformStrafe(vX);
         vY = current.transformForward(vY);
         vRot = current.transformRotate(vRot);
+        
+        /*
+        boolean auto_rotation = Robot.drive.getAutoRotation();
+        if ( rotate_to_target ) {
+            if ( !auto_rotation ) {
+                Robot.drive.setSetpoint(0.0);
+                Robot.drive.setAutoRotation(true);
+            }
+        }
+        else if ( auto_rotation ) {
+            Robot.drive.setAutoRotation(false);
+        }
+        */
+        
+        if ( driver.getRawButton(4) )
+        {
+            RobotMap.imu.zeroYaw();
+        }
+        
+        if ( driver.getRawButton(5))
+        {
+            Robot.drive.setFODEnabled(true);
+        }
+        if ( driver.getRawButton(3))
+        {
+            Robot.drive.setFODEnabled(false);
+        }        
         
         System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);
         Robot.drive.doMecanum(vY,vX,vRot);
