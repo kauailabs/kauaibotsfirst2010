@@ -102,6 +102,10 @@ public class Tensioner extends PIDSubsystem {
         return sensor.getAverageVoltage();
     }
     
+    public boolean isEnabled() {
+        return this.getPIDController().isEnable();
+    }
+    
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
