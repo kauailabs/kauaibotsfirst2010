@@ -131,28 +131,41 @@ public class Robot extends IterativeRobot {
     
     int count = 0;
     public void updateDashboard() {
+     
+        // Drive
         
-        // This is a single-line comment
-        
-        /*
-         This a multiple-line comment
-        */
-        
-        SmartDashboard.putBoolean("IMU_Connected", RobotMap.imu.isConnected());
-        SmartDashboard.putNumber( "IMU_Yaw", RobotMap.imu.getYaw());
+        SmartDashboard.putBoolean("IMU_Connected",      RobotMap.imu.isConnected());
+        SmartDashboard.putNumber( "IMU_Yaw",            RobotMap.imu.getYaw());
         SmartDashboard.putNumber( "IMU_CompassHeading", RobotMap.imu.getCompassHeading());
-        SmartDashboard.putBoolean("ArmsDown", Robot.arms.getPosition() == Arms.kPositionDown);
-        SmartDashboard.putBoolean("ArmsTeeUp", Robot.arms.getPosition() == Arms.kPositionTeeUp);
-        SmartDashboard.putBoolean("ArmsHandoff", Robot.arms.getPosition() == Arms.kPositionHandoff);
-        SmartDashboard.putBoolean("ArmsUp", Robot.arms.getPosition() == Arms.kPositionUp);
-        SmartDashboard.putNumber( "ArmsRaw", Robot.arms.getPosition());
-        SmartDashboard.putBoolean("TensionReady", Robot.tensioner.onTarget());
-        SmartDashboard.putNumber( "TensionRaw", Robot.tensioner.getTensionLevel());
-        SmartDashboard.putNumber( "TensionDistance", 0.0 /*TODO:  Get value from tensioner subsystem*/);
+        SmartDashboard.putBoolean("FOD_Enabled",        false /*Robot.drive.getFODEnabled()*/);
+        
+        // Arms
+        
+        SmartDashboard.putBoolean("ArmsReady",          Robot.arms.onTarget());
+        SmartDashboard.putNumber( "ArmsRaw",            Robot.arms.getPosition());
+        SmartDashboard.putBoolean("ArmsDown",           Robot.arms.getPosition() == Arms.kPositionDown);
+        SmartDashboard.putBoolean("ArmsTeeUp",          Robot.arms.getPosition() == Arms.kPositionTeeUp);
+        SmartDashboard.putBoolean("ArmsHandoff",        Robot.arms.getPosition() == Arms.kPositionHandoff);
+        SmartDashboard.putBoolean("ArmsUp",             Robot.arms.getPosition() == Arms.kPositionUp);
+        
+        // Tensioner
+        
+        SmartDashboard.putBoolean("TensionReady",       Robot.tensioner.onTarget());
+        SmartDashboard.putNumber( "TensionRaw",         Robot.tensioner.getTensionLevel());
+        SmartDashboard.putNumber( "TensionDistance",    0.0 /*TODO:  Get value from tensioner subsystem*/);
+
+        // Kicker
+        
         SmartDashboard.putBoolean("LegLatchedAndReady", Robot.kicker.isLegLatchedAndRetractorReady());
-        SmartDashboard.putBoolean("AimReady",true /*TODO:  Get value from drive subystem */);
-        SmartDashboard.putBoolean("FOD_Enabled", false /*Robot.drive.getFODEnabled()*/);
-        SmartDashboard.putBoolean("BallPresent", Robot.kicker.isBallPresent());
-     }
-    
+        SmartDashboard.putBoolean("TriggerReady",       Robot.kicker.isTriggerReady());
+        SmartDashboard.putBoolean("BallPresent",        Robot.kicker.isBallPresent());
+
+        // Targeting (camera/wall ranger)
+        
+        SmartDashboard.putBoolean("TargetHot",          false /* TODO:  Get value from camera */);
+        SmartDashboard.putNumber( "TargetDistance",     0.0 );
+        SmartDashboard.putNumber( "TargetAngle",        0.0 );
+        SmartDashboard.putBoolean("AimReady",           true /*TODO:  Get value from drive subystem */);        
+     
+    }
 }
