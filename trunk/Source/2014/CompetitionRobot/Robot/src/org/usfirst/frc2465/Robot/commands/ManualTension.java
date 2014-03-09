@@ -37,12 +37,16 @@ public class  ManualTension extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         
+        // Don't allow manual tensioning if leg is  not 
+        //  latched and ready.
+        if ( !Robot.kicker.isLegLatchedAndRetractorReady() ) return;
+        
         Joystick stick = Robot.oi.shooterJoystick;
         double throttle = stick.getThrottle();
 
         // map from stick range (-1 to 1) to tension range (min-max)
       
-        double throttle_percent = (throttle + 2.0) / 2.0;
+        double throttle_ratio = (throttle + 2.0) / 2.0;
         
         // Throttle is now a value from 0 to 1
         
@@ -53,7 +57,7 @@ public class  ManualTension extends Command {
         
         // mx+b
         
-        double tension_level = (throttle_percent * tension_range) + tension_min;        
+        double tension_level = (throttle_ratio * tension_range) + tension_min;        
         Robot.tensioner.setSetpoint(tension_level);
         if ( !Robot.tensioner.isEnabled() && !Robot.tensioner.onTarget()) {
             Robot.tensioner.enable();

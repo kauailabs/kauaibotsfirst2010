@@ -102,17 +102,17 @@ public class  StickDrive extends Command {
         Joystick driver = Robot.oi.driverJoystick;
         Joystick shooter = Robot.oi.shooterJoystick;
         double vX = driver.getX();
-        double vY = driver.getY();
-        vY = vY * -1;   // invert
+        double vY = driver.getY() * -1; // invert Y, which is reversed on stick
         double vRot = driver.getRawAxis(4);
-                         
-        boolean rotate_to_target = shooter.getRawButton(11);
+
+        System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);        
         
         vX = current.transformStrafe(vX);
         vY = current.transformForward(vY);
         vRot = current.transformRotate(vRot);
         
-        /*
+        boolean rotate_to_target = driver.getRawButton(11); // shooter.getRawButton(11);
+        
         boolean auto_rotation = Robot.drive.getAutoRotation();
         if ( rotate_to_target ) {
             if ( !auto_rotation ) {
@@ -123,7 +123,6 @@ public class  StickDrive extends Command {
         else if ( auto_rotation ) {
             Robot.drive.setAutoRotation(false);
         }
-        */
         
         if ( driver.getRawButton(4) )
         {
@@ -139,8 +138,7 @@ public class  StickDrive extends Command {
             Robot.drive.setFODEnabled(false);
         }        
         
-        System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);
-        Robot.drive.doMecanum(vY,vX,vRot);
+        Robot.drive.doMecanum(vX,vY,vRot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
