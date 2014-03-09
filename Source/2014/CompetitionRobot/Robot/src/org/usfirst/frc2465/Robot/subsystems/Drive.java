@@ -40,11 +40,6 @@ public class Drive extends PIDSubsystem {
     static final double wheelDiameter   = 6.0;                  // Per AndyMark Specs
     static final double wheelRadius     = wheelDiameter / 2;
 
-    static final int VX    = 0;
-    static final int VY    = 1;
-    static final int VROT  = 2;
-
-    public static final int ROTATE_DIRECTION  = -1;
     public static final int DRIVE_DIRECTION = -1;    
     
 /////////////////////////////////////////////////////////////////////////////////////
@@ -59,19 +54,22 @@ public class Drive extends PIDSubsystem {
 //////////////////////////////////////////////////////////
 
     static final double cRotK = ((cWidth + cLength)/2) / wheelRadius;               // Rotational Coefficient
-
+    /*
     static double invMatrix[][] = new double[][] {
         {  -1, 1,  cRotK },
         {   1, 1, -cRotK },
         {   1, 1,  cRotK },
         {  -1, 1, -cRotK },        
-    };
+    };*/
        
-    static final int WHEEL_FRONTLEFT       = 2;
-    static final int WHEEL_FRONTRIGHT      = 3;
-    static final int WHEEL_REARLEFT        = 4;
-    static final int WHEEL_REARRIGHT       = 5;    
     
+    static double invMatrix[][] = new double[][] {
+        {   1, 1,  cRotK },
+        {  -1, 1, -cRotK },
+        {  -1, 1,  cRotK },
+        {   1, 1, -cRotK },        
+    };
+
     CANJaguar.ControlMode currControlMode;
     int maxOutputSpeed;
     int maxSpeedModeRPMs;    
@@ -83,7 +81,7 @@ public class Drive extends PIDSubsystem {
                 RobotPreferences.getAutoRotateI(),
                 RobotPreferences.getAutoRotateD());
         try {
-            getPIDController().setContinuous(false);
+            getPIDController().setContinuous(true);
             getPIDController().setInputRange(0,360);
             getPIDController().setOutputRange(-1, 1);
             tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
@@ -221,17 +219,15 @@ public class Drive extends PIDSubsystem {
             curr_gyro_angle_degrees = imu.getYaw();
         }
         double curr_gyro_angle_radians = curr_gyro_angle_degrees * Math.PI/180;       
-        
-        double temp = vX * Math.cos( curr_gyro_angle_radians ) + vY * Math.sin( curr_gyro_angle_radians );
-        vY = -vX * Math.sin( curr_gyro_angle_radians ) + vY * Math.cos( curr_gyro_angle_radians );
-        vX = temp;
-        
+        double temp = vY * Math.cos( curr_gyro_angle_radians ) + vX * Math.sin( curr_gyro_angle_radians );
+        vX = -vY * Math.sin( curr_gyro_angle_radians ) + vX * Math.cos( curr_gyro_angle_radians );
+        vY = temp;
         try {
             double excessRatio = (double)1.0 / ( Math.abs(vX) + Math.abs(vY) + Math.abs(vRot) );
             if ( excessRatio < 1.0 )
             {
-                vX              *= excessRatio;
-                vY              *= excessRatio;
+                vX      *= excessRatio;
+                vY      *= excessRatio;
                 vRot    *= excessRatio;
             }
             
@@ -257,7 +253,7 @@ public class Drive extends PIDSubsystem {
             leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
             rightRearSC.set(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
             
-            System.out.println("LF: " + leftFrontSC.get() + "LR: " + leftRearSC.get() + "RF: " + rightFrontSC.get() + "RR: " + rightRearSC.get());
+            //System.out.println("LF: " + leftFrontSC.get() + "LR: " + leftRearSC.get() + "RF: " + rightFrontSC.get() + "RR: " + rightRearSC.get());
             
             CANJaguar.updateSyncGroup(syncGroup);
         } catch (CANTimeoutException ex) {

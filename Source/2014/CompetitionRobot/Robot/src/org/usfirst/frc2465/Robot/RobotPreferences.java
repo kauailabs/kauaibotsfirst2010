@@ -34,7 +34,7 @@ public class RobotPreferences {
     // PID Controller Settings
     
     static public double getArmsOnTargetToleranceVolts() {
-        return Preferences.getInstance().getDouble("AnkleOnTargetToleranceVolts", 0.1 );
+        return Preferences.getInstance().getDouble("ArmsOnTargetToleranceVolts", 0.1 );
     }
     static public double getArmsPGrab() {
         return Preferences.getInstance().getDouble("ArmsGrabP", 0.7);
@@ -76,7 +76,7 @@ public class RobotPreferences {
     // States
     
     static public double getArmsDefaultVolts() {
-        return Preferences.getInstance().getDouble("AnkleVoltsDefault",
+        return Preferences.getInstance().getDouble("ArmsVoltsDefault",
                                                     getArmsVoltsUp());
     }
     static public double getArmsVoltsDown() {
@@ -119,7 +119,7 @@ public class RobotPreferences {
         return Preferences.getInstance().getDouble("TensionerP", 1.0);
     }
     static public double getTensionerI() {
-        return Preferences.getInstance().getDouble("TensionerI", 0.03);
+        return Preferences.getInstance().getDouble("TensionerI", 0.4);
     }
     static public double getTensionerD() {
         return Preferences.getInstance().getDouble("TensionerD", 0.0);
@@ -152,13 +152,13 @@ public class RobotPreferences {
     // PID Controller Settings
     
     static public double getAutoRotateP() {
-        return Preferences.getInstance().getDouble("AutoRotateP", 1.0);
+        return Preferences.getInstance().getDouble("AutoRotateP", 0.012);
     }
     static public double getAutoRotateI() {
-        return Preferences.getInstance().getDouble("AutoRotateI", 1.0);
+        return Preferences.getInstance().getDouble("AutoRotateI", 0.0005);
     }
     static public double getAutoRotateD() {
-        return Preferences.getInstance().getDouble("AutoRotateD", 1.0);
+        return Preferences.getInstance().getDouble("AutoRotateD", 0.0);
     }
     static public double getAutoRotateOnTargetToleranceDegrees() {
         return Preferences.getInstance().getDouble("AutoRotateOnTargetToleranceDegrees",1.0);
@@ -167,7 +167,7 @@ public class RobotPreferences {
     //States
     
     static public double getAutoRotateDefaultTargetDegrees() {
-        return Preferences.getInstance().getDouble("AutoRotateDefaultTargetDegrees",6.0);
+        return Preferences.getInstance().getDouble("AutoRotateDefaultTargetDegrees",0.0);
     }
    
     /* Ball Present Proximity Sensor */
@@ -179,7 +179,7 @@ public class RobotPreferences {
     
     static public double ballPresentProximityMin()
     {
-        return Preferences.getInstance().getDouble ("BallPresentProximityMin", 40.0);
+        return Preferences.getInstance().getDouble ("BallPresentProximityMin", 20.0);
     }
     
     static public double ballPresentProximityMax()

@@ -63,6 +63,7 @@ public class OI {
     public JoystickButton armHandoffBtn;
     public JoystickButton armUpBtn;
     public JoystickButton zeroYawBtn;
+    public JoystickButton manualTensionEnableBtn;
     public Joystick driverJoystick;
     public JoystickButton rotateToTargetBtn;
     public JoystickButton fireBtn;
@@ -88,6 +89,8 @@ public class OI {
         fireBtn.whenPressed(new Kick());
         rotateToTargetBtn = new JoystickButton(shooterJoystick, 11);
         rotateToTargetBtn.whileHeld(new RotateToTarget());
+        manualTensionEnableBtn = new JoystickButton(shooterJoystick,2);
+        manualTensionEnableBtn.whenPressed(new ManualTension());
         driverJoystick = new Joystick(1);
         
         armUpBtn = new JoystickButton(driverJoystick, 9);

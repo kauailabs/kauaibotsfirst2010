@@ -137,7 +137,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("IMU_Connected",      RobotMap.imu.isConnected());
         SmartDashboard.putNumber( "IMU_Yaw",            RobotMap.imu.getYaw());
         SmartDashboard.putNumber( "IMU_CompassHeading", RobotMap.imu.getCompassHeading());
-        SmartDashboard.putBoolean("FOD_Enabled",        false /*Robot.drive.getFODEnabled()*/);
+        SmartDashboard.putBoolean("FOD_Enabled",        Robot.drive.getFODEnabled() );
         
         // Arms
         
@@ -159,7 +159,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("LegLatchedAndReady", Robot.kicker.isLegLatchedAndRetractorReady());
         SmartDashboard.putBoolean("TriggerReady",       Robot.kicker.isTriggerReady());
         SmartDashboard.putBoolean("BallPresent",        Robot.kicker.isBallPresent());
-
+        SmartDashboard.putNumber( "BallReading",        RobotMap.ballPresentSensor.getDistanceMM());
         // Targeting (camera/wall ranger)
         
         SmartDashboard.putBoolean("TargetHot",          false /* TODO:  Get value from camera */);
