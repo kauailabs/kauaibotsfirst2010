@@ -95,12 +95,41 @@ public class Robot extends IterativeRobot {
     }
     
     public void updateDashboard() {
-        SmartDashboard.putBoolean("IMU_Connected", RobotMap.imu.isConnected());
-        SmartDashboard.putNumber("IMU_Yaw", RobotMap.imu.getYaw());
-        SmartDashboard.putNumber("IMU_Pitch", RobotMap.imu.getPitch());
-        SmartDashboard.putNumber("IMU_Roll", RobotMap.imu.getRoll());
-        SmartDashboard.putNumber("IMU_CompassHeading", RobotMap.imu.getCompassHeading());
-        SmartDashboard.putBoolean("FOD_Enabled", Robot.drive.getFODEnabled());
-     }
+        // Drive
+        
+        SmartDashboard.putBoolean("IMU_Connected",      RobotMap.imu.isConnected());
+        SmartDashboard.putNumber( "IMU_Yaw",            RobotMap.imu.getYaw());
+        SmartDashboard.putNumber( "IMU_CompassHeading", RobotMap.imu.getCompassHeading());
+        SmartDashboard.putBoolean("FOD_Enabled",        Robot.drive.getFODEnabled() );
+        
+        // Arms
+        
+        SmartDashboard.putBoolean("ArmsReady",          false);
+        SmartDashboard.putNumber( "ArmsRaw",            2.7);
+        SmartDashboard.putBoolean("ArmsDown",           false);
+        SmartDashboard.putBoolean("ArmsTeeUp",          true);
+        SmartDashboard.putBoolean("ArmsHandoff",        false);
+        SmartDashboard.putBoolean("ArmsUp",             false);
+        
+        // Tensioner
+        
+        SmartDashboard.putBoolean("TensionReady",       true);
+        SmartDashboard.putNumber( "TensionRaw",         3.2);
+        SmartDashboard.putNumber( "TensionDistance",    18.2);
+
+        // Kicker
+        
+        SmartDashboard.putBoolean("LegLatchedAndReady", true);
+        SmartDashboard.putBoolean("TriggerReady",       true);
+        SmartDashboard.putBoolean("BallPresent",        true);
+        SmartDashboard.putNumber( "BallReading",        50.3);
+                
+        // Targeting (camera/wall ranger)
+        
+        SmartDashboard.putBoolean("TargetHot",          false /* TODO:  Get value from camera */);
+        SmartDashboard.putNumber( "TargetDistance",     16.3 );
+        SmartDashboard.putNumber( "TargetAngle",        3.2 );
+        SmartDashboard.putBoolean("AimReady",           true /*TODO:  Get value from drive subystem */);        
+      }
     
 }
