@@ -177,15 +177,27 @@ public class RobotPreferences {
     // ball is present on the tee
     //
     
-    static public double ballPresentProximityMin()
+    static public double getBallPresentProximityMin()
     {
         return Preferences.getInstance().getDouble ("BallPresentProximityMin", 20.0);
     }
     
-    static public double ballPresentProximityMax()
+    static public double getBallPresentProximityMax()
     {
         return Preferences.getInstance().getDouble ("BallPresentProximityMax", 150.0);
     }
     
+    /* Tensioner Ranging */
+    // Distance (in feet) to voltage
+    // To calculate voltage, v = Multiplier * exp( Exponent * x )
     
+    static public double getTensionFeetToVoltsMultipler()
+    {
+        return Preferences.getInstance().getDouble( "TensionFeetToVoltsMultiplier", .5);
+    }
+    
+    static public double getTensionFeedToVoltsExponent()
+    {
+        return Preferences.getInstance().getDouble( "TensionFeetToVoltsExponent", .4 );
+    }
 }

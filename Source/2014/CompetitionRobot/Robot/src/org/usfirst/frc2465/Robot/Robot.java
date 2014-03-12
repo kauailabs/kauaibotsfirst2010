@@ -160,6 +160,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("TriggerReady",       Robot.kicker.isTriggerReady());
         SmartDashboard.putBoolean("BallPresent",        Robot.kicker.isBallPresent());
         SmartDashboard.putNumber( "BallReading",        RobotMap.ballPresentSensor.getDistanceMM());
+                
         // Targeting (camera/wall ranger)
         
         SmartDashboard.putBoolean("TargetHot",          false /* TODO:  Get value from camera */);

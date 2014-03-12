@@ -129,8 +129,8 @@ public class Kicker extends Subsystem {
         return present;
     }
     
-    double ball_present_proximity_min = RobotPreferences.ballPresentProximityMin();
-    double ball_present_proximity_max = RobotPreferences.ballPresentProximityMax();
+    double ball_present_proximity_min = RobotPreferences.getBallPresentProximityMin();
+    double ball_present_proximity_max = RobotPreferences.getBallPresentProximityMax();
     
 }
 
