@@ -47,6 +47,7 @@ public class RobotMap {
     public static AnalogChannel tensionerSensor;
     public static Relay legTriggerMotorRelay;
     public static SpeedController armsSC;
+    public static SpeedController armsRotationSC;
     public static DigitalInput armsMin;
     public static DigitalInput armsMax;
     public static AnalogChannel armsSensor;
@@ -141,6 +142,9 @@ public class RobotMap {
         
         armsSC = new Talon(1, 3);
 	LiveWindow.addActuator("Arms", "SC", (Talon) armsSC);
+        
+        armsRotationSC = new Talon(1,2);
+        LiveWindow.addActuator("Arms", "RotationSC", (Talon)armsRotationSC);
         
         armsMin = new DigitalInput(1, 7);
 	LiveWindow.addSensor("Arms", "Min", armsMin);
