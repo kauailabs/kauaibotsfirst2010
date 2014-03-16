@@ -86,11 +86,11 @@ public class OI {
         aimBtn = new JoystickButton(shooterJoystick, 10);
         aimBtn.whileHeld(new Aim());
         fireBtn = new JoystickButton(shooterJoystick, 1);
-        fireBtn.whenPressed(new Kick());
+        fireBtn.whenPressed(new KickAndReload());
         rotateToTargetBtn = new JoystickButton(shooterJoystick, 11);
         rotateToTargetBtn.whileHeld(new RotateToTarget());
         manualTensionEnableBtn = new JoystickButton(shooterJoystick,2);
-        manualTensionEnableBtn.whenPressed(new ManualTension());
+        manualTensionEnableBtn.whileHeld(new ManualTension());
         driverJoystick = new Joystick(1);
         
         armUpBtn = new JoystickButton(driverJoystick, 9);

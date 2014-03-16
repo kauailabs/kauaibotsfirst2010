@@ -105,7 +105,7 @@ public class  StickDrive extends Command {
         double vY = driver.getY() * -1; // invert Y, which is reversed on stick
         double vRot = driver.getRawAxis(4);
 
-        System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);        
+        //System.out.println("X: " + vX + " Y: " + vY + " Rot: " + vRot);        
         
         vX = current.transformStrafe(vX);
         vY = current.transformForward(vY);

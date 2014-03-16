@@ -104,6 +104,10 @@ public class Kicker extends Subsystem {
         return triggerReady.get();
     }
     
+    public boolean isLegLatched() {
+        return this.latched.get();
+    }
+    
     public boolean isLegLatchedAndRetractorReady() {
         return (this.latched.get() && this.ready.get());
     }
