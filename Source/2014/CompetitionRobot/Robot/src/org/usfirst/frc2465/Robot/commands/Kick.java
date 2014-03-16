@@ -14,6 +14,7 @@ package org.usfirst.frc2465.Robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotPreferences;
 import org.usfirst.frc2465.Robot.subsystems.Kicker;
 import org.usfirst.frc2465.Robot.subsystems.Tensioner;
 
@@ -53,6 +54,7 @@ public class  Kick extends Command {
                      Robot.kicker.isBallPresent() ) {
                     trigger_motor_start = Timer.getFPGATimestamp();
                     Robot.kicker.startTriggerMotor();
+                    Robot.arms.setSetpoint(RobotPreferences.getArmsIGrab());
                     state = kStateTriggerMotorStarted;
                 } else {
                     state = kStateDone;
@@ -60,7 +62,7 @@ public class  Kick extends Command {
                 break;
             case kStateTriggerMotorStarted:
                 if ( ( ( Timer.getFPGATimestamp() - trigger_motor_start ) > 0.2 ) && 
-                        Robot.kicker.isTriggerReady() ) {
+                        !Robot.kicker.isLegLatched() ) {
                     Robot.kicker.stopTriggerMotor();
                     state = kStateTriggerMotorStopped;
                     settle_period_start = Timer.getFPGATimestamp();

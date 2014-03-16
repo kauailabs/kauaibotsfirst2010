@@ -165,8 +165,8 @@ public class Arms extends PIDSubsystem {
     
     protected double returnPIDInput() {
         double avg_voltage = sensor.getAverageVoltage();
-        if ( avg_voltage < .95 ) {
-            this.rotationSC.set(-.5);
+        if ( avg_voltage < 2.3 ) {
+            this.rotationSC.set(-.7);
         } else {
             this.rotationSC.set(0);
         }

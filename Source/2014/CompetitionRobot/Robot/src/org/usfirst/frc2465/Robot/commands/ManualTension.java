@@ -42,11 +42,11 @@ public class  ManualTension extends Command {
         if ( !Robot.kicker.isLegLatchedAndRetractorReady() ) return;
         
         Joystick stick = Robot.oi.shooterJoystick;
-        double throttle = stick.getThrottle();
+        double throttle = stick.getRawAxis(3);
 
         // map from stick range (-1 to 1) to tension range (min-max)
       
-        double throttle_ratio = (throttle + 2.0) / 2.0;
+        double throttle_ratio = (throttle + 1.0) / 2.0;
         
         // Throttle is now a value from 0 to 1
         
@@ -57,7 +57,8 @@ public class  ManualTension extends Command {
         
         // mx+b
         
-        double tension_level = (throttle_ratio * tension_range) + tension_min;        
+        double tension_level = (throttle_ratio * tension_range) + tension_min;
+        System.out.println("Throttle Ratio: " + throttle_ratio +  " Volts: " + tension_level);
         Robot.tensioner.setSetpoint(tension_level);
         if ( !Robot.tensioner.isEnabled() && !Robot.tensioner.onTarget()) {
             Robot.tensioner.enable();
