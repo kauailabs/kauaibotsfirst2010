@@ -197,7 +197,7 @@ public class Drive extends PIDSubsystem {
         }
     }    
 
-    boolean fod_enable = false;
+    boolean fod_enable = true;
     double next_autorotate_value = 0.0;
     
     public void doMecanum( double vX, double vY, double vRot) {
