@@ -12,14 +12,24 @@
 package org.usfirst.frc2465.Robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.usfirst.frc2465.Robot.Robot;
+import org.usfirst.frc2465.Robot.RobotPreferences;
 
 /**
  *
  */
-public class  Autonomous extends Command {
+public class  Autonomous extends CommandGroup {
 
     public Autonomous() {
+        this.addSequential(new PrepareToKick());
+        double voltage = RobotPreferences.getTensionerDefaultVolts();
+        boolean wait = true;
+        this.addSequential(new SetTension(voltage,wait));
+        this.addSequential(new WaitForCameraHot(), 3);
+        this.addSequential(new Kick());
+        this.addSequential(new AutoDrive(0, .5, 0), 2);
+        
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 	
