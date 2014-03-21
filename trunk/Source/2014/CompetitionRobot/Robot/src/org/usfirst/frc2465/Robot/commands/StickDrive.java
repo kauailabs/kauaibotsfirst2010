@@ -73,14 +73,14 @@ public class  StickDrive extends Command {
             new JoystickResponseCurve( .00, 3, 1.0, DEADZONE ) );
     
     JoystickResponseCurveSet conservative = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, .50, 0 ),
-            new JoystickResponseCurve( .40, 3, .50, 0 ),
-            new JoystickResponseCurve( .40, 3, .35, 0 ) );
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .35, DEADZONE ) );
 
     JoystickResponseCurveSet aggressive = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ) );
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ) );
     
     public StickDrive() {
         // Use requires() here to declare subsystem dependencies

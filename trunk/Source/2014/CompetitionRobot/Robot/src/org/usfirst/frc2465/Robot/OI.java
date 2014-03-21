@@ -112,7 +112,7 @@ public class OI {
 
         SmartDashboard.putData("Aim", new Aim());
 
-        SmartDashboard.putData("Fire", new Kick());
+        SmartDashboard.putData("Fire", new Kick(true));
 
         SmartDashboard.putData("ArmLow", new ArmsDown());
 

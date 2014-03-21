@@ -11,6 +11,7 @@
 
 package org.usfirst.frc2465.Robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc2465.Robot.Robot;
 import org.usfirst.frc2465.Robot.RobotPreferences;
@@ -39,7 +40,9 @@ public class  WaitForCameraHot extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-
+        if ( DriverStation.getInstance().getMatchTime() > 5.0 ) {
+            return true;
+        }
         return false;
     }
 

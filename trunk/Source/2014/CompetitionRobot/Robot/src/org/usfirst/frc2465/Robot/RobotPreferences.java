@@ -134,7 +134,7 @@ public class RobotPreferences {
         return Preferences.getInstance().getDouble("TensionerSlackVolts", getTensionerMinVolts());
     }
     static public double getTensionerDefaultVolts() {
-        return Preferences.getInstance().getDouble("TensionerDefaultVolts", getTensionerSlackVolts());
+        return Preferences.getInstance().getDouble("TensionerDefaultVolts", 3.4);
     }
 
     /* LegPreferences */
