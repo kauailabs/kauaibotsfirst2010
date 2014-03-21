@@ -27,8 +27,12 @@ public class  Autonomous extends CommandGroup {
         boolean wait = true;
         this.addSequential(new SetTension(voltage,wait));
         this.addSequential(new WaitForCameraHot(), 3);
-        this.addSequential(new Kick());
-        this.addSequential(new AutoDrive(0, .5, 0), 2);
+        this.addSequential(new Kick(false));
+        this.addParallel(new AutoDrive(0.75, 0, 0), 1);
+        this.addParallel(new PrepareToKick());
+        this.addParallel(new ArmsDown());
+        
+                
         
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

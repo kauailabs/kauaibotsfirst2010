@@ -96,7 +96,7 @@ public class Drive extends PIDSubsystem {
             leftRearSC.getPowerCycled();
             rightRearSC.getPowerCycled();
             
-            maxSpeedModeRPMs = (int)(2650.0/12.75);
+            maxSpeedModeRPMs = (int)(4000.0/12.75);
             
             setMode( CANJaguar.ControlMode.kPercentVbus );
         } catch (CANTimeoutException ex) {
