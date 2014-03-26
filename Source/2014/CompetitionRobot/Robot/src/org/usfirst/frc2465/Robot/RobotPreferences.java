@@ -25,10 +25,10 @@ public class RobotPreferences {
     // Physical Limits
     
     static public double getArmsMaxSensorVolts() {
-        return Preferences.getInstance().getDouble("ArmsMaxSensorVolts",2.9);
+        return Preferences.getInstance().getDouble("ArmsMaxSensorVolts",2.7);
     }
     static public double getArmsMinSensorVolts() {
-        return Preferences.getInstance().getDouble("ArmsMinSensorVolts",1.6);        
+        return Preferences.getInstance().getDouble("ArmsMinSensorVolts",2.0);        
     }
     
     // PID Controller Settings
@@ -36,13 +36,13 @@ public class RobotPreferences {
     static public double getArmsOnTargetToleranceVolts() {
         return Preferences.getInstance().getDouble("ArmsOnTargetToleranceVolts", 0.1 );
     }
-    static public double getArmsPGrab() {
-        return Preferences.getInstance().getDouble("ArmsGrabP", 0.55);
+    static public double getArmsPDown() {
+        return Preferences.getInstance().getDouble("ArmsGrabP", 3.0);
     }
-    static public double getArmsIGrab() {
-        return Preferences.getInstance().getDouble("ArmsGrabI", 0.05);
+    static public double getArmsIDown() {
+        return Preferences.getInstance().getDouble("ArmsGrabI", 0.1);
     }
-    static public double getArmsDGrab() {
+    static public double getArmsDDown() {
         return Preferences.getInstance().getDouble("ArmsGrabD", 0.0);
     }
     static public double getArmsPLift() {
@@ -54,20 +54,20 @@ public class RobotPreferences {
     static public double getArmsDLift() {
         return Preferences.getInstance().getDouble("ArmsLiftD", 0.0);
     }
-    static public double getArmsPRetract() {
+    static public double getArmsPUp() {
         return Preferences.getInstance().getDouble("ArmsRetractP", 0.55);
     }
-    static public double getArmsIRetract() {
+    static public double getArmsIUp() {
         return Preferences.getInstance().getDouble("ArmsRetractI", 0.05);
     }
-    static public double getArmsDRetract() {
+    static public double getArmsDUp() {
         return Preferences.getInstance().getDouble("ArmsRetractD", 0.0);
     }
     static public double getArmsPHandoff() {
-        return Preferences.getInstance().getDouble("ArmsHandoffP", 0.5);
+        return Preferences.getInstance().getDouble("ArmsHandoffP", 3.0);
     }
     static public double getArmsIHandoff() {
-        return Preferences.getInstance().getDouble("ArmsHandoffI", 0.05);
+        return Preferences.getInstance().getDouble("ArmsHandoffI", 0.1);
     }
     static public double getArmsDHandoff() {
         return Preferences.getInstance().getDouble("ArmsHandoffD", 0.0);
@@ -80,16 +80,16 @@ public class RobotPreferences {
                                                     getArmsVoltsUp());
     }
     static public double getArmsVoltsDown() {
-        return Preferences.getInstance().getDouble("ArmsVoltsDown",2.1);        
+        return Preferences.getInstance().getDouble("ArmsVoltsDown",2.05);        
     }
     static public double getArmsVoltsTeeup() {
         return Preferences.getInstance().getDouble("ArmsVoltsTeeup",2.55);        
     }
     static public double getArmsVoltsHandoff() {
-        return Preferences.getInstance().getDouble("ArmsVoltsHandoff",2.55);        
+        return Preferences.getInstance().getDouble("ArmsVoltsHandoff",2.25);        
     }
     static public double getArmsVoltsUp() {
-        return Preferences.getInstance().getDouble("ArmsVoltsUp",3.3);        
+        return Preferences.getInstance().getDouble("ArmsVoltsUp",2.65);        
     }
     
     //
@@ -107,7 +107,7 @@ public class RobotPreferences {
     // Physical Limits
     
     static public double getTensionerMinVolts() {
-        return Preferences.getInstance().getDouble("TensionerMinVolts",1.03);
+        return Preferences.getInstance().getDouble("TensionerMinVolts",1.00);
     }
     static public double getTensionerMaxVolts() {
         return Preferences.getInstance().getDouble("TensionerMaxVolts",3.8);
@@ -116,10 +116,10 @@ public class RobotPreferences {
     // PID Controller Settings
     
     static public double getTensionerP() {
-        return Preferences.getInstance().getDouble("TensionerP", 2.3);
+        return Preferences.getInstance().getDouble("TensionerP", 0.65);
     }
     static public double getTensionerI() {
-        return Preferences.getInstance().getDouble("TensionerI", 0.2);
+        return Preferences.getInstance().getDouble("TensionerI", 0.013);
     }
     static public double getTensionerD() {
         return Preferences.getInstance().getDouble("TensionerD", 0.0);
@@ -135,6 +135,9 @@ public class RobotPreferences {
     }
     static public double getTensionerDefaultVolts() {
         return Preferences.getInstance().getDouble("TensionerDefaultVolts", 3.4);
+    }
+    static public double getTensionerAutonomousVolts() {
+        return Preferences.getInstance().getDouble("TensionerAutonomousVolts", 3.2);
     }
 
     /* LegPreferences */

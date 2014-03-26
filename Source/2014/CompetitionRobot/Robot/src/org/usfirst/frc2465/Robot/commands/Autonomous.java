@@ -23,16 +23,22 @@ public class  Autonomous extends CommandGroup {
 
     public Autonomous() {
         this.addSequential(new PrepareToKick());
-        double voltage = RobotPreferences.getTensionerDefaultVolts();
+        double voltage = RobotPreferences.getTensionerAutonomousVolts(); //RobotPreferences.getTensionerDefaultVolts();
         boolean wait = true;
-        this.addSequential(new SetTension(voltage,wait));
+        /*
+        this.addSequential(new SetTension(voltage,wait),3);
         this.addSequential(new WaitForCameraHot(), 3);
         this.addSequential(new Kick(false));
-        this.addParallel(new AutoDrive(0.75, 0, 0), 1);
+        this.addParallel(new AutoDrive(0.65, 0, 0), 1.5);
         this.addParallel(new PrepareToKick());
-        this.addParallel(new ArmsDown());
-        
-                
+        this.addParallel(new ArmsUp());
+        */
+        this.addSequential(new SetTension(voltage,false),3);
+        this.addSequential(new AutoDrive(0.45,0,0),2.0);
+        this.addSequential(new WaitForCameraHot(),3);
+        this.addSequential(new Kick(false));
+        this.addParallel(new PrepareToKick());
+        this.addParallel(new ArmsUp());
         
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

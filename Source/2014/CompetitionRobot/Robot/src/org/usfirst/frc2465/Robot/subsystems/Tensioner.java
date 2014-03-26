@@ -98,8 +98,10 @@ public class Tensioner extends PIDSubsystem {
 
     public boolean isDetensioned() {
         double curr_volts = sensor.getAverageVoltage();
-        return ( ( curr_volts > (slack_tension_volts - threshold_volts ) ) &&
-                 ( curr_volts < (slack_tension_volts + threshold_volts ) ) );
+        boolean on_target =  ( ( curr_volts > (slack_tension_volts - threshold_volts ) ) &&
+                             ( curr_volts < (slack_tension_volts + threshold_volts ) ) );
+        boolean at_min = leftMin.get();
+        return (on_target || at_min);
     }
     
     public double getTensionLevel() {

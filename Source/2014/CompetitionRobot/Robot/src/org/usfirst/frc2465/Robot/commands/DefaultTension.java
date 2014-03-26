@@ -25,6 +25,6 @@ public class  DefaultTension extends CommandGroup {
 
     public DefaultTension() {
 	addSequential(new SetTension(
-                2.4,true));
+                RobotPreferences.getTensionerDefaultVolts(),true));
     }
 }

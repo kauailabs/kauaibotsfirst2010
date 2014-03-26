@@ -111,7 +111,7 @@ public class  StickDrive extends Command {
         vY = current.transformForward(vY);
         vRot = current.transformRotate(vRot);
         
-        boolean rotate_to_target = driver.getRawButton(11); // shooter.getRawButton(11);
+        boolean rotate_to_target = driver.getRawButton(1); // shooter.getRawButton(11);
         
         boolean auto_rotation = Robot.drive.getAutoRotation();
         if ( rotate_to_target ) {

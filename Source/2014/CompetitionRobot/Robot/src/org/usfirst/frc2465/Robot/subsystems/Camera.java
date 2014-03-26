@@ -13,6 +13,7 @@ package org.usfirst.frc2465.Robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import org.usfirst.frc2465.Robot.RobotMap;
 import org.usfirst.frc2465.Robot.commands.*;
 
@@ -49,18 +50,18 @@ public class Camera extends Subsystem {
 
     //Camera constants used for distance calculation
     final int Y_IMAGE_RES = 480;		//X Image resolution in pixels, should be 120, 240 or 480
-    final double VIEW_ANGLE = 49;		//Axis M1013
+    //final double VIEW_ANGLE = 49;		//Axis M1013
     //final double VIEW_ANGLE = 41.7;		//Axis 206 camera
-    //final double VIEW_ANGLE = 37.4;  //Axis M1011 camera
+    final double VIEW_ANGLE = 37.4;  //Axis M1011 camera
     final double PI = 3.141592653;
 
     //Score limits used for target identification
-    final int  RECTANGULARITY_LIMIT = 40;
+    final int RECTANGULARITY_LIMIT = 40;
     final int ASPECT_RATIO_LIMIT = 55;
 
     //Score limits used for hot target determination
     final int TAPE_WIDTH_LIMIT = 50;
-    final int  VERTICAL_SCORE_LIMIT = 50;
+    final int VERTICAL_SCORE_LIMIT = 50;
     final int LR_SCORE_LIMIT = 50;
 
     //Minimum area of particles to be considered
@@ -89,8 +90,8 @@ public class Camera extends Subsystem {
 		double verticalScore;
     };    
     
-    public void Camera() {
-        //camera = AxisCamera.getInstance();  // get an instance of the camera
+    public Camera() {
+        camera = RobotMap.camera;
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, AREA_MINIMUM, 65535, false);
         
@@ -107,23 +108,25 @@ public class Camera extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
-    public void autonomous() {
+    public boolean isNearestTargetHot() {
+        
+        if ( camera == null ) return false;
+        
 	TargetReport target = new TargetReport();
+        target.Hot = false;
 	int verticalTargets[] = new int[MAX_PARTICLES];
 	int horizontalTargets[] = new int[MAX_PARTICLES];
 	int verticalTargetCount, horizontalTargetCount;
-        
         {
             try {
                 /**
-                 * Do the image capture with the camera and apply the algorithm described above. This
-                 * sample will either get images from the camera or from an image file stored in the top
-                 * level directory in the flash memory on the cRIO. The file name in this case is "testImage.jpg"
-                 * 
+                 * Do the image capture with the camera and apply the algorithm described above.
+                 * In case of error accessing camera, simply return false (not hot).
                  */
-                //ColorImage image = camera.getImage();     // comment if using stored images
-                ColorImage image;                           // next 2 lines read image from flash on cRIO
-                image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
+                ColorImage image = camera.getImage(); // comment if using stored images
+                 
+                //ColorImage image;                           // next 2 lines read image from flash on cRIO
+                //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
                 BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
                 //thresholdImage.write("/threshold.bmp");
                 BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
@@ -135,7 +138,7 @@ public class Camera extends Subsystem {
                 
                 if(filteredImage.getNumberParticles() > 0)
                 {
-			for (int i = 0; i < MAX_PARTICLES && i < filteredImage.getNumberParticles(); i++) {
+                    for (int i = 0; i < MAX_PARTICLES && i < filteredImage.getNumberParticles(); i++) {
 			ParticleAnalysisReport report = filteredImage.getParticleAnalysisReport(i);
                         scores[i] = new Scores();
 					
@@ -202,6 +205,8 @@ public class Camera extends Subsystem {
                                 target.Hot = hotOrNot(target);
                             }
 
+                            /*
+                        
                             if(verticalTargetCount > 0)
                             {
                                     //Information about the target is contained in the "target" structure
@@ -218,6 +223,10 @@ public class Camera extends Subsystem {
                                             System.out.println("Distance: " + distance);
                                     }
                             }
+                        
+                            */
+                } else {
+                    System.out.println("0 Particles.");
                 }
 
                 /**
@@ -229,12 +238,16 @@ public class Camera extends Subsystem {
                 thresholdImage.free();
                 image.free();
                 
-//            } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
-//                ex.printStackTrace();
+            } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
+                ex.printStackTrace();
+                return false;
             } catch (NIVisionException ex) {
                 ex.printStackTrace();
+                return false;
             }
         }
+        if ( target.Hot ) System.out.println("HOT!!!!!!");
+        return target.Hot;
     }
 
     /**

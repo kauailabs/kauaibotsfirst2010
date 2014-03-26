@@ -30,7 +30,12 @@ public class  ArmsTeeUp extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        Robot.arms.disable();        
         Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsTeeup());
+        Robot.arms.getPIDController().setPID(
+                                RobotPreferences.getArmsPLift(),
+                                RobotPreferences.getArmsILift(),
+                                RobotPreferences.getArmsDLift());
         Robot.arms.enable();        
     }
 
@@ -45,10 +50,12 @@ public class  ArmsTeeUp extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+        Robot.arms.disable();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        Robot.arms.disable();
     }
 }

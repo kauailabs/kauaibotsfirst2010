@@ -25,6 +25,6 @@ public class  Detension extends CommandGroup {
 
     public Detension() {
 	addSequential(new SetTension(
-                RobotPreferences.getTensionerSlackVolts(),true));
+                RobotPreferences.getTensionerSlackVolts(),true,true));
     }
 }
