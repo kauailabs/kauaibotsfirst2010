@@ -66,9 +66,9 @@ public class Arms extends PIDSubsystem {
     public Arms() {
         
         super(  "Arms",
-                RobotPreferences.getArmsPGrab(),
-                RobotPreferences.getArmsIGrab(),
-                RobotPreferences.getArmsDGrab());
+                RobotPreferences.getArmsPDown(),
+                RobotPreferences.getArmsIDown(),
+                RobotPreferences.getArmsDDown());
         
         // Configure the PID Controller
         
@@ -83,7 +83,7 @@ public class Arms extends PIDSubsystem {
         // NOTE:  The PID Controller for the arms should *always*
         // be enabled.
         
-        enable();
+        disable();
     }
     
     // Put methods for controlling this subsystem
@@ -103,6 +103,10 @@ public class Arms extends PIDSubsystem {
     
     public boolean isAtMax() {
         return max.get();
+    }
+    
+    public void startArmsDown() {
+        this.sC.set(.5);
     }
     
     public void stop() {
@@ -139,9 +143,9 @@ public class Arms extends PIDSubsystem {
         switch ( speed ) {
             case kSpeedGrab:
                 this.getPIDController().setPID(
-                        RobotPreferences.getArmsPGrab(),
-                        RobotPreferences.getArmsIGrab(),
-                        RobotPreferences.getArmsDGrab());
+                        RobotPreferences.getArmsPDown(),
+                        RobotPreferences.getArmsIDown(),
+                        RobotPreferences.getArmsDDown());
                 break;
             case kSpeedLift:
                 this.getPIDController().setPID(

@@ -30,6 +30,7 @@ public class  Kick extends Command {
     
     int state;
     
+    double start;
     double trigger_motor_start;
     double settle_period_start;
     boolean m_droparms;
@@ -46,6 +47,16 @@ public class  Kick extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
         state = kStateInitial;
+        if(m_droparms == true) {
+            Robot.arms.disable();
+            Robot.arms.startArmsDown();
+            Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsHandoff());
+            Robot.arms.getPIDController().setPID(
+                    RobotPreferences.getArmsPHandoff(),
+                    RobotPreferences.getArmsIHandoff(),
+                    RobotPreferences.getArmsDHandoff());
+        }
+        start = Timer.getFPGATimestamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -54,12 +65,11 @@ public class  Kick extends Command {
             case kStateInitial:
                 if ( Robot.kicker.isLegLatchedAndRetractorReady() &&
                      Robot.kicker.isBallPresent() ) {
-                    trigger_motor_start = Timer.getFPGATimestamp();
-                    Robot.kicker.startTriggerMotor();
-                    if(m_droparms == true) {
-                        Robot.arms.setSetpoint(RobotPreferences.getArmsIGrab());
-                    }
-                    state = kStateTriggerMotorStarted;
+                    //if ( ( Timer.getFPGATimestamp() - start ) > 0.1 ) {
+                        trigger_motor_start = Timer.getFPGATimestamp();
+                        Robot.kicker.startTriggerMotor();
+                        state = kStateTriggerMotorStarted;
+                   // }
                 } else {
                     state = kStateDone;
                 }

@@ -30,7 +30,13 @@ public class  ArmsDown extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        Robot.arms.disable();
+        Robot.arms.startArmsDown();
         Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsDown());
+        Robot.arms.getPIDController().setPID(
+                                RobotPreferences.getArmsPDown(),
+                                RobotPreferences.getArmsIDown(),
+                                RobotPreferences.getArmsDDown());        
         Robot.arms.enable();
     }
 

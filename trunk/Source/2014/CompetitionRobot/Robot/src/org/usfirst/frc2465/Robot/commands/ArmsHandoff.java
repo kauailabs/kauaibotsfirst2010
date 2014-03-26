@@ -34,7 +34,12 @@ public class  ArmsHandoff extends Command {
     // Called just before this Command runs the first time
     
     protected void initialize() {
+        Robot.arms.disable();        
         Robot.arms.setSetpoint(RobotPreferences.getArmsVoltsHandoff());
+        Robot.arms.getPIDController().setPID(
+                                RobotPreferences.getArmsPHandoff(),
+                                RobotPreferences.getArmsIHandoff(),
+                                RobotPreferences.getArmsDHandoff());
         Robot.arms.enable();
     }
 
@@ -49,6 +54,7 @@ public class  ArmsHandoff extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+        Robot.arms.disable();
     }
 
     // Called when another command which requires one or more of the same

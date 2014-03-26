@@ -151,7 +151,7 @@ public class Robot extends IterativeRobot {
         
         // Tensioner
         
-        SmartDashboard.putBoolean("TensionReady",       Robot.tensioner.onTarget());
+        SmartDashboard.putBoolean("TensionReady",       Robot.tensioner.isDetensioned());
         SmartDashboard.putNumber( "TensionRaw",         Robot.tensioner.getTensionLevel());
         SmartDashboard.putNumber( "TensionDistance",    0.0 /*TODO:  Get value from tensioner subsystem*/);
 
