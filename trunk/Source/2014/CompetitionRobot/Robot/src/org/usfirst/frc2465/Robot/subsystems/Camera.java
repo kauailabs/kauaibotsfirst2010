@@ -108,6 +108,22 @@ public class Camera extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
+    /*
+    * The following camera settings were found to work well during
+    * pre-competition testing at Kukui Grove on 3/25/2014:
+    *
+    * COLOR LEVEL:  51
+    * BRIGHTNESS:   32
+    * SHARPNESS:    64
+    * CONTRAST:     50
+    *
+    * FixedIndoor
+    *
+    * Exposure: 68 (this value was better than 45)
+    *
+    * Backlight Compensation:  On
+    */
+    
     public boolean isNearestTargetHot() {
         
         if ( camera == null ) return false;
