@@ -97,11 +97,17 @@ public class Robot extends IterativeRobot {
     public void updateDashboard() {
         // Drive
         
-        SmartDashboard.putBoolean("IMU_Connected",      RobotMap.imu.isConnected());
-        SmartDashboard.putNumber( "IMU_Yaw",            RobotMap.imu.getYaw());
-        SmartDashboard.putNumber( "IMU_CompassHeading", RobotMap.imu.getCompassHeading());
-        SmartDashboard.putBoolean("FOD_Enabled",        Robot.drive.getFODEnabled() );
+        if(RobotMap.imu != null)
+        {
+	    	SmartDashboard.putBoolean("IMU_Connected",      RobotMap.imu.isConnected());
+	        SmartDashboard.putNumber( "IMU_Yaw",            RobotMap.imu.getYaw());
+	        SmartDashboard.putNumber( "IMU_CompassHeading", RobotMap.imu.getCompassHeading());
+        }
         
+        if(Robot.drive != null)
+        {
+        	SmartDashboard.putBoolean("FOD_Enabled",        Robot.drive.getFODEnabled() );
+        }
         // Arms
         
         SmartDashboard.putBoolean("ArmsReady",          false);

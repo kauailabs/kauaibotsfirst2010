@@ -122,7 +122,10 @@ public class  StickDrive extends Command {
             Robot.drive.setFODEnabled(false);
         }
         
-        Robot.drive.doMecanum(vY,vX,vRot);
+        if(RobotMap.robotDrive != null)
+        {
+        	Robot.drive.doMecanum(vY,vX,vRot);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
