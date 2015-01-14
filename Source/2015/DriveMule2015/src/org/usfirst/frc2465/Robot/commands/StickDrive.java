@@ -99,10 +99,9 @@ public class  StickDrive extends Command {
         JoystickResponseCurveSet current = conservative;
         
         Joystick driver = Robot.oi.driver;
-        double vX = driver.getX();
-        double vY = driver.getY();
-        vY = vY * -1;   // invert
-        double vRot = driver.getRawAxis(4);
+        double vX = driver.getY();
+        double vY = driver.getX();
+        double vRot = driver.getRawAxis(3);
                          
         vX = current.transformStrafe(vX);
         vY = current.transformForward(vY);
