@@ -72,14 +72,14 @@ public class  StickDrive extends Command {
             new JoystickResponseCurve( .00, 3, 1.0, DEADZONE ) );
     
     JoystickResponseCurveSet conservative = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, .50, 0 ),
-            new JoystickResponseCurve( .40, 3, .50, 0 ),
-            new JoystickResponseCurve( .40, 3, .35, 0 ) );
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .35, DEADZONE ) );
 
     JoystickResponseCurveSet aggressive = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ),
-            new JoystickResponseCurve( .40, 3, 1.0, 0 ) );
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ) );
     
     public StickDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -96,7 +96,7 @@ public class  StickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         
-        JoystickResponseCurveSet current = conservative;
+        JoystickResponseCurveSet current = aggressive;
         
         Joystick driver = Robot.oi.driver;
         double vX = driver.getY();
