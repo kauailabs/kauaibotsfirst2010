@@ -43,12 +43,7 @@ public class Drive extends PIDSubsystem {
     static final double wheelDiameter   = 6.0;                  // Per AndyMark Specs
     static final double wheelRadius     = wheelDiameter / 2;
 
-    static final int VX    = 0;
-    static final int VY    = 1;
-    static final int VROT  = 2;
-
     public static final int ROTATE_DIRECTION  = -1;
-    public static final int DRIVE_DIRECTION = -1;    
     
 /////////////////////////////////////////////////////////////////////////////////////
 // Mecanum Constants
@@ -82,7 +77,7 @@ public class Drive extends PIDSubsystem {
                 RobotPreferences.getAutoRotateD());
         try {
             getPIDController().setContinuous(false);
-            getPIDController().setInputRange(0,360);
+            getPIDController().setInputRange(-180,180);
             getPIDController().setOutputRange(-1, 1);
             tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
             getPIDController().setAbsoluteTolerance(tolerance_degrees);
@@ -120,12 +115,8 @@ public class Drive extends PIDSubsystem {
         try {
             if ( currControlMode == CANJaguar.ControlMode.Speed )
             {
-                //motor.ConfigEncoderCodesPerRev(360);
-                //motor.configEncoderCodesPerRev(250);
                 motor.configMaxOutputVoltage(12.0);
                 motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
-                //motor.setPID(.2,.004,0);
-                //motor.setSpeedReference(CANJaguar.SpeedReference.QuadEncoder);
                 motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, .2, .003, 0);
             }
             else
@@ -168,7 +159,6 @@ public class Drive extends PIDSubsystem {
                     initMotor( motor );
                     String error = "\n\n>>>>" + strDescription + "Jaguar Power Cycled - re-initializing";
                     System.out.println(error);
-                    //setErrorData(error, strlen(error), 100);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -232,14 +222,15 @@ public class Drive extends PIDSubsystem {
             double excessRatio = (double)1.0 / ( Math.abs(vX) + Math.abs(vY) + Math.abs(vRot) );
             if ( excessRatio < 1.0 )
             {
-                vX              *= excessRatio;
-                vY              *= excessRatio;
+                vX      *= excessRatio;
+                vY      *= excessRatio;
                 vRot    *= excessRatio;
             }
             
             vRot *= (1/cRotK);
             vRot *= ROTATE_DIRECTION;
             
+            SmartDashboard.putNumber( "vRot", vRot);
             double wheelSpeeds[] = new double[4];
             double velocities[] = new double[3];
             velocities[0] = vX;
@@ -282,17 +273,18 @@ public class Drive extends PIDSubsystem {
         if ( imu.isConnected() ) {
             current_yaw = imu.getYaw();
         }
+        SmartDashboard.putNumber( "AutoRotatePIDInput", current_yaw);
         return current_yaw;
     }
 
     protected void usePIDOutput(double d) {
         next_autorotate_value = d;
+        SmartDashboard.putNumber( "AutoRotatePIDOutput", next_autorotate_value);
     }
     
     public void setAutoRotation(boolean enable) {
         if ( enable ) {
             getPIDController().enable();
-            next_autorotate_value = 0.0;
         }
         else {
             getPIDController().disable();
@@ -300,6 +292,7 @@ public class Drive extends PIDSubsystem {
     }
     
     public boolean getAutoRotation() {
+        SmartDashboard.putBoolean( "AutoRotateEnabled", getPIDController().isEnable());
         return getPIDController().isEnable();
     }
     

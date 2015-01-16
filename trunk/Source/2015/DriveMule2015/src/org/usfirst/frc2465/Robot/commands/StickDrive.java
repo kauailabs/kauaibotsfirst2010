@@ -21,7 +21,7 @@ import org.usfirst.frc2465.Robot.RobotMap;
  */
 public class  StickDrive extends Command {
 
-    static final double DEADZONE = .025;
+    static final double DEADZONE = .05;
     
     public class JoystickResponseCurve {
         double adjust;
@@ -119,6 +119,14 @@ public class  StickDrive extends Command {
         if ( driver.getRawButton(3))
         {
             Robot.drive.setFODEnabled(false);
+        }
+        if (driver.getRawButton(1))
+        {
+        	Robot.drive.setAutoRotation(true);
+        }
+        else
+        {
+        	Robot.drive.setAutoRotation(false);
         }
         
         if(RobotMap.robotDrive != null)
