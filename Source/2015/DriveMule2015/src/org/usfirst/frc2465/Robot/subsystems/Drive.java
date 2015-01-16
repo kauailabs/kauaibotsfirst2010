@@ -15,6 +15,7 @@ import org.usfirst.frc2465.Robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc2465.Robot.RobotPreferences;
 import org.usfirst.frc2465.Robot.commands.StickDrive;
@@ -69,11 +70,6 @@ public class Drive extends PIDSubsystem {
         {  -1, 1, -cRotK },        
     };
        
-    static final int WHEEL_FRONTLEFT       = 2;
-    static final int WHEEL_FRONTRIGHT      = 3;
-    static final int WHEEL_REARLEFT        = 4;
-    static final int WHEEL_REARRIGHT       = 5;    
-    
     CANJaguar.ControlMode currControlMode;
     int maxOutputSpeed;
     int maxSpeedModeRPMs;    
@@ -102,7 +98,7 @@ public class Drive extends PIDSubsystem {
             
             maxSpeedModeRPMs = (int)(2650.0/12.75);
             
-            setMode( CANJaguar.ControlMode.PercentVbus );
+            setMode( CANJaguar.ControlMode.Speed);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -130,7 +126,7 @@ public class Drive extends PIDSubsystem {
                 motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
                 //motor.setPID(.2,.004,0);
                 //motor.setSpeedReference(CANJaguar.SpeedReference.QuadEncoder);
-                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, .2, .004, 0);
+                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, .2, .003, 0);
             }
             else
             {
@@ -242,6 +238,7 @@ public class Drive extends PIDSubsystem {
             }
             
             vRot *= (1/cRotK);
+            vRot *= ROTATE_DIRECTION;
             
             double wheelSpeeds[] = new double[4];
             double velocities[] = new double[3];
@@ -258,12 +255,23 @@ public class Drive extends PIDSubsystem {
             checkForRestartedMotor( leftRearSC, "Rear Left" );
             checkForRestartedMotor( rightRearSC, "Rear Right" );
             */
-            leftFrontSC.set(maxOutputSpeed * wheelSpeeds[0] * -1 * DRIVE_DIRECTION, syncGroup );
-            rightFrontSC.set(maxOutputSpeed * wheelSpeeds[1] * DRIVE_DIRECTION, syncGroup);
-            leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1 * DRIVE_DIRECTION, syncGroup);
-            rightRearSC.set(maxOutputSpeed * wheelSpeeds[3] * DRIVE_DIRECTION, syncGroup);
+            leftFrontSC.set(maxOutputSpeed * wheelSpeeds[0] * -1, syncGroup );
+            rightFrontSC.set(maxOutputSpeed * wheelSpeeds[1], syncGroup);
+            leftRearSC.set(maxOutputSpeed * wheelSpeeds[2] * -1, syncGroup);
+            rightRearSC.set(maxOutputSpeed * wheelSpeeds[3], syncGroup);
             
             CANJaguar.updateSyncGroup(syncGroup);
+            
+            SmartDashboard.putNumber( "SpeedOut_FrontLeft", leftFrontSC.get());
+            SmartDashboard.putNumber( "SpeedOut_RearLeft", leftRearSC.get());
+            SmartDashboard.putNumber( "SpeedOut_FrontRight", rightFrontSC.get());
+            SmartDashboard.putNumber( "SpeedOut_RearRight", rightRearSC.get());
+            
+            SmartDashboard.putNumber( "Speed_FrontLeft", leftFrontSC.getSpeed());
+            SmartDashboard.putNumber( "Speed_RearLeft", leftRearSC.getSpeed());
+            SmartDashboard.putNumber( "Speed_FrontRight", rightFrontSC.getSpeed());
+            SmartDashboard.putNumber( "Speed_RearRight", rightRearSC.getSpeed());
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }        
