@@ -13,8 +13,9 @@ package org.usfirst.frc2465.GizmoBot.subsystems;
 
 import org.usfirst.frc2465.GizmoBot.RobotMap;
 import org.usfirst.frc2465.GizmoBot.commands.*;
-import edu.wpi.first.wpilibj.*;
 
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 
@@ -38,5 +39,14 @@ public class StepLift extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
+    
+    public void raiseSteplift() {
+    	stepLiftValve.set(Value.kForward);
+    }
+    
+    public void lowerStepLift() {
+    	stepLiftValve.set(Value.kReverse);
+    }
+
 }
 
