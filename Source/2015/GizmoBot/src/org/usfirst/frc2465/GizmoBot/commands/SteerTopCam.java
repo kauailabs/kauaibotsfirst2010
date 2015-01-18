@@ -34,6 +34,12 @@ public class  SteerTopCam extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	double value_h = Robot.oi.opJoystick.getRawAxis(0);
+    	Robot.topCam.setHorizontal(value_h);
+    	
+    	double value_v = Robot.oi.opJoystick.getRawAxis(1);
+    	Robot.topCam.setHorizontal(value_v);
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
