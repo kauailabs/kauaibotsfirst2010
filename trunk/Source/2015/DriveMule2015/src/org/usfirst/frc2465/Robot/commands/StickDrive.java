@@ -109,7 +109,9 @@ public class  StickDrive extends Command {
         
         if ( driver.getRawButton(4) )
         {
-            RobotMap.imu.zeroYaw();
+        	if ( RobotMap.imu != null ) {
+	            RobotMap.imu.zeroYaw();
+        	}
         }
         
         if ( driver.getRawButton(5))

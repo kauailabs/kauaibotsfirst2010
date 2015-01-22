@@ -203,7 +203,10 @@ public class Drive extends PIDSubsystem {
             vRot = next_autorotate_value;
         }
         
-        boolean imu_connected = imu.isConnected();
+        boolean imu_connected = false;
+        if ( imu != null ) { 
+        	imu_connected = imu.isConnected();
+        }
                 
         // Field-oriented drive - Adjust input angle for gyro offset angle
         
