@@ -81,6 +81,17 @@ public class  StickDrive extends Command {
             new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
             new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ) );
     
+    JoystickResponseCurveSet aggressive_medium_rot = new JoystickResponseCurveSet(
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, 1.0, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .35, DEADZONE ) );
+
+    JoystickResponseCurveSet conservative_slow_rot = new JoystickResponseCurveSet(
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .15, DEADZONE ) );
+    
+    
     public StickDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -96,9 +107,15 @@ public class  StickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         
-        JoystickResponseCurveSet current = conservative;
-        
+        JoystickResponseCurveSet current;
         Joystick driver = Robot.oi.driver;
+
+        if ( driver.getRawButton(6) ) {
+        	current = conservative_slow_rot;
+        } else {
+        	current = aggressive_medium_rot;
+        }
+        
         double vX = driver.getY();
         double vY = driver.getX();
         double vRot = driver.getRawAxis(3);
