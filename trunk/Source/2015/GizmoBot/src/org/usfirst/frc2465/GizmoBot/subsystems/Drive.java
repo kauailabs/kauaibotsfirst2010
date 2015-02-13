@@ -91,7 +91,7 @@ public class Drive extends PIDSubsystem {
             leftRearSC.getPowerCycled();
             rightRearSC.getPowerCycled();*/
             
-            maxSpeedModeRPMs = (int)(2650.0/12.75);
+            maxSpeedModeRPMs = (int)(2650.0/4.41); /* 10 Feet/Sec */
             
             setMode( CANJaguar.ControlMode.Speed);
         } catch (Exception ex) {
@@ -117,7 +117,7 @@ public class Drive extends PIDSubsystem {
             {
                 motor.configMaxOutputVoltage(12.0);
                 motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
-                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, .2, .003, 0);
+                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, 1, .003, 0);
             }
             else
             {
