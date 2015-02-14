@@ -117,7 +117,7 @@ public class Drive extends PIDSubsystem {
             {
                 motor.configMaxOutputVoltage(12.0);
                 motor.configNeutralMode(CANJaguar.NeutralMode.Brake);
-                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, 1, .003, 0);
+                motor.setSpeedMode(CANJaguar.kQuadEncoder, 250, .4, .025, 0);
             }
             else
             {
