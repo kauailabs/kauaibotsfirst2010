@@ -64,7 +64,7 @@ public class AutoDrive extends Command {
     // subsystems is scheduled to run
     protected void interrupted(){
         
-            Robot.drive.doMecanum(0, 0, 0);
+        Robot.drive.doMecanum(0, 0, 0);
             
     }
 }
