@@ -21,7 +21,7 @@ import org.usfirst.frc2465.GizmoBot.RobotMap;
  */
 public class  StickDrive extends Command {
 
-    static final double DEADZONE = .05;
+    static final double DEADZONE = .06;
     
     public class JoystickResponseCurve {
         double adjust;
@@ -89,7 +89,7 @@ public class  StickDrive extends Command {
     JoystickResponseCurveSet conservative_slow_rot = new JoystickResponseCurveSet(
             new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
             new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
-            new JoystickResponseCurve( .40, 3, .15, DEADZONE ) );
+            new JoystickResponseCurve( .40, 3, .10, DEADZONE ) );
     
     
     public StickDrive() {
@@ -109,6 +109,7 @@ public class  StickDrive extends Command {
         
         JoystickResponseCurveSet current;
         Joystick driver = Robot.oi.driver;
+        Joystick op = Robot.oi.opJoystick;
 
         if ( driver.getRawButton(6) ) {
         	current = conservative_slow_rot;
@@ -142,6 +143,27 @@ public class  StickDrive extends Command {
         if (driver.getRawButton(1))
         {
         	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(0.0);        	
+        }
+        else if ( op.getRawButton(7))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(-90.0);
+        }
+        else if ( op.getRawButton(8))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(-179.0);
+        }
+        else if ( op.getRawButton(9))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(90.0);
+        }
+        else if ( op.getRawButton(10))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(0.0);
         }
         else
         {

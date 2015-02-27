@@ -17,10 +17,10 @@ public class RobotPreferences {
     // PID Controller Settings
     
     static public double getAutoRotateP() {
-        return Preferences.getInstance().getDouble("AutoRotateP", 0.003);
+        return Preferences.getInstance().getDouble("AutoRotateP", 0.00175);
     }
     static public double getAutoRotateI() {
-        return Preferences.getInstance().getDouble("AutoRotateI", 0.00001);
+        return Preferences.getInstance().getDouble("AutoRotateI", 0.000001);
     }
     static public double getAutoRotateD() {
         return Preferences.getInstance().getDouble("AutoRotateD", 0.0);

@@ -70,18 +70,18 @@ public class OI {
         driver = new Joystick(1);
         
         
-        stepLiftButton = new JoystickButton(opJoystick, 7);
-        stepLiftButton.toggleWhenPressed(new RaiseStepLift());
-        tilterButton = new JoystickButton(opJoystick, 6);
-        tilterButton.toggleWhenPressed(new TiltBack());
-        liftButton2 = new JoystickButton(opJoystick, 2);
-        liftButton2.toggleWhenPressed(new RaiseLift2());
-        liftButton1 = new JoystickButton(opJoystick, 4);
-        liftButton1.toggleWhenPressed(new RaiseLift1());
-        grabButton2 = new JoystickButton(opJoystick, 3);
-        grabButton2.toggleWhenPressed(new CloseGrab2());
-        grabButton1 = new JoystickButton(opJoystick, 5);
-        grabButton1.toggleWhenPressed(new CloseGrab1());
+        stepLiftButton = new JoystickButton(opJoystick, 1);
+        stepLiftButton.whileHeld(new RaiseStepLift());
+        tilterButton = new JoystickButton(opJoystick, 4);
+        tilterButton.whileHeld(new TiltBack());
+        liftButton2 = new JoystickButton(opJoystick, 6);
+        liftButton2.whileHeld(new RaiseLift2());
+        liftButton1 = new JoystickButton(opJoystick, 2);
+        liftButton1.whileHeld(new RaiseLift1());
+        grabButton2 = new JoystickButton(opJoystick, 5);
+        grabButton2.whileHeld(new CloseGrab2());
+        grabButton1 = new JoystickButton(opJoystick, 3);
+        grabButton1.whileHeld(new CloseGrab1());
 
 	    
         // SmartDashboard Buttons
