@@ -76,7 +76,7 @@ public class Drive extends PIDSubsystem {
                 RobotPreferences.getAutoRotateI(),
                 RobotPreferences.getAutoRotateD());
         try {
-            getPIDController().setContinuous(false);
+            getPIDController().setContinuous( true );
             getPIDController().setInputRange(-180,180);
             getPIDController().setOutputRange(-1, 1);
             tolerance_degrees = RobotPreferences.getAutoRotateOnTargetToleranceDegrees();
