@@ -111,7 +111,7 @@ public class  StickDrive extends Command {
         Joystick driver = Robot.oi.driver;
         Joystick op = Robot.oi.opJoystick;
 
-        if ( driver.getRawButton(6) ) {
+        if ( driver.getRawButton(1) ) {
         	current = conservative_slow_rot;
         } else {
         	current = aggressive_medium_rot;
@@ -140,12 +140,7 @@ public class  StickDrive extends Command {
         {
             Robot.drive.setFODEnabled(false);
         }
-        if (driver.getRawButton(1))
-        {
-        	Robot.drive.setAutoRotation(true);
-        	Robot.drive.setSetpoint(0.0);        	
-        }
-        else if ( op.getRawButton(7))
+        if ( op.getRawButton(7))
         {
         	Robot.drive.setAutoRotation(true);
         	Robot.drive.setSetpoint(-90.0);
