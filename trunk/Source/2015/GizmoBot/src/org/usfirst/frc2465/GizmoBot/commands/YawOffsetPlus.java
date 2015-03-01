@@ -5,13 +5,15 @@ import org.usfirst.frc2465.GizmoBot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ZeroYaw extends Command {
-	public ZeroYaw() {
+public class YawOffsetPlus extends Command {
+	double m_offset_angle;
+	public YawOffsetPlus(double offset_angle) {
+		m_offset_angle = offset_angle;
     }
 	
     // Called just before this Command runs the first time
     protected void initialize() {
-    	RobotMap.imu.zeroYaw();
+    	RobotMap.imu.yawOffsetPlus(m_offset_angle);
     }
 
     // Called repeatedly when this Command is scheduled to run

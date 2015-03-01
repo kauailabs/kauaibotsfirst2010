@@ -236,6 +236,10 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
         user_yaw_offset = getAverageFromYawHistory();
     }
 
+    public void yawOffsetPlus(double angle) {
+    	user_yaw_offset += angle;
+    }
+    
     /**
      * Indicates whether the nav6 IMU is currently connected
      * to the host computer.  A connection is considered established
