@@ -33,7 +33,7 @@ public class  AutonomousCommand extends CommandGroup {
     	this.addSequential(new WaitCommand(1.0));
     	
     	/* Reverses back 390cm, auto-rotate to 0 degrees (to keep from drifting */
-        this.addSequential(new AutoDrive(0.15,0,0,420.0),3.0);
+        this.addSequential(new AutoDrive(0.15,0,0,420.0,0.0),3.0);
 
     	/* rotate -90 degrees */
     	
