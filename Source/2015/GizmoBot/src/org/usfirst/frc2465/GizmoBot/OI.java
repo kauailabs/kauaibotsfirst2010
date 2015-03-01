@@ -85,7 +85,7 @@ public class OI {
 
 	    
         // SmartDashboard Buttons
-        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("Autonomous Command", new AutonomousCommand(-90));
 
         SmartDashboard.putData("CloseGrab1", new CloseGrab1());
 
