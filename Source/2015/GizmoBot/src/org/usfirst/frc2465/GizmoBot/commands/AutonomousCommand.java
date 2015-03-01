@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class  AutonomousCommand extends CommandGroup {
 
     public AutonomousCommand(double final_rotation_angle) {
-    	requires(Robot.stepLift);
+    	//requires(Robot.stepLift);
     	requires(Robot.drive);
     	requires(Robot.tilter);
     	/* Top Arms Up to pick up bin and tilts back */
@@ -43,7 +43,7 @@ public class  AutonomousCommand extends CommandGroup {
     	
     	this.addParallel(new AutoDrive(0,0,0),2.5);
         this.addSequential(new TiltForward(),2.5);
-    	
+    	this.addSequential(new YawOffsetPlus(180.0));    	
     	this.addSequential(new AutoDrive(0,0,0),10.0);
     	//this.addSequential(new LowerLift2(), 0.5);
     	//this.addSequential(new CloseGrab2(), 0.5);
