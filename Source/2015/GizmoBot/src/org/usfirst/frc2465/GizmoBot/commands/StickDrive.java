@@ -87,8 +87,8 @@ public class  StickDrive extends Command {
             new JoystickResponseCurve( .40, 3, .35, DEADZONE ) );
 
     JoystickResponseCurveSet conservative_slow_rot = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
-            new JoystickResponseCurve( .40, 3, .50, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .25, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .25, DEADZONE ),
             new JoystickResponseCurve( .40, 3, .06, DEADZONE ) );
     
     
