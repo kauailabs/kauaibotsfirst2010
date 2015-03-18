@@ -87,8 +87,8 @@ public class  StickDrive extends Command {
             new JoystickResponseCurve( .40, 3, .35, DEADZONE ) );
 
     JoystickResponseCurveSet conservative_slow_rot = new JoystickResponseCurveSet(
-            new JoystickResponseCurve( .40, 3, .25, DEADZONE ),
-            new JoystickResponseCurve( .40, 3, .25, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .125, DEADZONE ),
+            new JoystickResponseCurve( .40, 3, .125, DEADZONE ),
             new JoystickResponseCurve( .40, 3, .06, DEADZONE ) );
     
     
@@ -112,9 +112,9 @@ public class  StickDrive extends Command {
         Joystick op = Robot.oi.opJoystick;
 
         if ( driver.getRawButton(1) ) {
-        	current = conservative_slow_rot;
-        } else {
         	current = aggressive_medium_rot;
+        } else {
+        	current = conservative_slow_rot;
         }
         
         double vX = driver.getY();
@@ -160,6 +160,17 @@ public class  StickDrive extends Command {
         	Robot.drive.setAutoRotation(true);
         	Robot.drive.setSetpoint(0.0);
         }
+        /*else if (op.getRawButton(#))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(135.0)	
+        }*/
+        /*else if (op.getRawButton(#))
+        {
+        	Robot.drive.setAutoRotation(true);
+        	Robot.drive.setSetpoint(-135.0)	
+        }*/
+        
         else
         {
         	Robot.drive.setAutoRotation(false);
