@@ -1,6 +1,5 @@
 package org.usfirst.frc2465.GizmoBot.commands;
 
-import org.usfirst.frc2465.GizmoBot.Robot;
 import org.usfirst.frc2465.GizmoBot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;

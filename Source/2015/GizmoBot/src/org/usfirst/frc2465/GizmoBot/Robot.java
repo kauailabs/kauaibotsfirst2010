@@ -101,6 +101,8 @@ public class Robot extends IterativeRobot {
         autoChooser = new SendableChooser();
         autoChooser.addDefault("ToteBinLeft", new AutonomousCommand(-90));
         autoChooser.addObject("ToteBinRight", new AutonomousCommand(90));
+        autoChooser.addObject("ChuteLeft", new AutoZeroYawOffset(135.0));
+        autoChooser.addObject("ChuteRight", new AutoZeroYawOffset(-135.0));
         autoChooser.addObject("Frozen", new Still());
         SmartDashboard.putData("Autonomous Chooser",autoChooser);
 
